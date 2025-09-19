@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import LoadingPage from "./pages/loading";
 import App from "./App";
+import HomePage from "./pages/home";
+import AboutPage from "./about";
+import ProductsPage from "./pages/products";
 
 export const router = createBrowserRouter([
     // Public Routes with Main Layout
@@ -15,7 +18,7 @@ export const router = createBrowserRouter([
                 index: true,
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <HomePage /> */}
+                        <HomePage />
                     </Suspense>
                 ),
             },
@@ -23,7 +26,7 @@ export const router = createBrowserRouter([
                 path: "about",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <AboutPage /> */}
+                        <AboutPage />
                     </Suspense>
                 ),
             },
@@ -44,7 +47,7 @@ export const router = createBrowserRouter([
                         index: true,
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                {/* <ProductsPage /> */}
+                                <ProductsPage />
                             </Suspense>
                         ),
                     },
