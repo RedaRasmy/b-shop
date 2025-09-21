@@ -1,3 +1,4 @@
+import path from "path"
 import { defineConfig, type UserConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import tailwindcss from "@tailwindcss/vite"
@@ -17,7 +18,10 @@ const config: ViteConfig = {
         include : ['./src/tests/*.{test,spec}.?(c|m)[jt]s?(x)'],
     },
     resolve : {
-        extensions : ['.js','.mjs','.json','.ts','.tsx']
+        extensions : ['.js','.mjs','.json','.ts','.tsx'],
+        alias : {
+            "@" : path.resolve(__dirname,"./src")
+        }
     }
 }
 
