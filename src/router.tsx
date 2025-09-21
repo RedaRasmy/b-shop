@@ -1,18 +1,63 @@
-import { Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
-import LoadingPage from "./pages/loading";
-import App from "./App";
-import HomePage from "./pages/home";
-import AboutPage from "./about";
-import ProductsPage from "./pages/products";
+import { lazy, Suspense } from "react"
+import { createBrowserRouter, Navigate } from "react-router-dom"
+import LoadingPage from "./pages/loading"
+import App from "./App"
+
+const RegisterPage = lazy(() => import("./pages/auth/register"))
+const HomePage = lazy(() => import("./pages/home"))
+const AboutPage = lazy(() => import("./pages/about"))
+const ProductsPage = lazy(() => import("./pages/products"))
 
 export const router = createBrowserRouter([
     // Public Routes with Main Layout
     {
         path: "/",
-        element : <App/> ,
+        element: <App />,
         // errorElement: <NotFoundPage />,
         children: [
+            {
+                path: "/auth",
+                // element: <></>,
+                children: [
+                    {
+                        index: true,
+                        element: <Navigate to={"login"} replace />,
+                    },
+                    {
+                        path: "login",
+                        element: (
+                            <Suspense fallback={<LoadingPage />}>
+                                {/* <LoginPage /> */}
+                                <>login</>
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: "register",
+                        element: (
+                            <Suspense fallback={<LoadingPage />}>
+                                <RegisterPage />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: "forgot-password",
+                        element: (
+                            <Suspense fallback={<LoadingPage />}>
+                                {/* <ForgotPasswordPage /> */}
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: "reset-password/:token",
+                        element: (
+                            <Suspense fallback={<LoadingPage />}>
+                                {/* <ResetPasswordPage /> */}
+                            </Suspense>
+                        ),
+                    },
+                ],
+            },
             // Home & Discovery
             {
                 index: true,
@@ -158,44 +203,6 @@ export const router = createBrowserRouter([
     },
 
     // Auth Routes with Auth Layout
-    {
-        path: "/auth",
-        element: <></>,
-        children: [
-            {
-                path: "login",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <LoginPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "register",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <RegisterPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "forgot-password",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <ForgotPasswordPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "reset-password/:token",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <ResetPasswordPage /> */}
-                    </Suspense>
-                ),
-            },
-        ],
-    },
 
     // Checkout Routes with Checkout Layout (Protected)
     {

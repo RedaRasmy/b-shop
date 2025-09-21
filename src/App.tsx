@@ -2,7 +2,7 @@ import { Link, Outlet } from "react-router-dom"
 
 export default function App() {
     return (
-        <div className="h-screen">
+        <div className="h-screen flex flex-col">
             <nav className="bg-blue-600 text-white p-4">
                 <div className="flex space-x-6">
                     <Link to="/" className="hover:underline">
@@ -16,7 +16,7 @@ export default function App() {
                     </Link>
                 </div>
             </nav>
-            <main className="bg-blue-200">
+            <main className="flex-1 ">
                 <Outlet />
             </main>
         </div>
