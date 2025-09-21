@@ -4,6 +4,7 @@ import LoadingPage from "./pages/loading"
 import App from "./App"
 
 const RegisterPage = lazy(() => import("./pages/auth/register"))
+const LoginPage = lazy(() => import("./pages/auth/login"))
 const HomePage = lazy(() => import("./pages/home"))
 const AboutPage = lazy(() => import("./pages/about"))
 const ProductsPage = lazy(() => import("./pages/products"))
@@ -27,8 +28,7 @@ export const router = createBrowserRouter([
                         path: "login",
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                {/* <LoginPage /> */}
-                                <>login</>
+                                <LoginPage />
                             </Suspense>
                         ),
                     },
