@@ -5,11 +5,19 @@ import { Provider } from "react-redux"
 import { store } from "./redux/store.ts"
 import { RouterProvider } from "react-router-dom"
 import { router } from "./router.tsx"
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
+import { AuthProvider } from "./components/auth-provider.tsx"
+
+const queryClient = new QueryClient()
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <Provider store={store}>
-            <RouterProvider router={router} />
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+                <Provider store={store}>
+                    <RouterProvider router={router} />
+                </Provider>
+            </AuthProvider>
+        </QueryClientProvider>
     </StrictMode>
 )

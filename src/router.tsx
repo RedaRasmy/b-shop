@@ -2,6 +2,10 @@ import { lazy, Suspense } from "react"
 import { createBrowserRouter, Navigate } from "react-router-dom"
 import LoadingPage from "./pages/loading"
 import App from "./App"
+import { ProtectedRoute } from "./components/protected-route"
+import ProfilePage from "./pages/profile"
+import { PublicRoute } from "./components/public-route"
+import AdminPage from "./pages/admin"
 
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
@@ -28,7 +32,9 @@ export const router = createBrowserRouter([
                         path: "login",
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                <LoginPage />
+                                <PublicRoute redirectTo="/profile">
+                                    <LoginPage />
+                                </PublicRoute>
                             </Suspense>
                         ),
                     },
@@ -36,7 +42,9 @@ export const router = createBrowserRouter([
                         path: "register",
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                <RegisterPage />
+                                <PublicRoute redirectTo="/profile">
+                                    <RegisterPage />
+                                </PublicRoute>
                             </Suspense>
                         ),
                     },
@@ -199,10 +207,18 @@ export const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+            {
+                path: "profile",
+                element: (
+                    <Suspense fallback={<LoadingPage />}>
+                        <ProtectedRoute requiredRole="customer" roleFallback="/admin">
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    </Suspense>
+                ),
+            },
         ],
     },
-
-    // Auth Routes with Auth Layout
 
     // Checkout Routes with Checkout Layout (Protected)
     {
@@ -351,10 +367,10 @@ export const router = createBrowserRouter([
     {
         path: "/admin",
         element: (
-            //   <AdminRoute>
-            //     <AdminLayout />
-            //   </AdminRoute>
-            <></>
+            <ProtectedRoute requiredRole="admin" >
+                {/* <AdminLayout /> */}
+                <AdminPage />
+            </ProtectedRoute>
         ),
         children: [
             {

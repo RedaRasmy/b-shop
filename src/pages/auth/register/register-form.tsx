@@ -1,8 +1,7 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,9 +15,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { emailPasswordSchema } from "@/lib/zod-schemas"
+import { useMutation } from "@tanstack/react-query"
+import { registerRequest } from "@/api/auth-requests"
+import { useAuth } from "@/hooks/use-auth"
+import type { User } from "@/lib/types"
 
 export function RegisterForm() {
-    // ...
     type FormState = z.infer<typeof emailPasswordSchema>
 
     const form = useForm<FormState>({
@@ -28,8 +30,35 @@ export function RegisterForm() {
             password: "",
         },
     })
+    
+    const navigate = useNavigate()
+
+    const {login} = useAuth()
+
+    const mutation = useMutation({
+        mutationFn: registerRequest,
+        onSuccess: (res) => {
+            login(res.data.user)
+            if ((res.data.user as User).role === 'admin') {
+                navigate('/admin')
+            } else {
+                navigate("/profile")
+            }
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onError: (err: any) => {
+            console.log("err : ", err)
+            const message =
+                (err.response?.data?.message as string) ||
+                "Something went wrong , Please try again."
+            form.setError("root", {
+                message,
+            })
+        },
+    })
 
     function onSubmit(values: FormState) {
+        mutation.mutate(values)
         console.log(values)
     }
 

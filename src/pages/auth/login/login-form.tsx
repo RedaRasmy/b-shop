@@ -16,6 +16,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { emailPasswordSchema } from "@/lib/zod-schemas"
+import { useMutation } from "@tanstack/react-query"
+import { loginRequest } from "@/api/auth-requests"
+import { useAuth } from "@/hooks/use-auth"
+import { useNavigate } from "react-router-dom"
+import type { User } from "@/lib/types"
 
 export function LoginForm() {
     // ...
@@ -29,7 +34,35 @@ export function LoginForm() {
         },
     })
 
+    const navigate = useNavigate()
+
+    const { login } = useAuth()
+
+    const mutation = useMutation({
+        mutationFn: loginRequest,
+        onSuccess: (res) => {
+            login(res.data.user)
+            console.log('login res data :',res.data)
+            if ((res.data.user as User).role === "admin") {
+                navigate("/admin")
+            } else {
+                navigate("/profile")
+            }
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onError: (err: any) => {
+            console.log("err : ", err)
+            const message =
+                (err.response?.data?.message as string) ||
+                "Something went wrong , Please try again."
+            form.setError("root", {
+                message,
+            })
+        },
+    })
+
     function onSubmit(values: FormState) {
+        mutation.mutate(values)
         console.log(values)
     }
 
