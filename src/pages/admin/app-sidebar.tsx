@@ -65,9 +65,9 @@ export function AppSidebar() {
     useHotkeys("s", toggleSidebar)
 
     return (
-        <Sidebar className="" collapsible="icon">
+        <Sidebar className="" collapsible="icon" >
             <SidebarHeader />
-            <SidebarContent className="px-3 py-2">
+            <SidebarContent className="px-3 py-2 overflow-hidden">
                 <SidebarMenu>
                     {state !== "collapsed"
                         ? items.map((item) => (
