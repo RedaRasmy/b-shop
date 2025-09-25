@@ -19,6 +19,7 @@ import {
     Settings,
 } from "lucide-react"
 import { NavLink } from "react-router-dom"
+import { useHotkeys } from "react-hotkeys-hook"
 
 const items = [
     {
@@ -59,7 +60,10 @@ const items = [
 ]
 
 export function AppSidebar() {
-    const { setOpenMobile, state } = useSidebar()
+    const { setOpenMobile, state, toggleSidebar } = useSidebar()
+
+    useHotkeys("s", toggleSidebar)
+
     return (
         <Sidebar className="" collapsible="icon">
             <SidebarHeader />
