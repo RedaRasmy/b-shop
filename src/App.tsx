@@ -1,19 +1,79 @@
-import { Link, Outlet } from "react-router-dom"
+import { Link, NavLink, Outlet } from "react-router-dom"
+import { useAuth } from "./hooks/use-auth"
+import { Button } from "./components/ui/button"
+import { Heart, ShoppingCart, User } from "lucide-react"
+import { cn } from "./lib/utils"
 
 export default function App() {
+    const { user, isAuthenticated } = useAuth()
+    const isAdmin = user && user.role === "admin"
+
     return (
         <div className="h-screen flex flex-col">
-            <nav className="bg-blue-600 text-white p-4">
-                <div className="flex space-x-6">
-                    <Link to="/" className="hover:underline">
-                        Home
-                    </Link>
-                    <Link to="/products" className="hover:underline">
+            <nav className="flex items-center justify-between border-b border-black/20 px-2 lg:px-4 py-2 lg:py-3">
+                <div className="flex space-x-6 items-center">
+                    <NavLink
+                        to="/"
+                        className={() =>
+                            cn("font-extrabold text-accent text-xl mr-8")
+                        }
+                    >
+                        B-Shop
+                    </NavLink>
+                    <NavLink
+                        to="/products"
+                        className={({ isActive }) =>
+                            cn(
+                                "hover:text-accent font-semibold",
+                                isActive && "text-accent"
+                            )
+                        }
+                    >
                         Products
-                    </Link>
-                    <Link to="/about" className="hover:underline">
-                        About
-                    </Link>
+                    </NavLink>
+                    <NavLink
+                        to="/categories"
+                        className={({ isActive }) =>
+                            cn(
+                                "hover:text-accent font-semibold",
+                                isActive && "text-accent"
+                            )
+                        }
+                    >
+                        Categories
+                    </NavLink>
+                </div>
+                <div className="flex items-center gap-3">
+                    <Button asChild variant={"ghost"} size={"default"}>
+                        <Link to="/wishlist">
+                            <Heart />
+                        </Link>
+                    </Button>
+                    <Button asChild variant={"ghost"} size={"default"}>
+                        <Link to="/cart">
+                            <ShoppingCart />
+                        </Link>
+                    </Button>
+                    {!isAuthenticated ? (
+                        <div className="flex gap-2 ">
+                            <Button asChild>
+                                <Link to="/auth/register">Register</Link>
+                            </Button>
+                            <Button asChild>
+                                <Link to="/auth/login">Sign in</Link>
+                            </Button>
+                        </div>
+                    ) : isAdmin ? (
+                        <Button asChild>
+                            <Link to="/admin">Admin</Link>
+                        </Button>
+                    ) : (
+                        <Button variant={"ghost"} asChild size={"default"}>
+                            <Link to="/profile">
+                                <User />
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </nav>
             <main className="flex-1 ">

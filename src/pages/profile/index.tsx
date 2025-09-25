@@ -5,7 +5,7 @@ export default function ProfilePage() {
   const {logout} = useAuth()
     return (
         <div>
-            profile : protected page
+            customer profile 
             <Button onClick={logout}>log out</Button>
         </div>
     )

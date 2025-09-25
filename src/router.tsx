@@ -9,6 +9,7 @@ const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
 const HomePage = lazy(() => import("./pages/home"))
 const AboutPage = lazy(() => import("./pages/about"))
+const CategoriesPage = lazy(() => import("./pages/categories"))
 const ProductsPage = lazy(() => import("./pages/products"))
 const AdminLayout = lazy(() => import("./pages/admin"))
 const ProfilePage = lazy(() => import("./pages/profile"))
@@ -19,6 +20,9 @@ const AdminCategoriesPage = lazy(() => import("./pages/admin/categories"))
 const AdminCustomersPage = lazy(() => import("./pages/admin/customers"))
 const AdminAnalyticsPage = lazy(() => import("./pages/admin/analytics"))
 const AdminShippingPage = lazy(() => import("./pages/admin/shipping"))
+const CartPage = lazy(() => import("./pages/cart"))
+const WishlistPage = lazy(() => import("./pages/wishlist"))
+
 
 export const router = createBrowserRouter([
     // Public Routes with Main Layout
@@ -130,7 +134,7 @@ export const router = createBrowserRouter([
                         index: true,
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                {/* <CategoriesPage /> */}
+                                <CategoriesPage />
                             </Suspense>
                         ),
                     },
@@ -150,7 +154,7 @@ export const router = createBrowserRouter([
                 path: "cart",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <CartPage /> */}
+                        <CartPage />
                     </Suspense>
                 ),
             },
@@ -158,7 +162,7 @@ export const router = createBrowserRouter([
                 path: "wishlist",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <WishlistPage /> */}
+                        <WishlistPage />
                     </Suspense>
                 ),
             },

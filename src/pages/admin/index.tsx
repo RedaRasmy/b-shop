@@ -12,7 +12,7 @@ export default function AdminLayout() {
         <SidebarProvider>
             <AppSidebar />
             <main className="w-full">
-                <div className="border-b justify-between pl-2 pr-4 py-2 border-black/10 w-full min-h-10 flex items-center">
+                <div className="border-b justify-between pl-2 pr-4 py-2 lg:py-3 border-black/10 w-full min-h-10 flex items-center">
                     <div className="flex gap-20 ">
                         <SidebarTrigger />
                         {/* <div className="text-accent gap-1 flex items-center font-semibold">
