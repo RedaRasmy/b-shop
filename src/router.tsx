@@ -3,15 +3,22 @@ import { createBrowserRouter, Navigate } from "react-router-dom"
 import LoadingPage from "./pages/loading"
 import App from "./App"
 import { ProtectedRoute } from "./components/protected-route"
-import ProfilePage from "./pages/profile"
 import { PublicRoute } from "./components/public-route"
-import AdminPage from "./pages/admin"
 
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
 const HomePage = lazy(() => import("./pages/home"))
 const AboutPage = lazy(() => import("./pages/about"))
 const ProductsPage = lazy(() => import("./pages/products"))
+const AdminLayout = lazy(() => import("./pages/admin"))
+const ProfilePage = lazy(() => import("./pages/profile"))
+const AdminProductsPage = lazy(() => import("./pages/admin/products"))
+const AdminOrdersPage = lazy(() => import("./pages/admin/orders"))
+const AdminSettingsPage = lazy(() => import("./pages/admin/settings"))
+const AdminCategoriesPage = lazy(() => import("./pages/admin/categories"))
+const AdminCustomersPage = lazy(() => import("./pages/admin/customers"))
+const AdminAnalyticsPage = lazy(() => import("./pages/admin/analytics"))
+const AdminShippingPage = lazy(() => import("./pages/admin/shipping"))
 
 export const router = createBrowserRouter([
     // Public Routes with Main Layout
@@ -211,7 +218,10 @@ export const router = createBrowserRouter([
                 path: "profile",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        <ProtectedRoute requiredRole="customer" roleFallback="/admin">
+                        <ProtectedRoute
+                            requiredRole="customer"
+                            roleFallback="/admin"
+                        >
                             <ProfilePage />
                         </ProtectedRoute>
                     </Suspense>
@@ -367,9 +377,8 @@ export const router = createBrowserRouter([
     {
         path: "/admin",
         element: (
-            <ProtectedRoute requiredRole="admin" >
-                {/* <AdminLayout /> */}
-                <AdminPage />
+            <ProtectedRoute requiredRole="admin">
+                <AdminLayout />
             </ProtectedRoute>
         ),
         children: [
@@ -378,6 +387,7 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingPage />}>
                         {/* <AdminDashboard /> */}
+                        <>dashboard</>
                     </Suspense>
                 ),
             },
@@ -388,7 +398,7 @@ export const router = createBrowserRouter([
                         index: true,
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                {/* <AdminProductsPage /> */}
+                                <AdminProductsPage />
                             </Suspense>
                         ),
                     },
@@ -417,7 +427,7 @@ export const router = createBrowserRouter([
                         index: true,
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                {/* <AdminOrdersPage /> */}
+                                <AdminOrdersPage />
                             </Suspense>
                         ),
                     },
@@ -435,7 +445,7 @@ export const router = createBrowserRouter([
                 path: "customers",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <AdminCustomersPage /> */}
+                        <AdminCustomersPage />
                     </Suspense>
                 ),
             },
@@ -443,15 +453,15 @@ export const router = createBrowserRouter([
                 path: "analytics",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <AdminAnalyticsPage /> */}
+                        <AdminAnalyticsPage />
                     </Suspense>
                 ),
             },
             {
-                path: "inventory",
+                path: "shipping",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <AdminInventoryPage /> */}
+                        <AdminShippingPage />
                     </Suspense>
                 ),
             },
@@ -459,7 +469,7 @@ export const router = createBrowserRouter([
                 path: "categories",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <AdminCategoriesPage /> */}
+                        <AdminCategoriesPage />
                     </Suspense>
                 ),
             },
@@ -467,7 +477,7 @@ export const router = createBrowserRouter([
                 path: "settings",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <AdminSettingsPage /> */}
+                        <AdminSettingsPage />
                     </Suspense>
                 ),
             },
