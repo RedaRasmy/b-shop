@@ -1,26 +1,31 @@
+/* eslint-disable react-refresh/only-export-components */
+import { AuthProvider } from "@/components/auth-provider"
 import { render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import type { ComponentType, PropsWithChildren } from "react"
 import { BrowserRouter } from "react-router-dom"
 
-function customRender(ui: React.ReactElement, { ...renderOptions } = {}) {
+export function RenderWithProviders(
+    ui: React.ReactElement,
+    options = {}
+) {
     const wrapper = ({ children }: PropsWithChildren) => (
-        <BrowserRouter>{children}</BrowserRouter>
+        <BrowserRouter>
+            <AuthProvider>{children}</AuthProvider>
+        </BrowserRouter>
     )
-    return render(ui,{
-        wrapper : wrapper as ComponentType,
-        ...renderOptions
+    return render(ui, {
+        wrapper: wrapper as ComponentType,
+        ...options,
     })
 }
 
-
-function setup(jsx:React.ReactElement) {
+function setup(jsx: React.ReactElement) {
     return {
         user: userEvent.setup(),
-        render : {...customRender(jsx)}
+        render: { ...RenderWithProviders(jsx) },
     }
 }
 
-
-// export * from "@testing-library/react"
-export {setup}
+export * from "@testing-library/react"
+export { setup }

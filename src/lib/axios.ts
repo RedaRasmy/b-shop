@@ -1,10 +1,10 @@
 import axios from "axios"
 
+const isProd = import.meta.env.MODE === "production"
+// const isTest = import.meta.env.MODE === "test"
+
 export const axiosInstance = axios.create({
-    baseURL:
-        import.meta.env.MODE === "development"
-            ? "/api"
-            : import.meta.env.VITE_BACKEND_API_URL,
+    baseURL: isProd ? import.meta.env.VITE_BACKEND_API_URL : "/api",
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",
@@ -13,29 +13,38 @@ export const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.response.use(
-    (response) => response, // Directly return successful responses.
+    (response) => response, // successful responses pass through
+
     async (error) => {
         const originalRequest = error.config
+
+        // Skip refresh logic for login/register endpoints
+        if (
+            originalRequest.url?.includes("/auth/login") ||
+            originalRequest.url?.includes("/auth/register")
+        ) {
+            return Promise.reject(error)
+        }
 
         // If refresh endpoint itself fails, don't retry
         if (originalRequest.url?.includes("/auth/refresh")) {
             return Promise.reject(error)
         }
 
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true // Mark the request as retried to avoid infinite loops.
+        // Handle 401 for protected requests
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true
             try {
-                // Make a request to your auth server to refresh the token.
+                // Attempt to refresh the access token
                 await axiosInstance.post("/auth/refresh")
-
-                return axiosInstance(originalRequest) // Retry the original request with the new access token.
+                return axiosInstance(originalRequest) // retry original request
             } catch (refreshError) {
-                // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
-                console.error("Token refresh failed:", refreshError)
-                // window.location.href = "/auth/login"
+                // Redirect or handle logout
+                console.error("Refresh failed:", refreshError)
                 return Promise.reject(refreshError)
             }
         }
-        return Promise.reject(error) // For all other errors, return the error as is.
+
+        return Promise.reject(error) // all other errors
     }
 )
