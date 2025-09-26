@@ -36,13 +36,12 @@ export function LoginForm() {
 
     const navigate = useNavigate()
 
-    const { login } = useAuth()
+    const { setUser } = useAuth()
 
     const mutation = useMutation({
         mutationFn: loginRequest,
         onSuccess: (res) => {
-            login(res.data.user)
-            console.log('login res data :',res.data)
+            setUser(res.data.user)
             if ((res.data.user as User).role === "admin") {
                 navigate("/admin")
             } else {
@@ -51,7 +50,6 @@ export function LoginForm() {
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (err: any) => {
-            console.log("err : ", err)
             const message =
                 (err.response?.data?.message as string) ||
                 "Something went wrong , Please try again."
@@ -63,7 +61,6 @@ export function LoginForm() {
 
     function onSubmit(values: FormState) {
         mutation.mutate(values)
-        console.log(values)
     }
 
     const errors = form.formState.errors

@@ -9,10 +9,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const isAuthenticated = !!user
 
-    const login = (userData: User) => {
-        setUser(userData)
-    }
-
     const logout = async () => {
         try {
             await logoutRequest()
@@ -41,7 +37,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <AuthContext.Provider
-            value={{ user, isAuthenticated, login, logout, refreshUser , loading}}
+            value={{
+                user,
+                isAuthenticated,
+                isLoading: loading,
+                logout,
+                refreshUser,
+                setUser,
+            }}
         >
             {children}
         </AuthContext.Provider>

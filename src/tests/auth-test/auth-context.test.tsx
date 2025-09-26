@@ -26,7 +26,7 @@ describe("AuthContext", () => {
                 email: "test@example.com",
                 password: "password123",
             })
-            result.current.login(res.data.user)
+            result.current.setUser(res.data.user)
         })
 
         await waitFor(() => {
@@ -48,7 +48,7 @@ describe("AuthContext", () => {
                     email: "wrong@email.com",
                     password: "wrong-password",
                 })
-                result.current.login(res.data.user)
+                result.current.setUser(res.data.user)
             } catch (error) {
                 const data = (error as AxiosError).response?.data as {
                     message: string
@@ -64,7 +64,7 @@ describe("AuthContext", () => {
         const { result } = renderHook(() => useAuth(), { wrapper })
 
         // Login first
-        result.current.login({
+        result.current.setUser({
             id: "test-id",
             email: "test@example.com",
             role: "admin",
