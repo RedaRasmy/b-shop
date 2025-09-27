@@ -12,11 +12,25 @@ export const authHandlers = [
     http.post("/api/auth/login", async ({ request }) => {
         const { email, password } = (await request.json()) as Credentials
 
-        if (email === "test@example.com" && password === "password123") {
+        // Success case for customer user
+        if (
+            email === mockedCustomerCredentials.email &&
+            password === mockedCustomerCredentials.password
+        ) {
             return HttpResponse.json({
                 user: mockedCustomer,
-                message: "User logged in successfully",
-                // token: "fake-jwt-token",
+                message: "User registered and logged in successfully",
+            })
+        }
+
+        // Success case for admin user
+        if (
+            email === mockedAdminCredentials.email &&
+            password === mockedAdminCredentials.password
+        ) {
+            return HttpResponse.json({
+                user: mockedAdmin,
+                message: "User registered and logged in successfully",
             })
         }
 

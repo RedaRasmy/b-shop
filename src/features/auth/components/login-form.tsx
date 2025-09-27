@@ -60,7 +60,11 @@ export function LoginForm() {
     })
 
     async function onSubmit(values: FormState) {
-        await mutation.mutateAsync(values)
+        try {
+            await mutation.mutateAsync(values)
+        } catch {
+            // already handled
+        }
     }
 
     const errors = form.formState.errors
