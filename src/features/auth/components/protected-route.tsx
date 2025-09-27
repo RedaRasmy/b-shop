@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/features/auth/use-auth"
 import LoadingPage from "@/pages/loading"
 import type { ReactNode } from "react"
 import { Navigate } from "react-router-dom"
@@ -16,9 +16,9 @@ export const ProtectedRoute = ({
     roleFallback = "/profile",
     requiredRole,
 }: ProtectedRouteProps) => {
-    const { isAuthenticated, loading, user } = useAuth()
+    const { isAuthenticated, isLoading, user } = useAuth()
 
-    if (loading) return <LoadingPage />
+    if (isLoading) return <LoadingPage />
 
     if (!isAuthenticated || !user) {
         return <Navigate to={authFallback} replace />

@@ -1,7 +1,8 @@
+"use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useNavigate } from 'react-router-dom'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,11 +17,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { emailPasswordSchema } from "@/lib/zod-schemas"
 import { useMutation } from "@tanstack/react-query"
-import { registerRequest } from "@/api/auth-requests"
-import { useAuth } from "@/hooks/use-auth"
+import { loginRequest } from "@/features/auth/auth-requests"
+import { useAuth } from "@/features/auth/use-auth"
+import { useNavigate } from "react-router-dom"
 import type { User } from "@/lib/types"
 
-export function RegisterForm() {
+export function LoginForm() {
+    // ...
     type FormState = z.infer<typeof emailPasswordSchema>
 
     const form = useForm<FormState>({
@@ -30,17 +33,17 @@ export function RegisterForm() {
             password: "",
         },
     })
-    
+
     const navigate = useNavigate()
 
-    const {setUser} = useAuth()
+    const { setUser } = useAuth()
 
     const mutation = useMutation({
-        mutationFn: registerRequest,
+        mutationFn: loginRequest,
         onSuccess: (res) => {
             setUser(res.data.user)
-            if ((res.data.user as User).role === 'admin') {
-                navigate('/admin')
+            if ((res.data.user as User).role === "admin") {
+                navigate("/admin")
             } else {
                 navigate("/profile")
             }
@@ -71,7 +74,7 @@ export function RegisterForm() {
             >
                 <div>
                     <h1 className="text-2xl md:text-3xl mb-5 md:mb-10">
-                        Create new account
+                        Log in to your account
                     </h1>
                     <p className="text-red-500 my-2">{message}</p>
                 </div>
@@ -117,7 +120,7 @@ export function RegisterForm() {
                         className="cursor-pointer"
                         disabled={form.formState.isSubmitting}
                     >
-                        Register
+                        Log in
                     </Button>
                 </div>
             </form>

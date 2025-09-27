@@ -1,7 +1,7 @@
 import { useState, useEffect, type ReactNode } from "react"
 import type { User } from "@/lib/types"
-import { AuthContext } from "@/lib/auth-context"
-import { fetchMe, logoutRequest } from "@/api/auth-requests"
+import { AuthContext } from "@/features/auth/auth-context"
+import { fetchMe, logoutRequest } from "@/features/auth/auth-requests"
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)

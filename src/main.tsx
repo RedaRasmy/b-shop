@@ -6,7 +6,7 @@ import { store } from "./redux/store.ts"
 import { RouterProvider } from "react-router-dom"
 import { router } from "./router.tsx"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
-import { AuthProvider } from "./components/auth-provider.tsx"
+import { AuthProvider } from "./features/auth/components/auth-provider.tsx"
 
 const queryClient = new QueryClient()
 

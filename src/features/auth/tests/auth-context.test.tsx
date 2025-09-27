@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest"
 import { renderHook, act, waitFor } from "@testing-library/react"
-import { AuthProvider } from "@/components/auth-provider"
-import { useAuth } from "@/hooks/use-auth"
-import { loginRequest } from "@/api/auth-requests"
+import { AuthProvider } from "@/features/auth/components/auth-provider"
+import { useAuth } from "@/features/auth/use-auth"
+import { loginRequest } from "@/features/auth/auth-requests"
 import type { ReactNode } from "react"
 import type { AxiosError } from "axios"
 

@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/features/auth/use-auth"
 import { NavLink, Outlet } from "react-router-dom"
-import { AppSidebar } from "./app-sidebar"
+import { AppSidebar } from "../../features/admin/components/app-sidebar"
 // import { Shield } from "lucide-react"
 
 export default function AdminLayout() {
@@ -21,10 +21,18 @@ export default function AdminLayout() {
                         </div> */}
                     </div>
                     <div className="flex gap-2">
-                        <Button onClick={logout} variant={'default'} className="cursor-pointer">
+                        <Button
+                            onClick={logout}
+                            variant={"default"}
+                            className="cursor-pointer"
+                        >
                             Sign out
                         </Button>
-                        <Button className="cursor-pointer" variant={'default'} asChild>
+                        <Button
+                            className="cursor-pointer"
+                            variant={"default"}
+                            asChild
+                        >
                             <NavLink to={"/"}>Shop</NavLink>
                         </Button>
                     </div>

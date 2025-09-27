@@ -15,7 +15,7 @@ const config: ViteConfig = {
         setupFiles: ['./src/tests/setup.ts'],
         globals : true,
         watch : false,
-        include : ['./src/tests/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+        include : ['./src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     },
     resolve : {
         extensions : ['.js','.mjs','.json','.ts','.tsx'],

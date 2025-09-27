@@ -2,15 +2,15 @@ import { lazy, Suspense } from "react"
 import { createBrowserRouter, Navigate } from "react-router-dom"
 import LoadingPage from "./pages/loading"
 import App from "./App"
-import { ProtectedRoute } from "./components/protected-route"
-import { PublicRoute } from "./components/public-route"
+import { ProtectedRoute } from "./features/auth/components/protected-route"
+import { PublicRoute } from "./features/auth/components/public-route"
 
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
 const HomePage = lazy(() => import("./pages/home"))
-const AboutPage = lazy(() => import("./pages/about"))
 const CategoriesPage = lazy(() => import("./pages/categories"))
 const ProductsPage = lazy(() => import("./pages/products"))
+const ProductDetailPage = lazy(() => import("./pages/products/product-detail"))
 const AdminLayout = lazy(() => import("./pages/admin"))
 const ProfilePage = lazy(() => import("./pages/profile"))
 const AdminProductsPage = lazy(() => import("./pages/admin/products"))
@@ -85,15 +85,7 @@ export const router = createBrowserRouter([
                         <HomePage />
                     </Suspense>
                 ),
-            },
-            {
-                path: "about",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        <AboutPage />
-                    </Suspense>
-                ),
-            },
+            }, 
             {
                 path: "contact",
                 element: (
@@ -119,7 +111,7 @@ export const router = createBrowserRouter([
                         path: ":slug",
                         element: (
                             <Suspense fallback={<LoadingPage />}>
-                                {/* <ProductDetailPage /> */}
+                                <ProductDetailPage />
                             </Suspense>
                         ),
                     },

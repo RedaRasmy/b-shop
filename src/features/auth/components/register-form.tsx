@@ -1,8 +1,7 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,13 +16,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { emailPasswordSchema } from "@/lib/zod-schemas"
 import { useMutation } from "@tanstack/react-query"
-import { loginRequest } from "@/api/auth-requests"
-import { useAuth } from "@/hooks/use-auth"
-import { useNavigate } from "react-router-dom"
+import { registerRequest } from "@/features/auth/auth-requests"
+import { useAuth } from "@/features/auth/use-auth"
 import type { User } from "@/lib/types"
 
-export function LoginForm() {
-    // ...
+export function RegisterForm() {
     type FormState = z.infer<typeof emailPasswordSchema>
 
     const form = useForm<FormState>({
@@ -39,7 +36,7 @@ export function LoginForm() {
     const { setUser } = useAuth()
 
     const mutation = useMutation({
-        mutationFn: loginRequest,
+        mutationFn: registerRequest,
         onSuccess: (res) => {
             setUser(res.data.user)
             if ((res.data.user as User).role === "admin") {
@@ -74,7 +71,7 @@ export function LoginForm() {
             >
                 <div>
                     <h1 className="text-2xl md:text-3xl mb-5 md:mb-10">
-                        Log in to your account
+                        Create new account
                     </h1>
                     <p className="text-red-500 my-2">{message}</p>
                 </div>
@@ -120,7 +117,7 @@ export function LoginForm() {
                         className="cursor-pointer"
                         disabled={form.formState.isSubmitting}
                     >
-                        Log in
+                        Register
                     </Button>
                 </div>
             </form>

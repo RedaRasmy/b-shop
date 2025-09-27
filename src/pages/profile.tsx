@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/features/auth/use-auth"
 
 export default function ProfilePage() {
-  const {logout} = useAuth()
+    const { logout } = useAuth()
     return (
         <div>
-            customer profile 
+            customer profile
             <Button onClick={logout}>log out</Button>
         </div>
     )

@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet } from "react-router-dom"
-import { useAuth } from "./hooks/use-auth"
+import { useAuth } from "./features/auth/use-auth"
 import { Button } from "./components/ui/button"
 import { Heart, ShoppingCart, User } from "lucide-react"
 import { cn } from "./lib/utils"
