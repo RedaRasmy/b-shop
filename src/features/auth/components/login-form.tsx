@@ -59,8 +59,8 @@ export function LoginForm() {
         },
     })
 
-    function onSubmit(values: FormState) {
-        mutation.mutate(values)
+    async function onSubmit(values: FormState) {
+        await mutation.mutateAsync(values)
     }
 
     const errors = form.formState.errors
