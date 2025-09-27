@@ -1,21 +1,20 @@
 import { afterEach, beforeAll, afterAll } from "vitest"
 import { cleanup } from "@testing-library/react"
 import "@testing-library/jest-dom"
-import { mockedServer } from "./mock/mocked-server"
-
+import { server } from "./mocked-server"
 
 afterEach(() => {
     cleanup()
 })
 
 beforeAll(() => {
-    mockedServer.listen()
+    server.listen()
 })
 
 afterAll(() => {
-    mockedServer.close()
+    server.close()
 })
 
 afterEach(() => {
-    mockedServer.resetHandlers()
+    server.resetHandlers()
 })

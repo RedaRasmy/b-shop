@@ -3,19 +3,13 @@ import { renderHook, act, waitFor } from "@testing-library/react"
 import { AuthProvider } from "@/features/auth/components/auth-provider"
 import { useAuth } from "@/features/auth/use-auth"
 import type { ReactNode } from "react"
-import { mockedServer } from "@/tests/mock/mocked-server"
+import { server } from "@/tests/mocked-server"
 import { http, HttpResponse } from "msw"
+import { mockedCustomer } from "./mocked-users"
 
 const wrapper = ({ children }: { children: ReactNode }) => (
     <AuthProvider>{children}</AuthProvider>
 )
-
-const mockedUser = {
-    id: "test-id",
-    email: "test@example.com",
-    role: "admin" as "admin" | "customer",
-    isEmailVerified: false,
-}
 
 const getAuthResult = () => renderHook(useAuth, { wrapper }).result
 
@@ -28,7 +22,7 @@ describe("AuthContext", () => {
         expect(result.current.isLoading).toBe(true)
 
         await waitFor(() => {
-            expect(result.current.user).toStrictEqual(mockedUser)
+            expect(result.current.user).toStrictEqual(mockedCustomer)
             expect(result.current.isAuthenticated).toBe(true)
             expect(result.current.isLoading).toBe(false)
         })
@@ -38,10 +32,10 @@ describe("AuthContext", () => {
         const result = getAuthResult()
 
         act(() => {
-            result.current.setUser(mockedUser)
+            result.current.setUser(mockedCustomer)
         })
 
-        expect(result.current.user).toEqual(mockedUser)
+        expect(result.current.user).toEqual(mockedCustomer)
         expect(result.current.isAuthenticated).toBe(true)
         expect(result.current.isLoading).toBe(false)
     })
@@ -50,7 +44,7 @@ describe("AuthContext", () => {
         const result = getAuthResult()
 
         // Set user first
-        result.current.setUser(mockedUser)
+        result.current.setUser(mockedCustomer)
         // Then logout
         await act(async () => {
             await result.current.logout()
@@ -68,11 +62,11 @@ describe("AuthContext", () => {
             await result.current.refreshUser()
         })
 
-        expect(result.current.user).toEqual(mockedUser)
+        expect(result.current.user).toEqual(mockedCustomer)
     })
 
     it("should handle refreshUser failure", async () => {
-        mockedServer.use(
+        server.use(
             http.get("/api/auth/me", () =>
                 HttpResponse.json({}, { status: 401 })
             )
