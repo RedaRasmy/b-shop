@@ -7,7 +7,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
 
-    const isAuthenticated = !!user
+    function set(user: User) {
+        setUser(user)
+        setLoading(false)
+    }
 
     const logout = async () => {
         try {
@@ -39,11 +42,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         <AuthContext.Provider
             value={{
                 user,
-                isAuthenticated,
+                isAuthenticated: !!user,
                 isLoading: loading,
                 logout,
                 refreshUser,
-                setUser,
+                setUser: set,
             }}
         >
             {children}

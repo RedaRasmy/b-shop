@@ -61,16 +61,16 @@ export const handlers = [
 
     http.post("/api/auth/logout", async () => {}),
 
-    // // Protected route
-    // http.get("/api/user/profile", ({ request }) => {
-    //     const authHeader = request.headers.get("Authorization")
+    http.get("/api/auth/me", async () => {
+        return HttpResponse.json({
+            user: {
+                id: "test-id",
+                email: "test@example.com",
+                role: "admin",
+                isEmailVerified: false,
+            },
+        })
+    }),
 
-    //     if (authHeader === "Bearer fake-jwt-token") {
-    //         return HttpResponse.json({
-    //             user: { id: 1, email: "test@example.com", name: "Test User" },
-    //         })
-    //     }
 
-    //     return HttpResponse.json({ error: "Unauthorized" }, { status: 401 })
-    // }),
 ]
