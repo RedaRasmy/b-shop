@@ -74,7 +74,7 @@ export function LoginForm() {
             >
                 <div>
                     <h1 className="text-2xl md:text-3xl mb-5 md:mb-10">
-                        Log in to your account
+                        Sign in to your account
                     </h1>
                     <p className="text-red-500 my-2">{message}</p>
                 </div>
@@ -120,7 +120,7 @@ export function LoginForm() {
                         className="cursor-pointer"
                         disabled={form.formState.isSubmitting}
                     >
-                        Log in
+                        Sign in
                     </Button>
                 </div>
             </form>
