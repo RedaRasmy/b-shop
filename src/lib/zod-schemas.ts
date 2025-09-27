@@ -1,6 +1,9 @@
-import z from "zod";
+import z from "zod"
 
 export const emailPasswordSchema = z.object({
-    email : z.string().email(),
-    password : z.string().min(8,"Password must be at least 8 characters long")
+    email: z.string().min(1, "Email is required").email(),
+    password: z
+        .string()
+        .min(1, "Password is required")
+        .min(8, "Password must be at least 8 characters long"),
 })

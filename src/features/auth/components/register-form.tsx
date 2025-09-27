@@ -56,8 +56,12 @@ export function RegisterForm() {
         },
     })
 
-    function onSubmit(values: FormState) {
-        mutation.mutate(values)
+    async function onSubmit(values: FormState) {
+        try {
+            await mutation.mutateAsync(values)
+        } catch {
+            // Error handled in onError callback
+        }
     }
 
     const errors = form.formState.errors
