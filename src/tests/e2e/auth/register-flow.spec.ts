@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
     await page.goto("/")
 })
 
-test.describe("register", () => {
+test.describe("Register Flow", () => {
     test("customer should register successfully", async ({ page }) => {
         // Navigate to register page (if not already there)
         await page.getByText(/register/i).click()

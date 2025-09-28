@@ -26,7 +26,7 @@ export default function AdminLayout() {
                             variant={"default"}
                             className="cursor-pointer"
                         >
-                            Sign out
+                            Log out
                         </Button>
                         <Button
                             className="cursor-pointer"
