@@ -37,7 +37,9 @@ export default function AdminLayout() {
                         </Button>
                     </div>
                 </div>
-                <Outlet />
+                <div className="px-3 md:px-4 lg:px-6 py-2 md:py-3 lg:py-5">
+                    <Outlet />
+                </div>
             </main>
         </SidebarProvider>
     )
