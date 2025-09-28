@@ -16,6 +16,7 @@ const config: ViteConfig = {
         globals : true,
         watch : false,
         include : ['./src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+        exclude : ['./src/tests/e2e']
     },
     resolve : {
         extensions : ['.js','.mjs','.json','.ts','.tsx'],
