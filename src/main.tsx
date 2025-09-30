@@ -8,7 +8,7 @@ import { router } from "./router.tsx"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 import { AuthProvider } from "./features/auth/components/auth-provider.tsx"
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>

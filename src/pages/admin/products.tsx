@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
+
 import AdminPageHeader from "@/features/admin/components/page-header";
-import { Plus } from "lucide-react";
+import AddProductDialog from "@/features/admin/products/components/add-product-dialog";
+
 
 export default function AdminProductsPage() {
     return (
@@ -9,10 +10,7 @@ export default function AdminProductsPage() {
                 title="Poducts"
                 description="Manage your product inventory"
             >
-                <Button>
-                    <Plus />
-                    Add Product
-                </Button>
+                <AddProductDialog/>
             </AdminPageHeader>
         </div>
     )
