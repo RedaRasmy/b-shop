@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -384,14 +385,15 @@ export default function AddProductDialog() {
                         />
 
                         <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4">
-                            {/* <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => onOpenChange(false)}
-                                className="w-full sm:w-auto"
-                            >
-                                Cancel
-                            </Button> */}
+                            <DialogClose asChild>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="w-full sm:w-auto"
+                                >
+                                    Cancel
+                                </Button>
+                            </DialogClose>
                             <Button
                                 type="submit"
                                 disabled={form.formState.isSubmitting}
