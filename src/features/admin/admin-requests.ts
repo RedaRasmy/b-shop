@@ -1,3 +1,4 @@
+import type { CategoryFormData } from "@/features/admin/categories/categories.validation";
 import { axiosInstance } from "@/lib/axios";
 
 export async function addProduct(formData:FormData) {
@@ -7,3 +8,7 @@ export async function addProduct(formData:FormData) {
         }
     })
 }    
+
+export async function addCategory(data:CategoryFormData) {
+    return axiosInstance.post("/admin/categories",data)
+}

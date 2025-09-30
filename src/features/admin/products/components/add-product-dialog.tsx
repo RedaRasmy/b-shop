@@ -37,6 +37,7 @@ import { useMutation } from "@tanstack/react-query"
 import { addProduct } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import type { ChangeEvent } from "react"
+import { generateSlug } from "@/utils/generate-slug"
 
 const categories = ["Electronics", "Sports", "Home", "Clothing", "Books"]
 
@@ -110,16 +111,7 @@ export default function AddProductDialog() {
         newImages[index] = { ...newImages[index], alt }
         form.setValue("images", newImages)
     }
-
-    const generateSlug = (name: string) => {
-        return name
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, "")
-            .replace(/\s+/g, "-")
-            .replace(/-+/g, "-")
-            .trim()
-    }
-
+    
     const mutation = useMutation({
         mutationFn: addProduct,
         onSuccess: (data) => {
