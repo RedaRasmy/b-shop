@@ -44,6 +44,7 @@ export function AddCategoryDialog() {
         defaultValues: {
             name: "",
             description: "",
+            slug: "",
             status: "inactive",
         },
     })
@@ -178,8 +179,8 @@ export function AddCategoryDialog() {
 
                         <div className="flex justify-end space-x-2 pt-4">
                             <DialogClose>
-                                <Button type="button" variant="outline">
-                                    Cancel
+                                <Button asChild type="button" variant="outline">
+                                    <div>Cancel</div>
                                 </Button>
                             </DialogClose>
                             <Button
