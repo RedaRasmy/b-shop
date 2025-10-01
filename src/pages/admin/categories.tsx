@@ -1,4 +1,5 @@
 import { getCategories } from "@/features/admin/admin-requests"
+import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import { AddCategoryDialog } from "@/features/admin/categories/components/add-category-dialog"
 import CategoryList from "@/features/admin/categories/components/category-list"
 import DataTableControls from "@/features/admin/components/data-table-controls"
@@ -46,17 +47,15 @@ export default function AdminCategoriesPage() {
         queryFn: () => getCategories(params),
         select: (res) => {
             console.log("res : ", res)
-            return res.data
+            return res.data as AdminCategory[]
         },
     })
-
-    console.log("categories : ", data)
 
     return (
         <div className="space-y-6">
             <AdminPageHeader
                 title="Categories"
-                description="Organize your products with categories (5 categories)"
+                description={`Organize your products with categories (${data?.length || 0} categories)`}
             >
                 <AddCategoryDialog />
             </AdminPageHeader>
