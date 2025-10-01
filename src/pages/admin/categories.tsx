@@ -4,24 +4,15 @@ import { AddCategoryDialog } from "@/features/admin/categories/components/add-ca
 import CategoryList from "@/features/admin/categories/components/category-list"
 import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
+import type { Order, Status } from "@/lib/types"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
 export default function AdminCategoriesPage() {
     const [searchTerm, setSearchTerm] = useState("")
-    // const [categories, setCategories] = useState(mockCategories)
-    // const [addDialogOpen, setAddDialogOpen] = useState(false)
-    // const [editDialogOpen, setEditDialogOpen] = useState(false)
-    // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-    // const [selectedCategory, setSelectedCategory] = useState<any>(null)
-    // const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState<Record<string, string>>({})
     const [sortBy, setSortBy] = useState("createdAt")
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
-
-    // const [status,setStatus] = useState<'active'|'inactive'|undefined>(undefined)
-
-    type Status = "active" | "inactive"
+    const [sortOrder, setSortOrder] = useState<Order>("desc")
 
     const filterOptions = [
         {
@@ -35,15 +26,21 @@ export default function AdminCategoriesPage() {
         },
     ]
 
-    const handleFilterChange = (key: string, value: string) => {
+    function handleFilterChange(key: string, value: string) {
         setFilters((prev) => ({ ...prev, [key]: value }))
         // setCurrentPage(1)
     }
 
+    function handleSortChange(field: string, order: Order) {
+        setSortBy(field)
+        setSortOrder(order)
+    }
+
     const sortOptions = [
         { label: "Name", value: "name" },
-        { label: "Products", value: "products" },
-        { label: "Created Date", value: "created" },
+        { label: "Status", value: "status" },
+        { label: "Created Date", value: "createdAt" },
+        { label: "Updated Date", value: "updatedAt" },
     ]
 
     const params = {
@@ -84,7 +81,7 @@ export default function AdminCategoriesPage() {
                 sortOrder={sortOrder}
                 onFilterChange={handleFilterChange}
                 onSearchChange={(search) => setSearchTerm(search)}
-                onSortChange={() => {}}
+                onSortChange={handleSortChange}
             />
             <CategoryList categories={data || []} />
         </div>

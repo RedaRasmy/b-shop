@@ -9,3 +9,6 @@ export type User = {
     role : 'admin' | 'customer',
     isEmailVerified : boolean
 }
+
+export type Status = "active" | "inactive"
+export type Order = "asc" | "desc"

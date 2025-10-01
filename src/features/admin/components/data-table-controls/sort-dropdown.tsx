@@ -5,6 +5,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import type { Order } from "@/lib/types"
 import { SortAsc, SortDesc } from "lucide-react"
 
 type Props = {
@@ -20,15 +21,19 @@ export default function SortDropdown({
     sortBy,
     sortOptions,
 }: Props) {
+    function isDate(str: string) {
+        return ["createdAt", "updatedAt"].includes(str)
+    }
+
     return (
         <Select
             value={`${sortBy}-${order}`}
             onValueChange={(value) => {
                 const [field, order] = value.split("-")
-                onChange(field, order as "asc" | "desc")
+                onChange(field, order as Order)
             }}
         >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full max-w-[300px]">
                 <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -37,13 +42,13 @@ export default function SortDropdown({
                         <SelectItem value={`${option.value}-asc`}>
                             <div className="flex items-center">
                                 <SortAsc className="h-4 w-4 mr-2" />
-                                {option.label} (A-Z)
+                                {option.label} {isDate(option.value) ? "(older)" : "(A-Z)"}
                             </div>
                         </SelectItem>
                         <SelectItem value={`${option.value}-desc`}>
                             <div className="flex items-center">
                                 <SortDesc className="h-4 w-4 mr-2" />
-                                {option.label} (Z-A)
+                                {option.label} {isDate(option.value) ? "(newer)" : "(Z-A)"}
                             </div>
                         </SelectItem>
                     </div>
