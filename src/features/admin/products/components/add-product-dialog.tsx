@@ -33,13 +33,12 @@ import {
     type ProductFormData,
 } from "@/features/admin/products/products.validation"
 import ImagesInput from "@/features/admin/products/components/images-input"
-import { useMutation } from "@tanstack/react-query"
-import { addProduct } from "@/features/admin/admin-requests"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { addProduct, getCategories } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import type { ChangeEvent } from "react"
 import { generateSlug } from "@/utils/generate-slug"
-
-const categories = ["Electronics", "Sports", "Home", "Clothing", "Books"]
+import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 
 type ProductImage = ProductFormData["images"][number]
 
@@ -56,6 +55,12 @@ export default function AddProductDialog() {
             status: "inactive",
             images: [],
         },
+    })
+
+    const { data: categories } = useQuery({
+        queryFn: () => getCategories(),
+        queryKey: ["admin-categories"],
+        select: (res) => (res.data || []) as AdminCategory[],
     })
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +116,7 @@ export default function AddProductDialog() {
         newImages[index] = { ...newImages[index], alt }
         form.setValue("images", newImages)
     }
-    
+
     const mutation = useMutation({
         mutationFn: addProduct,
         onSuccess: (data) => {
@@ -310,12 +315,12 @@ export default function AddProductDialog() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {categories.map((category) => (
+                                                {categories?.map((category) => (
                                                     <SelectItem
-                                                        key={category}
-                                                        value={category}
+                                                        key={category.id}
+                                                        value={category.id}
                                                     >
-                                                        {category}
+                                                        {category.name}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>

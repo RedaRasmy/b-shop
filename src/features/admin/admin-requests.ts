@@ -22,7 +22,7 @@ type CategoriesQuery = {
     status?: "active" | "inactive"
     sort?: string
 }
-export async function getCategories(params: CategoriesQuery) {
+export async function getCategories(params: CategoriesQuery = {}) {
     return axiosInstance.get("/admin/categories", {
         params,
     })
