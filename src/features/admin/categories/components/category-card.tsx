@@ -82,7 +82,7 @@ export default function CategoryCard({ category , onDelete, onEdit }: Props) {
                     <div className="flex items-center justify-between text-sm">
                         <div className="text-muted-foreground">
                             <span className="font-medium text-foreground">
-                                {category.productsCount}
+                                {category.productsCount || 0}
                             </span>{" "}
                             products
                         </div>
@@ -92,7 +92,7 @@ export default function CategoryCard({ category , onDelete, onEdit }: Props) {
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                        <UpdateCategoryDialog category={category} />
+                        <UpdateCategoryDialog category={category}  />
                         <Button
                             variant="outline"
                             size="sm"

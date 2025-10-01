@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query"
 import { updateCategory } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
+import { useState } from "react"
 
 type UpdatePayload = {
     id: string
@@ -19,13 +20,19 @@ export function UpdateCategoryDialog({
 }: {
     category: AdminCategory
 }) {
+    const [isEditOpen, setIsEditOpen] = useState(false)
+
     const { mutateAsync, isPending } = useMutation({
         mutationFn: ({ id, data }: UpdatePayload) => updateCategory(id, data),
         onSuccess: (data) => {
             console.log("success : ", data)
             queryClient.invalidateQueries({
-                queryKey: ["admin-categories", "categories"],
+                queryKey: ["admin-categories"],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["categories"],
+            })
+            setIsEditOpen(false)
         },
     })
 
@@ -37,6 +44,8 @@ export function UpdateCategoryDialog({
 
     return (
         <CategoryForm
+            open={isEditOpen}
+            onOpenChange={setIsEditOpen}
             triggerButton={
                 <Button asChild variant={"outline"}>
                     <div>

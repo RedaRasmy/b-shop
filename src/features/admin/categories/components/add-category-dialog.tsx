@@ -5,15 +5,21 @@ import { useMutation } from "@tanstack/react-query"
 import { addCategory } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
+import { useState } from "react"
 
 export function AddCategoryDialog() {
+    const [open, onOpenChange] = useState(false)
     const { mutateAsync, isPending } = useMutation({
         mutationFn: addCategory,
         onSuccess: (data) => {
             console.log("success : ", data)
             queryClient.invalidateQueries({
-                queryKey: ["admin-categories", "categories"],
+                queryKey: ["admin-categories"],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["categories"],
+            })
+            onOpenChange(false)
         },
     })
 
@@ -21,6 +27,8 @@ export function AddCategoryDialog() {
 
     return (
         <CategoryForm
+            open={open}
+            onOpenChange={onOpenChange}
             triggerButton={
                 <Button asChild>
                     <div>

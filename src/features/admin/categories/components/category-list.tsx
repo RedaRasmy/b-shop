@@ -1,4 +1,3 @@
-
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import CategoryCard from "@/features/admin/categories/components/category-card"
 
@@ -13,6 +12,7 @@ export default function CategoryList({ categories, onDelete, onEdit }: Props) {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {categories.map((category) => (
                 <CategoryCard
+                    key={category.id}
                     category={category}
                     onDelete={onDelete}
                     onEdit={onEdit}

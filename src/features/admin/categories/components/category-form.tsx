@@ -42,6 +42,8 @@ type Props = {
     initialData?: CategoryFormData
     isSubmitting : boolean
     triggerButton : ReactNode
+    onOpenChange?: (open:boolean) => void,
+    open?: boolean
 }
 export function CategoryForm({
     buttonText,
@@ -50,7 +52,9 @@ export function CategoryForm({
     title,
     initialData,
     isSubmitting,
-    triggerButton
+    triggerButton,
+    onOpenChange,
+    open
 }: Props) {
     const form = useForm<CategoryFormData>({
         resolver: zodResolver(CategoryFormSchema),
@@ -82,7 +86,7 @@ export function CategoryForm({
     }
 
     return (
-        <Dialog>
+        <Dialog onOpenChange={onOpenChange} open={open}>
             <DialogTrigger>
                 {triggerButton}
             </DialogTrigger>
