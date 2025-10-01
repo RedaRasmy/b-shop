@@ -1,18 +1,33 @@
-import type { CategoryFormData } from "@/features/admin/categories/categories.validation";
-import { axiosInstance } from "@/lib/axios";
+import type { CategoryFormData } from "@/features/admin/categories/categories.validation"
+import { axiosInstance } from "@/lib/axios"
 
-export async function addProduct(formData:FormData) {
-    return axiosInstance.post("/admin/products",formData,{
-        headers : {
-            "Content-Type" : "multipart/form-data"
-        }
+// Products
+
+export async function addProduct(formData: FormData) {
+    return axiosInstance.post("/admin/products", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
     })
-}    
-
-export async function addCategory(data:CategoryFormData) {
-    return axiosInstance.post("/admin/categories",data)
 }
 
-export async function updateCategory(id:string,data:CategoryFormData) {
-    return axiosInstance.put(`/admin/categories/${id}`,data)
+// Categories
+
+export async function addCategory(data: CategoryFormData) {
+    return axiosInstance.post("/admin/categories", data)
+}
+
+type CategoriesQuery = {
+    search?: string
+    status?: "active" | "inactive"
+    sort?: string
+}
+export async function getCategories(params: CategoriesQuery) {
+    return axiosInstance.get("/admin/categories", {
+        params,
+    })
+}
+
+export async function updateCategory(id: string, data: CategoryFormData) {
+    return axiosInstance.put(`/admin/categories/${id}`, data)
 }

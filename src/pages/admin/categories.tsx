@@ -1,6 +1,10 @@
+import { getCategories } from "@/features/admin/admin-requests"
+import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import { AddCategoryDialog } from "@/features/admin/categories/components/add-category-dialog"
+import CategoryList from "@/features/admin/categories/components/category-list"
 import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
+import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
 export default function AdminCategoriesPage() {
@@ -12,8 +16,8 @@ export default function AdminCategoriesPage() {
     // const [selectedCategory, setSelectedCategory] = useState<any>(null)
     // const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState<Record<string, string>>({})
-    const [sortBy, setSortBy] = useState("name")
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+    const [sortBy, setSortBy] = useState("createdAt")
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
 
     const filterOptions = [
         {
@@ -26,11 +30,30 @@ export default function AdminCategoriesPage() {
             ],
         },
     ]
+
     const sortOptions = [
         { label: "Name", value: "name" },
         { label: "Products", value: "products" },
         { label: "Created Date", value: "created" },
     ]
+
+
+    const params = {
+        search : searchTerm || undefined,
+        sort : sortBy+":"+sortOrder,
+    }
+
+    const { data } = useQuery({
+        queryKey : ['admin-categories',params],
+        queryFn : () => getCategories(params),
+        select : (res) => {
+            console.log('res : ',res)
+            return res.data
+        },
+    })
+
+    console.log('categories : ',data)
+
     return (
         <div className="space-y-6">
             <AdminPageHeader
@@ -48,9 +71,10 @@ export default function AdminCategoriesPage() {
                 sortOptions={sortOptions}
                 sortOrder={sortOrder}
                 onFilterChange={() => {}}
-                onSearchChange={() => {}}
+                onSearchChange={(search) => setSearchTerm(search)}
                 onSortChange={() => {}}
             />
+            <CategoryList categories={data || []} onDelete={() => {}} onEdit={() => {}} />
         </div>
     )
 }
