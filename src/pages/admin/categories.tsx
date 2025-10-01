@@ -4,15 +4,21 @@ import { AddCategoryDialog } from "@/features/admin/categories/components/add-ca
 import CategoryList from "@/features/admin/categories/components/category-list"
 import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
-import type { Order, Status } from "@/lib/types"
+import { useTableControls } from "@/features/admin/hooks/use-table-controls"
 import { useQuery } from "@tanstack/react-query"
-import { useState } from "react"
 
 export default function AdminCategoriesPage() {
-    const [searchTerm, setSearchTerm] = useState("")
-    const [filters, setFilters] = useState<Record<string, string>>({})
-    const [sortBy, setSortBy] = useState("createdAt")
-    const [sortOrder, setSortOrder] = useState<Order>("desc")
+    const {
+        clearFilters,
+        filters,
+        queryParams,
+        searchTerm,
+        setFilter,
+        setSearchTerm,
+        setSort,
+        sortBy,
+        sortOrder,
+    } = useTableControls()
 
     const filterOptions = [
         {
@@ -26,16 +32,6 @@ export default function AdminCategoriesPage() {
         },
     ]
 
-    function handleFilterChange(key: string, value: string) {
-        setFilters((prev) => ({ ...prev, [key]: value }))
-        // setCurrentPage(1)
-    }
-
-    function handleSortChange(field: string, order: Order) {
-        setSortBy(field)
-        setSortOrder(order)
-    }
-
     const sortOptions = [
         { label: "Name", value: "name" },
         { label: "Status", value: "status" },
@@ -43,18 +39,9 @@ export default function AdminCategoriesPage() {
         { label: "Updated Date", value: "updatedAt" },
     ]
 
-    const params = {
-        search: searchTerm || undefined,
-        sort: sortBy + ":" + sortOrder,
-        status:
-            filters["status"] === ""
-                ? undefined
-                : (filters["status"] as Status) ?? undefined,
-    }
-
     const { data } = useQuery({
-        queryKey: ["admin-categories", params],
-        queryFn: () => getCategories(params),
+        queryKey: ["admin-categories", queryParams],
+        queryFn: () => getCategories(queryParams),
         select: (res) => {
             return res.data as AdminCategory[]
         },
@@ -72,15 +59,15 @@ export default function AdminCategoriesPage() {
             </AdminPageHeader>
             <DataTableControls
                 activeFilters={filters}
-                onClearFilters={() => setFilters({})}
+                onClearFilters={clearFilters}
                 sortBy={sortBy}
                 filters={filterOptions}
                 searchTerm={searchTerm}
                 sortOptions={sortOptions}
                 sortOrder={sortOrder}
-                onFilterChange={handleFilterChange}
-                onSearchChange={(search) => setSearchTerm(search)}
-                onSortChange={handleSortChange}
+                onFilterChange={setFilter}
+                onSearchChange={setSearchTerm}
+                onSortChange={setSort}
             />
             <CategoryList categories={data || []} />
         </div>
