@@ -41,9 +41,9 @@ type Props = {
     onSubmit: (data: CategoryFormData) => Promise<unknown>
     initialData?: CategoryFormData
     isSubmitting : boolean
-    triggerButton : ReactNode
     onOpenChange?: (open:boolean) => void,
     open?: boolean
+    children?: ReactNode
 }
 export function CategoryForm({
     buttonText,
@@ -52,7 +52,7 @@ export function CategoryForm({
     title,
     initialData,
     isSubmitting,
-    triggerButton,
+    children,
     onOpenChange,
     open
 }: Props) {
@@ -88,7 +88,7 @@ export function CategoryForm({
     return (
         <Dialog onOpenChange={onOpenChange} open={open}>
             <DialogTrigger>
-                {triggerButton}
+                {children}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

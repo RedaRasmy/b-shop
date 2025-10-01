@@ -3,19 +3,15 @@ import CategoryCard from "@/features/admin/categories/components/category-card"
 
 type Props = {
     categories: AdminCategory[]
-    onDelete: (id: string) => void
-    onEdit: (category: AdminCategory) => void
 }
 
-export default function CategoryList({ categories, onDelete, onEdit }: Props) {
+export default function CategoryList({ categories}: Props) {
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid:cols-4">
             {categories.map((category) => (
                 <CategoryCard
                     key={category.id}
                     category={category}
-                    onDelete={onDelete}
-                    onEdit={onEdit}
                 />
             ))}
         </div>

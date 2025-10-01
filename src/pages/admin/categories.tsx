@@ -1,5 +1,4 @@
 import { getCategories } from "@/features/admin/admin-requests"
-import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import { AddCategoryDialog } from "@/features/admin/categories/components/add-category-dialog"
 import CategoryList from "@/features/admin/categories/components/category-list"
 import DataTableControls from "@/features/admin/components/data-table-controls"
@@ -37,22 +36,21 @@ export default function AdminCategoriesPage() {
         { label: "Created Date", value: "created" },
     ]
 
-
     const params = {
-        search : searchTerm || undefined,
-        sort : sortBy+":"+sortOrder,
+        search: searchTerm || undefined,
+        sort: sortBy + ":" + sortOrder,
     }
 
     const { data } = useQuery({
-        queryKey : ['admin-categories',params],
-        queryFn : () => getCategories(params),
-        select : (res) => {
-            console.log('res : ',res)
+        queryKey: ["admin-categories", params],
+        queryFn: () => getCategories(params),
+        select: (res) => {
+            console.log("res : ", res)
             return res.data
         },
     })
 
-    console.log('categories : ',data)
+    console.log("categories : ", data)
 
     return (
         <div className="space-y-6">
@@ -74,7 +72,7 @@ export default function AdminCategoriesPage() {
                 onSearchChange={(search) => setSearchTerm(search)}
                 onSortChange={() => {}}
             />
-            <CategoryList categories={data || []} onDelete={() => {}} onEdit={() => {}} />
+            <CategoryList categories={data || []} />
         </div>
     )
 }

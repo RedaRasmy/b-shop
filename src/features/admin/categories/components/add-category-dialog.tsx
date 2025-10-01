@@ -29,19 +29,18 @@ export function AddCategoryDialog() {
         <CategoryForm
             open={open}
             onOpenChange={onOpenChange}
-            triggerButton={
-                <Button asChild>
-                    <div>
-                        <Plus />
-                        Add Category
-                    </div>
-                </Button>
-            }
             title="Add Category"
             description="Add a new product category to organize your inventory."
             buttonText="Add Category"
             onSubmit={onSubmit}
             isSubmitting={isPending}
-        />
+        >
+            <Button asChild>
+                <div>
+                    <Plus />
+                    Add Category
+                </div>
+            </Button>
+        </CategoryForm>
     )
 }

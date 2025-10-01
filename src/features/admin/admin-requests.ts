@@ -31,3 +31,7 @@ export async function getCategories(params: CategoriesQuery) {
 export async function updateCategory(id: string, data: CategoryFormData) {
     return axiosInstance.put(`/admin/categories/${id}`, data)
 }
+
+export async function deleteCategory(id: string) {
+    return axiosInstance.delete("/admin/categories/" + id)
+}

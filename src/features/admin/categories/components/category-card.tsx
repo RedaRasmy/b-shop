@@ -11,20 +11,53 @@ import type { AdminCategory } from "@/features/admin/categories/categories.valid
 import { UpdateCategoryDialog } from "@/features/admin/categories/components/update-categorie-dialog"
 import { Edit, MoreHorizontal, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
-import {format} from 'date-fns'
+import { format } from "date-fns"
+import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
+import { useMutation } from "@tanstack/react-query"
+import { deleteCategory } from "@/features/admin/admin-requests"
+import { queryClient } from "@/main"
+import { useState } from "react"
 
 type Props = {
     category: AdminCategory
-    onDelete: (id: string) => void
-    onEdit: (category: AdminCategory) => void
 }
-export default function CategoryCard({ category , onDelete, onEdit }: Props) {
-    const createdAt = format(category.createdAt,'yyyy-MM-dd')
+export default function CategoryCard({ category }: Props) {
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+    const createdAt = format(category.createdAt, "yyyy-MM-dd")
+
+    const { mutateAsync, isPending } = useMutation({
+        mutationFn: deleteCategory,
+        onSuccess: (res) => {
+            console.log("deleted successfuly :", res)
+            queryClient.invalidateQueries({
+                queryKey: ["admin-categories"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["categories"],
+            })
+        },
+        onError: (err) => {
+            console.log("delete failed : ", err)
+        },
+    })
+
+    async function handleDelete() {
+        await mutateAsync(category.id)
+    }
+
     return (
         <Card
             key={category.id}
             className="hover:shadow-hover transition-all duration-200"
         >
+            <DeleteConfirmDialog
+                title="Delete Category"
+                description={`Are you sure you want to delete "${category.name}"? This action cannot be undone.`}
+                onConfirm={handleDelete}
+                isLoading={isPending}
+                open={isDeleteOpen}
+                onOpenChange={setIsDeleteOpen}
+            />
             <CardContent className="p-6">
                 <div className="space-y-4">
                     <div className="flex items-start justify-between">
@@ -60,20 +93,13 @@ export default function CategoryCard({ category , onDelete, onEdit }: Props) {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem
-                                    onClick={() => onEdit(category)}
+                                    variant="destructive"
+                                    onClick={() => setIsDeleteOpen(true)}
                                 >
-                                    <Edit className="h-4 w-4 mr-2" />
-                                    Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    View Products
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="text-destructive"
-                                    onClick={() => onDelete(category.id)}
-                                >
-                                    <Trash2 className="h-4 w-4 mr-2" />
-                                    Delete
+                                    <div className="flex items-center  ">
+                                        <Trash2 className="h-4 w-4 mr-2 text-destructive " />
+                                        Delete
+                                    </div>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -90,9 +116,15 @@ export default function CategoryCard({ category , onDelete, onEdit }: Props) {
                             Created {createdAt}
                         </div>
                     </div>
-
                     <div className="flex gap-2 pt-2">
-                        <UpdateCategoryDialog category={category}  />
+                        <UpdateCategoryDialog category={category}>
+                            <Button asChild variant={"outline"}>
+                                <div>
+                                    <Edit />
+                                    Edit
+                                </div>
+                            </Button>
+                        </UpdateCategoryDialog>
                         <Button
                             variant="outline"
                             size="sm"
