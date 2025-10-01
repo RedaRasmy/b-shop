@@ -86,9 +86,6 @@ export default function FilterDropdown({
                                             />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="all">
-                                                All
-                                            </SelectItem>
                                             {filter.options.map((option) => (
                                                 <SelectItem
                                                     key={option.value}

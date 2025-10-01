@@ -89,7 +89,7 @@ export default function DataTableControls({
                                     variant="ghost"
                                     size="sm"
                                     className="h-auto p-0 ml-1"
-                                    onClick={() => onFilterChange(key, "")}
+                                    onClick={() => onFilterChange(key, '')}
                                 >
                                     <X className="h-3 w-3" />
                                 </Button>

@@ -19,17 +19,26 @@ export default function AdminCategoriesPage() {
     const [sortBy, setSortBy] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
 
+    // const [status,setStatus] = useState<'active'|'inactive'|undefined>(undefined)
+
+    type Status = "active" | "inactive"
+
     const filterOptions = [
         {
             label: "Status",
             value: "status",
             type: "select" as const,
             options: [
-                { label: "Active", value: "Active" },
-                { label: "Inactive", value: "Inactive" },
+                { label: "Active", value: "active" },
+                { label: "Inactive", value: "inactive" },
             ],
         },
     ]
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => ({ ...prev, [key]: value }))
+        // setCurrentPage(1)
+    }
 
     const sortOptions = [
         { label: "Name", value: "name" },
@@ -40,6 +49,10 @@ export default function AdminCategoriesPage() {
     const params = {
         search: searchTerm || undefined,
         sort: sortBy + ":" + sortOrder,
+        status:
+            filters["status"] === ""
+                ? undefined
+                : (filters["status"] as Status) ?? undefined,
     }
 
     const { data } = useQuery({
@@ -55,19 +68,21 @@ export default function AdminCategoriesPage() {
         <div className="space-y-6">
             <AdminPageHeader
                 title="Categories"
-                description={`Organize your products with categories (${data?.length || 0} categories)`}
+                description={`Organize your products with categories (${
+                    data?.length || 0
+                } categories)`}
             >
                 <AddCategoryDialog />
             </AdminPageHeader>
             <DataTableControls
                 activeFilters={filters}
-                onClearFilters={() => {}}
+                onClearFilters={() => setFilters({})}
                 sortBy={sortBy}
                 filters={filterOptions}
                 searchTerm={searchTerm}
                 sortOptions={sortOptions}
                 sortOrder={sortOrder}
-                onFilterChange={() => {}}
+                onFilterChange={handleFilterChange}
                 onSearchChange={(search) => setSearchTerm(search)}
                 onSortChange={() => {}}
             />
