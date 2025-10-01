@@ -12,3 +12,7 @@ export async function addProduct(formData:FormData) {
 export async function addCategory(data:CategoryFormData) {
     return axiosInstance.post("/admin/categories",data)
 }
+
+export async function updateCategory(id:string,data:CategoryFormData) {
+    return axiosInstance.put(`/admin/categories/${id}`,data)
+}
