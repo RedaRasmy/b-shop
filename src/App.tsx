@@ -10,7 +10,7 @@ export default function App() {
 
     return (
         <div className="h-screen flex flex-col">
-            <nav className="flex items-center justify-between border-b border-black/20 px-2 lg:px-4 py-2 lg:py-3">
+            <nav className="flex items-center h-15 justify-between border-b border-black/10 px-2 lg:px-4">
                 <div className="flex space-x-6 items-center">
                     <NavLink
                         to="/"

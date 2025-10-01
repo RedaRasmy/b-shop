@@ -27,8 +27,7 @@ export default function CategoryCard({ category }: Props) {
 
     const { mutateAsync, isPending } = useMutation({
         mutationFn: deleteCategory,
-        onSuccess: (res) => {
-            console.log("deleted successfuly :", res)
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["admin-categories"],
             })
@@ -36,8 +35,7 @@ export default function CategoryCard({ category }: Props) {
                 queryKey: ["categories"],
             })
         },
-        onError: (err) => {
-            console.log("delete failed : ", err)
+        onError: () => {
         },
     })
 

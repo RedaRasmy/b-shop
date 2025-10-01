@@ -11,8 +11,8 @@ export default function AdminLayout() {
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main className="w-full">
-                <div className="border-b justify-between pl-2 pr-4 py-2 lg:py-3 border-black/10 w-full min-h-10 flex items-center">
+            <main className="w-full h-screen">
+                <div className="border-b h-15 justify-between pl-2 pr-4 border-black/10 w-full min-h-10 flex items-center">
                     <div className="flex gap-20 ">
                         <SidebarTrigger />
                         {/* <div className="text-accent gap-1 flex items-center font-semibold">
@@ -37,7 +37,7 @@ export default function AdminLayout() {
                         </Button>
                     </div>
                 </div>
-                <div className="px-3 md:px-4 lg:px-6 py-2 md:py-3 lg:py-5">
+                <div className="px-3 md:px-4 h-[calc(100%-3.75rem)] lg:px-6 py-2 md:py-3 lg:py-5">
                     <Outlet />
                 </div>
             </main>

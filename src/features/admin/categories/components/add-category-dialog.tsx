@@ -11,8 +11,7 @@ export function AddCategoryDialog() {
     const [open, onOpenChange] = useState(false)
     const { mutateAsync, isPending } = useMutation({
         mutationFn: addCategory,
-        onSuccess: (data) => {
-            console.log("success : ", data)
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["admin-categories"],
             })

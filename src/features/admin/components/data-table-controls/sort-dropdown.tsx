@@ -42,13 +42,15 @@ export default function SortDropdown({
                         <SelectItem value={`${option.value}-asc`}>
                             <div className="flex items-center">
                                 <SortAsc className="h-4 w-4 mr-2" />
-                                {option.label} {isDate(option.value) ? "(older)" : "(A-Z)"}
+                                {option.label}{" "}
+                                {isDate(option.value) ? "(older)" : "(A-Z)"}
                             </div>
                         </SelectItem>
                         <SelectItem value={`${option.value}-desc`}>
                             <div className="flex items-center">
                                 <SortDesc className="h-4 w-4 mr-2" />
-                                {option.label} {isDate(option.value) ? "(newer)" : "(Z-A)"}
+                                {option.label}{" "}
+                                {isDate(option.value) ? "(newer)" : "(Z-A)"}
                             </div>
                         </SelectItem>
                     </div>

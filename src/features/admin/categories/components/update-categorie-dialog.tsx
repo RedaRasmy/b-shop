@@ -25,8 +25,7 @@ export function UpdateCategoryDialog({
 
     const { mutateAsync, isPending } = useMutation({
         mutationFn: ({ id, data }: UpdatePayload) => updateCategory(id, data),
-        onSuccess: (data) => {
-            console.log("success : ", data)
+        onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["admin-categories"],
             })

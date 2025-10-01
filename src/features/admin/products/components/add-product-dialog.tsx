@@ -119,15 +119,16 @@ export default function AddProductDialog() {
 
     const mutation = useMutation({
         mutationFn: addProduct,
-        onSuccess: (data) => {
-            console.log("success data : ", data)
+        onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["admin-products", "products"],
+                queryKey: ["admin-products"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["products"],
             })
             form.reset()
         },
-        onError: (err) => {
-            console.log("error : ", err)
+        onError: () => {
         },
     })
 

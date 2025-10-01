@@ -56,13 +56,12 @@ export default function AdminCategoriesPage() {
         queryKey: ["admin-categories", params],
         queryFn: () => getCategories(params),
         select: (res) => {
-            console.log("res : ", res)
             return res.data as AdminCategory[]
         },
     })
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 h-full flex flex-col">
             <AdminPageHeader
                 title="Categories"
                 description={`Organize your products with categories (${
