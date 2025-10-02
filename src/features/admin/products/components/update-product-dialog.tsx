@@ -35,7 +35,6 @@ export default function UpdateProductDialog({
             })
             onOpenChange(false)
         },
-        onError: () => {},
     })
 
     async function onSubmit(data: FormData) {
