@@ -8,11 +8,13 @@ import {
 import type { Order } from "@/lib/types"
 import { SortAsc, SortDesc } from "lucide-react"
 
+type Option = { label: string; value: string }
+
 type Props = {
     sortBy: string
     order: "asc" | "desc"
     onChange: (field: string, order: "asc" | "desc") => void
-    sortOptions: { label: string; value: string }[]
+    sortOptions: Option[]
 }
 
 export default function SortDropdown({
@@ -23,6 +25,28 @@ export default function SortDropdown({
 }: Props) {
     function isDate(str: string) {
         return ["createdAt", "updatedAt"].includes(str)
+    }
+    function isNumber(str: string) {
+        return ["price", "stock"].includes(str)
+    }
+
+    function getOrderAsc(str: string) {
+        if (isDate(str)) {
+            return "(older)"
+        } else if (isNumber(str)) {
+            return "(lower)"
+        } else {
+            return "(A-Z)"
+        }
+    }
+    function getOrderDesc(str: string) {
+        if (isDate(str)) {
+            return "(newer)"
+        } else if (isNumber(str)) {
+            return "(higher)"
+        } else {
+            return "(Z-A)"
+        }
     }
 
     return (
@@ -43,14 +67,14 @@ export default function SortDropdown({
                             <div className="flex items-center">
                                 <SortAsc className="h-4 w-4 mr-2" />
                                 {option.label}{" "}
-                                {isDate(option.value) ? "(older)" : "(A-Z)"}
+                                {getOrderAsc(option.value)}
                             </div>
                         </SelectItem>
                         <SelectItem value={`${option.value}-desc`}>
                             <div className="flex items-center">
                                 <SortDesc className="h-4 w-4 mr-2" />
                                 {option.label}{" "}
-                                {isDate(option.value) ? "(newer)" : "(Z-A)"}
+                                {getOrderDesc(option.value)}
                             </div>
                         </SelectItem>
                     </div>

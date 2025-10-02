@@ -80,7 +80,7 @@ export default function FilterDropdown({
                                             onFilterChange(filter.value, value)
                                         }
                                     >
-                                        <SelectTrigger>
+                                        <SelectTrigger className="w-full">
                                             <SelectValue
                                                 placeholder={`Select ${filter.label.toLowerCase()}`}
                                             />

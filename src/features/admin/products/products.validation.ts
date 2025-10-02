@@ -7,6 +7,12 @@ import { z } from "zod"
 export const AdminProductSchema = ProductSchema.extend({
     status: StatusSchema,
     stock: z.int(),
+}).omit({
+    averageRating: true,
+    categoryName: true,
+    categorySlug: true,
+    reviews: true,
+    reviewCount: true,
 })
 
 export type AdminProduct = z.infer<typeof AdminProductSchema>
@@ -44,7 +50,7 @@ export const ProductFormSchema = z.object({
     price: z.number().min(0, "Price must be positive"),
     stock: z.int().min(0, "Stock must be positive"),
     // categoryId: z.string().min(1,"Category is Required").uuid(),
-    categoryId: z.string().min(1,"Category is Required"),// for now until add categories  
+    categoryId: z.string().min(1, "Category is Required"), // for now until add categories
     status: StatusSchema,
     images: z
         .array(ImageFormSchema)

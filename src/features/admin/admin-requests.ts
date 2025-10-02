@@ -11,6 +11,19 @@ export async function addProduct(formData: FormData) {
     })
 }
 
+type ProductsQuery = {
+    search?: string
+    status?: "active" | "inactive"
+    sort?: string
+    categoryId?: string
+
+}
+export async function getProducts(params:ProductsQuery={}) {
+    return axiosInstance.get('admin/products',{
+        params
+    })
+}
+
 // Categories
 
 export async function addCategory(data: CategoryFormData) {
@@ -22,6 +35,7 @@ type CategoriesQuery = {
     status?: "active" | "inactive"
     sort?: string
 }
+
 export async function getCategories(params: CategoriesQuery = {}) {
     return axiosInstance.get("/admin/categories", {
         params,
