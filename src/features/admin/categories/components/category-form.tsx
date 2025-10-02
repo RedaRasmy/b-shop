@@ -29,10 +29,12 @@ import {
 } from "@/components/ui/select"
 import {
     CategoryFormSchema,
+    type AdminCategory,
     type CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
 import type { ChangeEvent, ReactNode } from "react"
 import { generateSlug } from "@/utils/generate-slug"
+import axios from "axios"
 
 type Props = {
     buttonText: string
@@ -40,10 +42,11 @@ type Props = {
     description: string
     onSubmit: (data: CategoryFormData) => Promise<unknown>
     initialData?: CategoryFormData
-    isSubmitting : boolean
-    onOpenChange?: (open:boolean) => void,
+    isSubmitting: boolean
+    onOpenChange?: (open: boolean) => void
     open?: boolean
     children?: ReactNode
+    existingCategories?: AdminCategory[]
 }
 export function CategoryForm({
     buttonText,
@@ -54,7 +57,8 @@ export function CategoryForm({
     isSubmitting,
     children,
     onOpenChange,
-    open
+    open,
+    existingCategories = [],
 }: Props) {
     const form = useForm<CategoryFormData>({
         resolver: zodResolver(CategoryFormSchema),
@@ -66,36 +70,86 @@ export function CategoryForm({
         },
     })
 
-
-
-    async function handleSubmit(data:CategoryFormData) {
+    async function handleSubmit(data: CategoryFormData) {
         try {
             await onSubmit(data)
             form.reset()
         } catch (error) {
-            console.error("Submission failed : ",error)
+            if (axios.isAxiosError(error)) {
+                const message =
+                    error.response?.data.messsage || "Failed to save category"
+                form.setError("root", {
+                    message,
+                })
+            } else {
+                form.setError("root", {
+                    message: "An unexpected error occurred",
+                })
+            }
         }
     }
 
-
     function handleNameChange(e: ChangeEvent<HTMLInputElement>) {
         const newName = e.target.value
-        form.setValue("name", newName, { shouldValidate: true })
-        const slug = generateSlug(newName)
-        form.setValue("slug", slug, { shouldValidate: true })
+
+        // Check if name exists (excluding current category in edit mode)
+        const nameExists = existingCategories.some(
+            ({ name }) =>
+                name.toLowerCase() === newName.toLowerCase() &&
+                name.toLowerCase() !== initialData?.name?.toLowerCase()
+        )
+
+        if (nameExists) {
+            form.setValue("name", newName, { shouldValidate: false })
+            form.setError("name", {
+                message: "This category name is already in use",
+            })
+        } else {
+            form.setValue("name", newName, { shouldValidate: true })
+        }
+
+        /// Generate default slug
+        const newSlug = generateSlug(newName)
+
+        // Check if slug exists (excluding current category in edit mode)
+        const slugExists = existingCategories.some(
+            ({ slug }) => slug === newSlug && slug !== initialData?.slug
+        )
+        if (slugExists) {
+            form.setValue("slug", newSlug, { shouldValidate: false })
+            form.setError("slug", {
+                message: "This slug is already in use",
+            })
+        } else {
+            form.setValue("slug", newSlug, { shouldValidate: true })
+        }
     }
+
+    function handleSlugChange(e: ChangeEvent<HTMLInputElement>) {
+        const newSlug = e.target.value
+        // Check if slug exists (excluding current category in edit mode)
+        const slugExists = existingCategories.some(
+            ({ slug }) => slug === newSlug && slug !== initialData?.slug
+        )
+        if (slugExists) {
+            form.setValue("slug", newSlug, { shouldValidate: false })
+            form.setError("slug", {
+                message: "This slug is already in use",
+            })
+        } else {
+            form.setValue("slug", newSlug, { shouldValidate: true })
+        }
+    }
+
+    const error = form.formState.errors.root?.message
 
     return (
         <Dialog onOpenChange={onOpenChange} open={open}>
-            <DialogTrigger>
-                {children}
-            </DialogTrigger>
+            <DialogTrigger>{children}</DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>
-                        {description}
-                    </DialogDescription>
+                    <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
 
                 <Form {...form}>
@@ -103,6 +157,7 @@ export function CategoryForm({
                         onSubmit={form.handleSubmit(handleSubmit)}
                         className="space-y-4"
                     >
+                        <div className="text-destructive">{error}</div>
                         <FormField
                             control={form.control}
                             name="name"
@@ -131,6 +186,7 @@ export function CategoryForm({
                                         <Input
                                             placeholder="category-slug"
                                             {...field}
+                                            onChange={handleSlugChange}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -167,7 +223,7 @@ export function CategoryForm({
                                         defaultValue={field.value}
                                     >
                                         <FormControl>
-                                            <SelectTrigger>
+                                            <SelectTrigger className="w-full">
                                                 <SelectValue />
                                             </SelectTrigger>
                                         </FormControl>
@@ -191,10 +247,7 @@ export function CategoryForm({
                                     <div>Cancel</div>
                                 </Button>
                             </DialogClose>
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                            >
+                            <Button type="submit" disabled={isSubmitting}>
                                 {buttonText}
                             </Button>
                         </div>

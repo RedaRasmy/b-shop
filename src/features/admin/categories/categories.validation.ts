@@ -14,7 +14,7 @@ export type AdminCategory = z.infer<typeof AdminCategorySchema>
 /// Post
 
 export const CategoryFormSchema = z.object({
-    name: z.string().min(1, "Category name is required").max(30),
+    name: z.string().min(1, "Category name is required").max(30,"Name is too long (maximum 30 characters)"),
     description: z.string().min(1, "Description is required"),
     slug: SlugSchema,
     status: StatusSchema,

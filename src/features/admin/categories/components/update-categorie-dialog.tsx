@@ -1,10 +1,9 @@
-
 import {
     type AdminCategory,
     type CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
-import { useMutation } from "@tanstack/react-query"
-import { updateCategory } from "@/features/admin/admin-requests"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { getCategories, updateCategory } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import { useState, type ReactNode } from "react"
@@ -41,6 +40,12 @@ export function UpdateCategoryDialog({
             id: category.id,
             data,
         })
+        
+    const { data: categories } = useQuery({
+        queryKey: ["admin-categories"],
+        queryFn: () => getCategories(),
+        select: (res) => res.data as AdminCategory[],
+    })
 
     return (
         <CategoryForm
@@ -52,6 +57,7 @@ export function UpdateCategoryDialog({
             onSubmit={onSubmit}
             isSubmitting={isPending}
             initialData={category}
+            existingCategories={categories}
         >
             {children}
         </CategoryForm>

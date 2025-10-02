@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button"
-import { type CategoryFormData } from "@/features/admin/categories/categories.validation"
+import {
+    type AdminCategory,
+    type CategoryFormData,
+} from "@/features/admin/categories/categories.validation"
 import { Plus } from "lucide-react"
-import { useMutation } from "@tanstack/react-query"
-import { addCategory } from "@/features/admin/admin-requests"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { addCategory, getCategories } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import { useState } from "react"
@@ -22,6 +25,13 @@ export function AddCategoryDialog() {
         },
     })
 
+    const { data: categories } = useQuery({
+        queryKey: ["admin-categories"],
+        queryFn: () => getCategories(),
+        select: (res) => res.data as AdminCategory[],
+    })
+
+
     const onSubmit = async (data: CategoryFormData) => await mutateAsync(data)
 
     return (
@@ -33,6 +43,7 @@ export function AddCategoryDialog() {
             buttonText="Add Category"
             onSubmit={onSubmit}
             isSubmitting={isPending}
+            existingCategories={categories}
         >
             <Button asChild>
                 <div>

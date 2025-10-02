@@ -37,6 +37,7 @@ type CategoriesQuery = {
 }
 
 export async function getCategories(params: CategoriesQuery = {}) {
+    console.log('get categories runs...')
     return axiosInstance.get("/admin/categories", {
         params,
     })
