@@ -14,7 +14,12 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table"
+import { deleteProduct } from "@/features/admin/admin-requests"
+import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
+import UpdateProductDialog from "@/features/admin/products/components/update-product-dialog"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
+import { queryClient } from "@/main"
+import { useMutation } from "@tanstack/react-query"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -33,17 +38,42 @@ export default function ProductsTable({ products }: Props) {
     )
 
     function openEditDialog(product: TableProduct) {
-        setIsEditOpen(true)
         setSelectedProduct(product)
+        setIsEditOpen(true)
     }
 
     function openDeleteDialog(product: TableProduct) {
-        setIsDeleteOpen(true)
         setSelectedProduct(product)
+        setIsDeleteOpen(true)
     }
+
+    const { mutateAsync: handleDelete, isPending } = useMutation({
+        mutationFn: () => deleteProduct(selectedProduct!.id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["admin-categories"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["categories"],
+            })
+        },
+    })
 
     return (
         <Table>
+            <UpdateProductDialog
+                product={selectedProduct!}
+                open={isEditOpen}
+                onOpenChange={setIsDeleteOpen}
+            />
+            <DeleteConfirmDialog
+                title="Delete Product"
+                description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
+                onConfirm={handleDelete}
+                isLoading={isPending}
+                open={isDeleteOpen}
+                onOpenChange={setIsDeleteOpen}
+            />
             <TableHeader>
                 <TableRow>
                     <TableHead>Name</TableHead>

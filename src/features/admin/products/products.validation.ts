@@ -20,6 +20,7 @@ export type AdminProduct = z.infer<typeof AdminProductSchema>
 /// POST
 
 const ImageFormSchema = z.object({
+    id : z.string().optional(),
     alt: z.string().max(255, "Alt is too long").optional().default(""),
     isPrimary: z.boolean(),
     file: z
@@ -32,7 +33,7 @@ const ImageFormSchema = z.object({
             (file) =>
                 ["image/jpeg", "image/png", "image/webp"].includes(file.type),
             "Only JPEG, PNG, and WebP images are allowed"
-        ),
+        ).optional(),
     url: z.string(),
 })
 

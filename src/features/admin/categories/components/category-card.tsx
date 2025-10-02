@@ -35,8 +35,6 @@ export default function CategoryCard({ category }: Props) {
                 queryKey: ["categories"],
             })
         },
-        onError: () => {
-        },
     })
 
     async function handleDelete() {

@@ -16,13 +16,25 @@ type ProductsQuery = {
     status?: "active" | "inactive"
     sort?: string
     categoryId?: string
-
 }
-export async function getProducts(params:ProductsQuery={}) {
-    return axiosInstance.get('admin/products',{
-        params
+export async function getProducts(params: ProductsQuery = {}) {
+    return axiosInstance.get("/admin/products", {
+        params,
     })
 }
+
+export async function updateProduct(id: string, formData: FormData) {
+    return axiosInstance.put("/admin/products/" + id, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
+}
+
+export async function deleteProduct(id: string) {
+    return axiosInstance.delete("/admin/products/" + id)
+}
+
 
 // Categories
 
