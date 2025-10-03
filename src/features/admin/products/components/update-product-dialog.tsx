@@ -16,7 +16,7 @@ export default function UpdateProductDialog({
     open,
     product,
 }: Props) {
-    
+
     const { data: categories = [] } = useQuery({
         queryFn: () => getCategories(),
         queryKey: ["admin-categories"],

@@ -68,11 +68,13 @@ export default function ProductsTable({ products }: Props) {
 
     return (
         <Table>
-            <UpdateProductDialog
-                product={selectedProduct!}
-                open={isEditOpen}
-                onOpenChange={setIsEditOpen}
-            />
+            {selectedProduct && (
+                <UpdateProductDialog
+                    product={selectedProduct}
+                    open={isEditOpen}
+                    onOpenChange={setIsEditOpen}
+                />
+            )}
             <DeleteConfirmDialog
                 title="Delete Product"
                 description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
