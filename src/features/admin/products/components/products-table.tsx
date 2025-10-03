@@ -51,10 +51,10 @@ export default function ProductsTable({ products }: Props) {
         mutationFn: () => deleteProduct(selectedProduct!.id),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["admin-categories"],
+                queryKey: ["admin-products"],
             })
             queryClient.invalidateQueries({
-                queryKey: ["categories"],
+                queryKey: ["products"],
             })
         },
     })
@@ -168,7 +168,7 @@ export default function ProductsTable({ products }: Props) {
                                             <Link
                                                 to={`/products/${product.slug}`}
                                             >
-                                                <Eye className="h-4 w-4 mr-2" />
+                                                <Eye className="h-4 w-4 mr-2 hover:text-white" />
                                                 View Details
                                             </Link>
                                         </DropdownMenuItem>
@@ -177,11 +177,11 @@ export default function ProductsTable({ products }: Props) {
                                                 openEditDialog(product)
                                             }
                                         >
-                                            <Edit className="h-4 w-4 mr-2" />
+                                            <Edit className="h-4 w-4 mr-2 hover:text-white" />
                                             Edit
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
-                                            className="text-destructive"
+                                            variant="destructive"
                                             onClick={() =>
                                                 openDeleteDialog(product)
                                             }
