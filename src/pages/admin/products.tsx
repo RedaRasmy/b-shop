@@ -4,6 +4,7 @@ import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { useTableControls } from "@/features/admin/hooks/use-table-controls"
 import AddProductDialog from "@/features/admin/products/components/add-product-dialog"
+import ProductsTable from "@/features/admin/products/components/products-table"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { useQuery } from "@tanstack/react-query"
 
@@ -65,15 +66,21 @@ export default function AdminProductsPage() {
         { label: "Updated Date", value: "updatedAt" },
     ]
 
-    const { data:products=[] } = useQuery({
+    const { data: products = [] } = useQuery({
         queryKey: ["admin-products", updatedQueryParams],
         queryFn: () => getProducts(updatedQueryParams),
         select: (res) => {
-            return res.data as AdminProduct[]
+            return res.data.data as AdminProduct[]
         },
     })
 
     console.log("products : ", products)
+
+    const tableProducts = products.map((product) => ({
+        ...product,
+        categoryName: categories.find((cat) => cat.id === product.categoryId)!
+            .name,
+    }))
 
     return (
         <div className="space-y-6 h-full flex flex-col">
@@ -95,6 +102,7 @@ export default function AdminProductsPage() {
                 onSearchChange={setSearchTerm}
                 onSortChange={setSort}
             />
+            <ProductsTable products={tableProducts} />
         </div>
     )
 }

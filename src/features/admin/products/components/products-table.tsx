@@ -59,6 +59,13 @@ export default function ProductsTable({ products }: Props) {
         },
     })
 
+    //// Columns per screen :
+    // +xl : 7 (all)
+    // +lg : 6 (stock-status removed)
+    // +md : 5 (status removed)
+    // +sm : 4 (stock removed)
+    // else (in phone) : name , price , actions
+
     return (
         <Table>
             <UpdateProductDialog
@@ -78,10 +85,12 @@ export default function ProductsTable({ products }: Props) {
                 <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Price</TableHead>
-                    <TableHead>Stock</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Stock Status</TableHead>
+                    <TableHead className="not-sm:hidden">Stock</TableHead>
+                    <TableHead className="not-lg:hidden">Category</TableHead>
+                    <TableHead className="not-md:hidden">Status</TableHead>
+                    <TableHead className="not-xl:hidden">
+                        Stock Status
+                    </TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
             </TableHeader>
@@ -92,9 +101,13 @@ export default function ProductsTable({ products }: Props) {
                             {product.name}
                         </TableCell>
                         <TableCell>${product.price}</TableCell>
-                        <TableCell>{product.stock}</TableCell>
-                        <TableCell>{product.createdAt}</TableCell>
-                        <TableCell>
+                        <TableCell className="not-sm:hidden">
+                            {product.stock}
+                        </TableCell>
+                        <TableCell className="not-lg:hidden">
+                            {product.categoryName}
+                        </TableCell>
+                        <TableCell className="not-md:hidden">
                             <Badge
                                 variant={
                                     product.status === "active"
@@ -105,7 +118,7 @@ export default function ProductsTable({ products }: Props) {
                                 {product.status}
                             </Badge>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="not-xl:hidden">
                             <Badge
                                 variant={
                                     product.inventoryStatus === "In Stock"
