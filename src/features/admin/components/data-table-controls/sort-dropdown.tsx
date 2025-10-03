@@ -57,7 +57,7 @@ export default function SortDropdown({
                 onChange(field, order as Order)
             }}
         >
-            <SelectTrigger className="w-full max-w-[300px]">
+            <SelectTrigger className="w-full">
                 <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -66,15 +66,13 @@ export default function SortDropdown({
                         <SelectItem value={`${option.value}-asc`}>
                             <div className="flex items-center">
                                 <SortAsc className="h-4 w-4 mr-2" />
-                                {option.label}{" "}
-                                {getOrderAsc(option.value)}
+                                {option.label} {getOrderAsc(option.value)}
                             </div>
                         </SelectItem>
                         <SelectItem value={`${option.value}-desc`}>
                             <div className="flex items-center">
                                 <SortDesc className="h-4 w-4 mr-2" />
-                                {option.label}{" "}
-                                {getOrderDesc(option.value)}
+                                {option.label} {getOrderDesc(option.value)}
                             </div>
                         </SelectItem>
                     </div>
