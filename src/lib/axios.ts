@@ -7,7 +7,7 @@ export const axiosInstance = axios.create({
     baseURL: isProd ? import.meta.env.VITE_BACKEND_API_URL : "/api",
     withCredentials: true,
     headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
         Accept: "application/json",
     },
 })

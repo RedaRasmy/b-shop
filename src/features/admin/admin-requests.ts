@@ -4,11 +4,7 @@ import { axiosInstance } from "@/lib/axios"
 // Products
 
 export async function addProduct(formData: FormData) {
-    return axiosInstance.post("/admin/products", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    })
+    return axiosInstance.post("/admin/products", formData)
 }
 
 type ProductsQuery = {
@@ -24,17 +20,12 @@ export async function getProducts(params: ProductsQuery = {}) {
 }
 
 export async function updateProduct(id: string, formData: FormData) {
-    return axiosInstance.put("/admin/products/" + id, formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    })
+    return axiosInstance.put("/admin/products/" + id, formData)
 }
 
 export async function deleteProduct(id: string) {
     return axiosInstance.delete("/admin/products/" + id)
 }
-
 
 // Categories
 

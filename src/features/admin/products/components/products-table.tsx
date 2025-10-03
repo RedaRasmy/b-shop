@@ -71,7 +71,7 @@ export default function ProductsTable({ products }: Props) {
             <UpdateProductDialog
                 product={selectedProduct!}
                 open={isEditOpen}
-                onOpenChange={setIsDeleteOpen}
+                onOpenChange={setIsEditOpen}
             />
             <DeleteConfirmDialog
                 title="Delete Product"
