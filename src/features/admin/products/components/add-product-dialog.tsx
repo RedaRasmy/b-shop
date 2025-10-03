@@ -18,7 +18,8 @@ export default function AddProductDialog() {
 
     const { mutateAsync, isPending } = useMutation({
         mutationFn: (data: FormData) => addProduct(data),
-        onSuccess: () => {
+        onSuccess: (res) => {
+            console.log('add products success : ',res)
             queryClient.invalidateQueries({
                 queryKey: ["admin-products"],
             })
@@ -27,6 +28,9 @@ export default function AddProductDialog() {
             })
             onOpenChange(false)
         },
+        onError : (err) => {
+            console.log('add product error : ',err)
+        }
     })
 
     async function onSubmit(data: FormData) {

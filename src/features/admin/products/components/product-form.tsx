@@ -111,7 +111,7 @@ export default function ProductForm({
         Promise.all(filePromises)
             .then((newImages) => {
                 const finalImages = [...images, ...newImages]
-                form.setValue("images", finalImages)
+                form.setValue("images", finalImages ,{shouldValidate:true})
             })
             .catch((error) => {
                 console.error("Error reading files:", error)
@@ -184,7 +184,7 @@ export default function ProductForm({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogTrigger>{children}</DialogTrigger>
+            <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
