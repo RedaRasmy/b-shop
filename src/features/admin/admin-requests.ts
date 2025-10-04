@@ -12,6 +12,8 @@ type ProductsQuery = {
     status?: "active" | "inactive"
     sort?: string
     categoryId?: string
+    page?: number
+    perPage?: number
 }
 export async function getProducts(params: ProductsQuery = {}) {
     return axiosInstance.get("/admin/products", {

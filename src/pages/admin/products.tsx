@@ -4,9 +4,19 @@ import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { useTableControls } from "@/features/admin/hooks/use-table-controls"
 import AddProductDialog from "@/features/admin/products/components/add-product-dialog"
+import ProductsPagination from "@/features/admin/products/components/products-pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { useQuery } from "@tanstack/react-query"
+import { useRef, useState } from "react"
+
+type ProductsData = {
+    data: AdminProduct[]
+    page: number
+    perPage: number
+    total: number | null
+    totalPages: number | null
+}
 
 export default function AdminProductsPage() {
     const {
@@ -21,6 +31,12 @@ export default function AdminProductsPage() {
         sortOrder,
     } = useTableControls()
 
+    /// pagination
+    const [page, setPage] = useState(1)
+    const totalPagesRef = useRef<number>(1)
+
+    
+    // get categories
     const { data: categories = [] } = useQuery({
         queryKey: ["admin-categories"],
         queryFn: () => getCategories(),
@@ -31,9 +47,11 @@ export default function AdminProductsPage() {
 
     // update query params to use categoryId instead of categoryName
     const { category, ...params } = queryParams
-    const updatedQueryParams = {
+    const finalQueryParams = {
         ...params,
         categoryId: categories.find((c) => c.name === category)?.id,
+        page,
+        perPage: 15,
     }
 
     const filterOptions = [
@@ -66,13 +84,20 @@ export default function AdminProductsPage() {
         { label: "Updated Date", value: "updatedAt" },
     ]
 
-    const { data: products = [] } = useQuery({
-        queryKey: ["admin-products", updatedQueryParams],
-        queryFn: () => getProducts(updatedQueryParams),
+    const { data: { data: products = [] } = {} } = useQuery({
+        queryKey: ["admin-products", finalQueryParams],
+        queryFn: () => getProducts(finalQueryParams),
         select: (res) => {
-            return res.data.data as AdminProduct[]
+            // setTotalPages(res.data.totalPages)
+            const totalPages = res.data.totalPages
+            if (totalPages) {
+                totalPagesRef.current = res.data.totalPages
+            }
+            return res.data as ProductsData
         },
     })
+
+    console.log("total pages : ", totalPagesRef.current)
 
     const tableProducts = products.map((product) => ({
         ...product,
@@ -101,6 +126,11 @@ export default function AdminProductsPage() {
                 onSortChange={setSort}
             />
             <ProductsTable products={tableProducts} />
+            <ProductsPagination
+                page={page}
+                setPage={setPage}
+                totalPages={totalPagesRef.current}
+            />
         </div>
     )
 }

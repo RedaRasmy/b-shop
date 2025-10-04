@@ -64,7 +64,6 @@ export default function ProductForm({
     open,
     categories,
 }: Props) {
-    console.log('initial data : ',initialData)
     const form = useForm<ProductFormData>({
         resolver: zodResolver(ProductFormSchema),
         defaultValues: initialData || {
@@ -78,8 +77,6 @@ export default function ProductForm({
             images: [],
         },
     })
-
-    console.log('zod errors : ',form.formState.errors)
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || [])

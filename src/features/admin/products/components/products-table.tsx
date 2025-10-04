@@ -94,7 +94,7 @@ export default function ProductsTable({ products }: Props) {
     // else (in phone) : name , price , actions
 
     return (
-        <Table>
+        <Table className="">
             <ProductForm
                 key={selectedId}
                 open={isEditOpen}
