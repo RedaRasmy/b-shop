@@ -23,22 +23,19 @@ const ImageFormSchema = z.object({
     id: z.string().optional(),
     alt: z.string().max(255, "Alt is too long").optional().default(""),
     isPrimary: z.boolean(),
-    file: z.union([
-        z
-            .instanceof(File)
-            .refine(
-                (file) => file.size <= 10 * 1024 * 1024,
-                "Image must be less than 10MB"
-            )
-            .refine(
-                (file) =>
-                    ["image/jpeg", "image/png", "image/webp"].includes(
-                        file.type
-                    ),
-                "Only JPEG, PNG, and WebP images are allowed"
-            ).optional(),
-        z.undefined(),
-    ]),
+    file: z
+        .instanceof(File)
+        .refine(
+            (file) => file.size <= 10 * 1024 * 1024,
+            "Image must be less than 10MB"
+        )
+        .refine(
+            (file) =>
+                ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+            "Only JPEG, PNG, and WebP images are allowed"
+        )
+        .optional(),
+
     url: z.string(),
 })
 

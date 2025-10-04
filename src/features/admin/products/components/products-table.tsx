@@ -14,12 +14,13 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table"
-import { deleteProduct } from "@/features/admin/admin-requests"
+import { deleteProduct, getCategories, updateProduct } from "@/features/admin/admin-requests"
+import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
-import UpdateProductDialog from "@/features/admin/products/components/update-product-dialog"
+import ProductForm from "@/features/admin/products/components/product-form"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { queryClient } from "@/main"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -33,22 +34,21 @@ type Props = {
 export default function ProductsTable({ products }: Props) {
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-    const [selectedProduct, setSelectedProduct] = useState<null | TableProduct>(
-        null
-    )
+    const [selectedId, setSelectedId] = useState<null | string>(null)
+    const selectedProduct = products.find((p) => p.id === selectedId)
 
-    function openEditDialog(product: TableProduct) {
-        setSelectedProduct(product)
+    function openEditDialog(id: string) {
+        setSelectedId(id)
         setIsEditOpen(true)
     }
 
-    function openDeleteDialog(product: TableProduct) {
-        setSelectedProduct(product)
+    function openDeleteDialog(id: string) {
+        setSelectedId(id)
         setIsDeleteOpen(true)
     }
 
-    const { mutateAsync: handleDelete, isPending } = useMutation({
-        mutationFn: () => deleteProduct(selectedProduct!.id),
+    const { mutateAsync: handleDelete, isPending: isDeleting } = useMutation({
+        mutationFn: () => deleteProduct(selectedId!),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["admin-products"],
@@ -56,9 +56,36 @@ export default function ProductsTable({ products }: Props) {
             queryClient.invalidateQueries({
                 queryKey: ["products"],
             })
+            setIsDeleteOpen(false)
+            setSelectedId(null)
         },
     })
 
+    
+    const { data: categories = [] } = useQuery({
+        queryFn: () => getCategories(),
+        queryKey: ["admin-categories"],
+        select: (res) => (res.data || []) as AdminCategory[],
+    })
+    
+    const { mutateAsync, isPending: isUpdating } = useMutation({
+        mutationFn: (data: FormData) => updateProduct(selectedId!, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["admin-products"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["products"],
+            })
+            setIsEditOpen(false)
+            setSelectedId(null)
+        },
+    })
+    
+    async function onSubmit(data: FormData) {
+        await mutateAsync(data)
+    }
+    
     //// Columns per screen :
     // +xl : 7 (all)
     // +lg : 6 (stock-status removed)
@@ -68,18 +95,23 @@ export default function ProductsTable({ products }: Props) {
 
     return (
         <Table>
-            {selectedProduct && (
-                <UpdateProductDialog
-                    product={selectedProduct}
-                    open={isEditOpen}
-                    onOpenChange={setIsEditOpen}
-                />
-            )}
+            <ProductForm
+                key={selectedId}
+                open={isEditOpen}
+                onOpenChange={setIsEditOpen}
+                categories={categories}
+                title="Edit Product"
+                description="Update product information."
+                buttonText="Update Product"
+                onSubmit={onSubmit}
+                isSubmitting={isUpdating}
+                initialData={selectedProduct}
+            />
             <DeleteConfirmDialog
                 title="Delete Product"
                 description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
                 onConfirm={handleDelete}
-                isLoading={isPending}
+                isLoading={isDeleting}
                 open={isDeleteOpen}
                 onOpenChange={setIsDeleteOpen}
             />
@@ -149,7 +181,7 @@ export default function ProductsTable({ products }: Props) {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => openEditDialog(product)}
+                                    onClick={() => openEditDialog(product.id)}
                                     title="Edit"
                                 >
                                     <Edit className="h-4 w-4" />
@@ -174,7 +206,7 @@ export default function ProductsTable({ products }: Props) {
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             onClick={() =>
-                                                openEditDialog(product)
+                                                openEditDialog(product.id)
                                             }
                                         >
                                             <Edit className="h-4 w-4 mr-2 hover:text-white" />
@@ -183,7 +215,7 @@ export default function ProductsTable({ products }: Props) {
                                         <DropdownMenuItem
                                             variant="destructive"
                                             onClick={() =>
-                                                openDeleteDialog(product)
+                                                openDeleteDialog(product.id)
                                             }
                                         >
                                             <Trash2 className="h-4 w-4 mr-2" />
