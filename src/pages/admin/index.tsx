@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { useAuth } from "@/features/auth/use-auth"
 import { NavLink, Outlet } from "react-router-dom"
 import { AppSidebar } from "../../features/admin/components/app-sidebar"
+import { LogOut } from "lucide-react"
 // import { Shield } from "lucide-react"
 
 export default function AdminLayout() {
@@ -12,7 +13,7 @@ export default function AdminLayout() {
         <SidebarProvider>
             <AppSidebar />
             <main className="w-full h-screen">
-                <div className="border-b h-15 justify-between pl-2 pr-4 border-black/10 w-full min-h-10 flex items-center">
+                <div className="border-b h-15 justify-between pl-2 pr-4 lg:pr-7 border-black/10 w-full min-h-10 flex items-center">
                     <div className="flex gap-20 ">
                         <SidebarTrigger />
                         {/* <div className="text-accent gap-1 flex items-center font-semibold">
@@ -20,17 +21,18 @@ export default function AdminLayout() {
                             Admin Panel
                         </div> */}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 md:gap-3 lg:gap-4">
                         <Button
                             onClick={logout}
-                            variant={"default"}
+                            variant={"outline"}
                             className="cursor-pointer"
                         >
+                            <LogOut/>
                             Log out
                         </Button>
                         <Button
                             className="cursor-pointer"
-                            variant={"default"}
+                            variant={"outline"}
                             asChild
                         >
                             <NavLink to={"/"}>Shop</NavLink>
