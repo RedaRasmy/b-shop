@@ -1,5 +1,4 @@
-import type { Status } from "@/lib/types"
-import type { Prettify } from "node_modules/zod/v4/core/util.d.cts"
+import type { Status, Prettify } from "@/lib/types"
 
 type Params = Record<string, string | number | boolean>
 

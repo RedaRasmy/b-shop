@@ -12,3 +12,7 @@ export type User = {
 
 export type Status = "active" | "inactive"
 export type Order = "asc" | "desc"
+
+export type Prettify<T> = {
+    [K in keyof T]: T[K];
+} & {};
