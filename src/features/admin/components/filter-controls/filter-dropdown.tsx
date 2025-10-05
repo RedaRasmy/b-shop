@@ -12,14 +12,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { FilterOption } from "@/features/admin/components/data-table-controls"
+import type { FilterOptions } from "@/features/admin/components/filter-controls"
 import { Filter } from "lucide-react"
 
 type Props = {
     open: boolean
     onOpenChange: (open: boolean) => void
     onFilterChange: (key: string, value: string) => void
-    filters?: FilterOption[]
+    options?: FilterOptions
     activeFilters: Record<string, string>
     onClear: () => void
 }
@@ -27,7 +27,7 @@ type Props = {
 export default function FilterDropdown({
     open,
     onOpenChange,
-    filters = [],
+    options = [],
     activeFilters,
     onFilterChange,
     onClear,
@@ -35,7 +35,7 @@ export default function FilterDropdown({
     const activeFilterCount =
         Object.values(activeFilters).filter(Boolean).length
     return (
-        filters.length > 0 && (
+        options.length > 0 && (
             <Popover open={open} onOpenChange={onOpenChange}>
                 <PopoverTrigger asChild>
                     <Button variant="outline" className="relative">
@@ -65,7 +65,7 @@ export default function FilterDropdown({
                                 </Button>
                             )}
                         </div>
-                        {filters.map((filter) => (
+                        {options.map((filter) => (
                             <div key={filter.value} className="space-y-2">
                                 <label className="text-sm font-medium">
                                     {filter.label}

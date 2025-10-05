@@ -5,9 +5,9 @@ import {
     getProducts,
 } from "@/features/admin/admin-requests"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
-import DataTableControls from "@/features/admin/components/data-table-controls"
+import FilterControls from "@/features/admin/components/filter-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
-import { useTableControls } from "@/features/admin/hooks/use-table-controls"
+import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
 import ProductForm from "@/features/admin/products/components/product-form"
 import ProductsPagination from "@/features/admin/products/components/products-pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
@@ -17,6 +17,15 @@ import { queryClient } from "@/main"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useRef, useState } from "react"
+
+const sortOptions = [
+    { label: "Name", value: "name" },
+    { label: "Status", value: "status" },
+    { label: "Price", value: "price" },
+    { label: "Stock", value: "stock" },
+    { label: "Created Date", value: "createdAt" },
+    { label: "Updated Date", value: "updatedAt" },
+]
 
 type ProductsData = {
     data: AdminProduct[]
@@ -28,21 +37,6 @@ type ProductsData = {
 
 export default function AdminProductsPage() {
     const [isAddOpen, setIsAddOpen] = useState(false)
-    const {
-        clearFilters,
-        filters,
-        queryParams,
-        searchTerm,
-        setFilter,
-        setSearchTerm,
-        setSort,
-        sortBy,
-        sortOrder,
-    } = useTableControls()
-
-    /// pagination
-    const [page, setPage] = useState(1)
-    const totalPagesRef = useRef<number>(1)
 
     // get categories
     const { data: categories = [] } = useQuery({
@@ -52,15 +46,6 @@ export default function AdminProductsPage() {
             return res.data as AdminCategory[]
         },
     })
-
-    // update query params to use categoryId instead of categoryName
-    const { category, ...params } = queryParams
-    const finalQueryParams = {
-        ...params,
-        categoryId: categories.find((c) => c.name === category)?.id,
-        page,
-        perPage: 15,
-    }
 
     const filterOptions = [
         {
@@ -81,14 +66,23 @@ export default function AdminProductsPage() {
         },
     ]
 
-    const sortOptions = [
-        { label: "Name", value: "name" },
-        { label: "Status", value: "status" },
-        { label: "Price", value: "price" },
-        { label: "Stock", value: "stock" },
-        { label: "Created Date", value: "createdAt" },
-        { label: "Updated Date", value: "updatedAt" },
-    ]
+    const { queryParams, controls } = useFilterControls({
+        filterOptions,
+        sortOptions,
+    })
+
+    /// pagination
+    const [page, setPage] = useState(1)
+    const totalPagesRef = useRef<number>(1)
+
+    // update query params to use categoryId instead of categoryName
+    const { category, ...params } = queryParams
+    const finalQueryParams = {
+        ...params,
+        categoryId: categories.find((c) => c.name === category)?.id,
+        page,
+        perPage: 15,
+    }
 
     const { data: { data: products = [] } = {} } = useQuery({
         queryKey: queryKeys.products.admin(finalQueryParams),
@@ -148,18 +142,7 @@ export default function AdminProductsPage() {
                     </Button>
                 </ProductForm>
             </AdminPageHeader>
-            <DataTableControls
-                activeFilters={filters}
-                onClearFilters={clearFilters}
-                sortBy={sortBy}
-                filters={filterOptions}
-                searchTerm={searchTerm}
-                sortOptions={sortOptions}
-                sortOrder={sortOrder}
-                onFilterChange={setFilter}
-                onSearchChange={setSearchTerm}
-                onSortChange={setSort}
-            />
+            <FilterControls {...controls} />
             <ProductsTable products={tableProducts} />
             <ProductsPagination
                 page={page}

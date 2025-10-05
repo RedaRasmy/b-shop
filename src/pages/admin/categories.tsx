@@ -2,42 +2,35 @@ import { Button } from "@/components/ui/button"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import CategoryList from "@/features/admin/categories/components/category-list"
 import { useAdminCategories } from "@/features/admin/categories/hooks/use-admin-categories"
-import DataTableControls from "@/features/admin/components/data-table-controls"
+import FilterControls from "@/features/admin/components/filter-controls"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import AdminPageHeader from "@/features/admin/components/page-header"
-import { useTableControls } from "@/features/admin/hooks/use-table-controls"
+import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
 import { Plus } from "lucide-react"
 
+const filterOptions = [
+    {
+        label: "Status",
+        value: "status",
+        options: [
+            { label: "Active", value: "active" },
+            { label: "Inactive", value: "inactive" },
+        ],
+    },
+]
+
+const sortOptions = [
+    { label: "Name", value: "name" },
+    { label: "Status", value: "status" },
+    { label: "Created Date", value: "createdAt" },
+    { label: "Updated Date", value: "updatedAt" },
+]
+
 export default function AdminCategoriesPage() {
-    const {
-        clearFilters,
-        filters,
-        queryParams,
-        searchTerm,
-        setFilter,
-        setSearchTerm,
-        setSort,
-        sortBy,
-        sortOrder,
-    } = useTableControls()
-
-    const filterOptions = [
-        {
-            label: "Status",
-            value: "status",
-            options: [
-                { label: "Active", value: "active" },
-                { label: "Inactive", value: "inactive" },
-            ],
-        },
-    ]
-
-    const sortOptions = [
-        { label: "Name", value: "name" },
-        { label: "Status", value: "status" },
-        { label: "Created Date", value: "createdAt" },
-        { label: "Updated Date", value: "updatedAt" },
-    ]
+    const { queryParams, controls } = useFilterControls({
+        filterOptions,
+        sortOptions,
+    })
 
     const { categories, category, addForm, updateForm, confirm, triggers } =
         useAdminCategories({ queryParams })
@@ -67,18 +60,7 @@ export default function AdminCategoriesPage() {
                     </Button>
                 </CategoryForm>
             </AdminPageHeader>
-            <DataTableControls
-                activeFilters={filters}
-                onClearFilters={clearFilters}
-                sortBy={sortBy}
-                filters={filterOptions}
-                searchTerm={searchTerm}
-                sortOptions={sortOptions}
-                sortOrder={sortOrder}
-                onFilterChange={setFilter}
-                onSearchChange={setSearchTerm}
-                onSortChange={setSort}
-            />
+            <FilterControls {...controls} />
             <CategoryList categories={categories} {...triggers} />
         </div>
     )

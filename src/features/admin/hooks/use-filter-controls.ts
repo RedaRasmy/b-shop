@@ -1,13 +1,23 @@
 import { useSearchParams } from "react-router-dom"
 import type { Order } from "@/lib/types"
 import { useCallback, useMemo } from "react"
+import type {
+    FilterOptions,
+    SortOptions,
+} from "@/features/admin/components/filter-controls"
 
-interface UseTableControlsOptions {
+interface Params {
     defaultSort?: string
+    filterOptions: FilterOptions
+    sortOptions: SortOptions
 }
 
-export function useTableControls(options: UseTableControlsOptions = {}) {
-    const { defaultSort = "createdAt:desc" } = options
+export function useFilterControls(options: Params) {
+    const {
+        defaultSort = "createdAt:desc",
+        filterOptions,
+        sortOptions,
+    } = options
 
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -122,5 +132,17 @@ export function useTableControls(options: UseTableControlsOptions = {}) {
         setFilters,
         clearFilters,
         setSort,
+        controls: {
+            activeFilters: filters,
+            onClearFilters: clearFilters,
+            sortBy,
+            filterOptions,
+            searchTerm,
+            sortOptions,
+            sortOrder,
+            onFilterChange: setFilter,
+            onSearchChange: setSearchTerm,
+            onSortChange: setSort,
+        },
     }
 }

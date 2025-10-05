@@ -1,31 +1,33 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import FilterDropdown from "@/features/admin/components/data-table-controls/filter-dropdown"
-import AdminSearchInput from "@/features/admin/components/data-table-controls/search-input"
-import SortDropdown from "@/features/admin/components/data-table-controls/sort-dropdown"
+import FilterDropdown from "@/features/admin/components/filter-controls/filter-dropdown"
+import AdminSearchInput from "@/features/admin/components/filter-controls/search-input"
+import SortDropdown from "@/features/admin/components/filter-controls/sort-dropdown"
 import { X } from "lucide-react"
 import { useState } from "react"
 
-export type FilterOption = {
+export type FilterOptions = {
     label: string
     value: string
     options: { label: string; value: string }[]
-}
+}[]
+
+export type SortOptions = { label: string; value: string }[]
 
 type Props = {
     searchTerm: string
     onSearchChange: (value: string) => void
-    filters?: FilterOption[]
+    filterOptions?: FilterOptions
     activeFilters: Record<string, string>
     onFilterChange: (key: string, value: string) => void
     onClearFilters: () => void
     sortBy: string
     sortOrder: "asc" | "desc"
     onSortChange: (field: string, order: "asc" | "desc") => void
-    sortOptions: { label: string; value: string }[]
+    sortOptions: SortOptions
 }
 
-export default function DataTableControls({
+export default function FilterControls({
     activeFilters,
     onClearFilters,
     onFilterChange,
@@ -35,7 +37,7 @@ export default function DataTableControls({
     sortBy,
     sortOptions,
     sortOrder,
-    filters = [],
+    filterOptions = [],
 }: Props) {
     const [filtersOpen, setFiltersOpen] = useState(false)
 
@@ -54,7 +56,7 @@ export default function DataTableControls({
                 <div className="flex gap-2">
                     <FilterDropdown
                         activeFilters={activeFilters}
-                        filters={filters}
+                        options={filterOptions}
                         onClear={onClearFilters}
                         onFilterChange={onFilterChange}
                         onOpenChange={setFiltersOpen}
@@ -76,7 +78,7 @@ export default function DataTableControls({
                 <div className="flex flex-wrap gap-2">
                     {Object.entries(activeFilters).map(([key, value]) => {
                         if (!value) return null
-                        const filter = filters.find((f) => f.value === key)
+                        const filter = filterOptions.find((f) => f.value === key)
                         return (
                             <Badge
                                 key={key}
@@ -88,7 +90,7 @@ export default function DataTableControls({
                                     variant="ghost"
                                     size="sm"
                                     className="h-auto p-0 ml-1"
-                                    onClick={() => onFilterChange(key, '')}
+                                    onClick={() => onFilterChange(key, "")}
                                 >
                                     <X className="h-3 w-3" />
                                 </Button>
