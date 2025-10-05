@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
     Popover,
     PopoverContent,
@@ -71,7 +70,7 @@ export default function FilterDropdown({
                                 <label className="text-sm font-medium">
                                     {filter.label}
                                 </label>
-                                {filter.type === "select" && filter.options ? (
+                                {filter.options.length > 0 && (
                                     <Select
                                         value={
                                             activeFilters[filter.value] || ""
@@ -96,19 +95,6 @@ export default function FilterDropdown({
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                ) : (
-                                    <Input
-                                        placeholder={`Filter by ${filter.label.toLowerCase()}`}
-                                        value={
-                                            activeFilters[filter.value] || ""
-                                        }
-                                        onChange={(e) =>
-                                            onFilterChange(
-                                                filter.value,
-                                                e.target.value
-                                            )
-                                        }
-                                    />
                                 )}
                             </div>
                         ))}

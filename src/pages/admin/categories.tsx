@@ -25,7 +25,6 @@ export default function AdminCategoriesPage() {
         {
             label: "Status",
             value: "status",
-            type: "select" as const,
             options: [
                 { label: "Active", value: "active" },
                 { label: "Inactive", value: "inactive" },

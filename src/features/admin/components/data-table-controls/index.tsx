@@ -9,8 +9,7 @@ import { useState } from "react"
 export type FilterOption = {
     label: string
     value: string
-    type: "select" | "date" | "number"
-    options?: { label: string; value: string }[]
+    options: { label: string; value: string }[]
 }
 
 type Props = {

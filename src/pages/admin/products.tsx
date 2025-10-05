@@ -66,7 +66,6 @@ export default function AdminProductsPage() {
         {
             label: "Status",
             value: "status",
-            type: "select" as const,
             options: [
                 { label: "Active", value: "active" },
                 { label: "Inactive", value: "inactive" },
@@ -75,7 +74,6 @@ export default function AdminProductsPage() {
         {
             label: "Category",
             value: "category",
-            type: "select" as const,
             options: categories.map((c) => ({
                 label: c.name,
                 value: c.name,
