@@ -7,6 +7,7 @@ import AddProductDialog from "@/features/admin/products/components/add-product-d
 import ProductsPagination from "@/features/admin/products/components/products-pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
+import { queryKeys } from "@/lib/query-keys"
 import { useQuery } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 
@@ -35,10 +36,9 @@ export default function AdminProductsPage() {
     const [page, setPage] = useState(1)
     const totalPagesRef = useRef<number>(1)
 
-    
     // get categories
     const { data: categories = [] } = useQuery({
-        queryKey: ["admin-categories"],
+        queryKey: queryKeys.categories.admin(),
         queryFn: () => getCategories(),
         select: (res) => {
             return res.data as AdminCategory[]
@@ -85,7 +85,7 @@ export default function AdminProductsPage() {
     ]
 
     const { data: { data: products = [] } = {} } = useQuery({
-        queryKey: ["admin-products", finalQueryParams],
+        queryKey: queryKeys.products.admin(finalQueryParams),
         queryFn: () => getProducts(finalQueryParams),
         select: (res) => {
             // setTotalPages(res.data.totalPages)

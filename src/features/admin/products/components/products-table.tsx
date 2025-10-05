@@ -19,6 +19,7 @@ import type { AdminCategory } from "@/features/admin/categories/categories.valid
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import ProductForm from "@/features/admin/products/components/product-form"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
+import { queryKeys } from "@/lib/query-keys"
 import { queryClient } from "@/main"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
@@ -63,8 +64,8 @@ export default function ProductsTable({ products }: Props) {
 
     
     const { data: categories = [] } = useQuery({
+        queryKey: queryKeys.categories.admin(),
         queryFn: () => getCategories(),
-        queryKey: ["admin-categories"],
         select: (res) => (res.data || []) as AdminCategory[],
     })
     

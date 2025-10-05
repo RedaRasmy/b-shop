@@ -5,6 +5,7 @@ import CategoryList from "@/features/admin/categories/components/category-list"
 import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { useTableControls } from "@/features/admin/hooks/use-table-controls"
+import { queryKeys } from "@/lib/query-keys"
 import { useQuery } from "@tanstack/react-query"
 
 export default function AdminCategoriesPage() {
@@ -40,7 +41,7 @@ export default function AdminCategoriesPage() {
     ]
 
     const { data } = useQuery({
-        queryKey: ["admin-categories", queryParams],
+        queryKey: queryKeys.categories.admin(queryParams),
         queryFn: () => getCategories(queryParams),
         select: (res) => {
             return res.data as AdminCategory[]

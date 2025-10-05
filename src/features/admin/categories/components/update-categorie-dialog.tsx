@@ -7,6 +7,7 @@ import { getCategories, updateCategory } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import { useState, type ReactNode } from "react"
+import { queryKeys } from "@/lib/query-keys"
 
 type UpdatePayload = {
     id: string
@@ -42,7 +43,7 @@ export function UpdateCategoryDialog({
         })
         
     const { data: categories } = useQuery({
-        queryKey: ["admin-categories"],
+        queryKey: queryKeys.categories.admin(),
         queryFn: () => getCategories(),
         select: (res) => res.data as AdminCategory[],
     })

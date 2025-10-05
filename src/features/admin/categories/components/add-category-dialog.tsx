@@ -9,6 +9,7 @@ import { addCategory, getCategories } from "@/features/admin/admin-requests"
 import { queryClient } from "@/main"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import { useState } from "react"
+import { queryKeys } from "@/lib/query-keys"
 
 export function AddCategoryDialog() {
     const [open, onOpenChange] = useState(false)
@@ -26,7 +27,7 @@ export function AddCategoryDialog() {
     })
 
     const { data: categories } = useQuery({
-        queryKey: ["admin-categories"],
+        queryKey: queryKeys.categories.admin(),
         queryFn: () => getCategories(),
         select: (res) => res.data as AdminCategory[],
     })

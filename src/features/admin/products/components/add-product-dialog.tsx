@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { addProduct, getCategories } from "@/features/admin/admin-requests"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import ProductForm from "@/features/admin/products/components/product-form"
+import { queryKeys } from "@/lib/query-keys"
 import { queryClient } from "@/main"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
@@ -11,8 +12,8 @@ export default function AddProductDialog() {
     const [open, onOpenChange] = useState(false)
 
     const { data: categories = [] } = useQuery({
+        queryKey: queryKeys.categories.admin(),
         queryFn: () => getCategories(),
-        queryKey: ["admin-categories"],
         select: (res) => (res.data || []) as AdminCategory[],
     })
 
@@ -26,7 +27,7 @@ export default function AddProductDialog() {
                 queryKey: ["products"],
             })
             onOpenChange(false)
-        }
+        },
     })
 
     async function onSubmit(data: FormData) {
