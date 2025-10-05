@@ -1,14 +1,21 @@
-import { getCategories, getProducts } from "@/features/admin/admin-requests"
+import { Button } from "@/components/ui/button"
+import {
+    addProduct,
+    getCategories,
+    getProducts,
+} from "@/features/admin/admin-requests"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { useTableControls } from "@/features/admin/hooks/use-table-controls"
-import AddProductDialog from "@/features/admin/products/components/add-product-dialog"
+import ProductForm from "@/features/admin/products/components/product-form"
 import ProductsPagination from "@/features/admin/products/components/products-pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { queryKeys } from "@/lib/query-keys"
-import { useQuery } from "@tanstack/react-query"
+import { queryClient } from "@/main"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { Plus } from "lucide-react"
 import { useRef, useState } from "react"
 
 type ProductsData = {
@@ -20,6 +27,7 @@ type ProductsData = {
 }
 
 export default function AdminProductsPage() {
+    const [isAddOpen, setIsAddOpen] = useState(false)
     const {
         clearFilters,
         filters,
@@ -97,13 +105,28 @@ export default function AdminProductsPage() {
         },
     })
 
-    console.log("total pages : ", totalPagesRef.current)
-
     const tableProducts = products.map((product) => ({
         ...product,
         categoryName: categories.find((cat) => cat.id === product.categoryId)!
             .name,
     }))
+
+    const { mutateAsync, isPending } = useMutation({
+        mutationFn: (data: FormData) => addProduct(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["admin-products"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["products"],
+            })
+            setIsAddOpen(false)
+        },
+    })
+
+    async function onSubmit(data: FormData) {
+        await mutateAsync(data)
+    }
 
     return (
         <div className="space-y-6 h-full flex flex-col">
@@ -111,7 +134,21 @@ export default function AdminProductsPage() {
                 title="Poducts"
                 description="Manage your product inventory"
             >
-                <AddProductDialog />
+                <ProductForm
+                    open={isAddOpen}
+                    onOpenChange={setIsAddOpen}
+                    categories={categories}
+                    title="Add Product"
+                    description="Add a new product to your inventory."
+                    buttonText="Add Product"
+                    onSubmit={onSubmit}
+                    isSubmitting={isPending}
+                >
+                    <Button>
+                        <Plus />
+                        Add Product
+                    </Button>
+                </ProductForm>
             </AdminPageHeader>
             <DataTableControls
                 activeFilters={filters}
