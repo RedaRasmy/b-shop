@@ -51,7 +51,6 @@ export function useFilterControls(options: Params) {
                         params.set(key, value)
                     }
                 })
-
                 return params
             })
         },

@@ -14,78 +14,19 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table"
-import { deleteProduct, getCategories, updateProduct } from "@/features/admin/admin-requests"
-import type { AdminCategory } from "@/features/admin/categories/categories.validation"
-import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
-import ProductForm from "@/features/admin/products/components/product-form"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
-import { queryKeys } from "@/lib/query-keys"
-import { queryClient } from "@/main"
-import { useMutation, useQuery } from "@tanstack/react-query"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
-import { useState } from "react"
 import { Link } from "react-router-dom"
 
 type TableProduct = AdminProduct & { categoryName: string }
 
 type Props = {
     products: TableProduct[]
+    onUpdate: (id: string) => void
+    onDelete: (id: string) => void
 }
 
-export default function ProductsTable({ products }: Props) {
-    const [isEditOpen, setIsEditOpen] = useState(false)
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-    const [selectedId, setSelectedId] = useState<null | string>(null)
-    const selectedProduct = products.find((p) => p.id === selectedId)
-
-    function openEditDialog(id: string) {
-        setSelectedId(id)
-        setIsEditOpen(true)
-    }
-
-    function openDeleteDialog(id: string) {
-        setSelectedId(id)
-        setIsDeleteOpen(true)
-    }
-
-    const { mutateAsync: handleDelete, isPending: isDeleting } = useMutation({
-        mutationFn: () => deleteProduct(selectedId!),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["admin-products"],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["products"],
-            })
-            setIsDeleteOpen(false)
-            setSelectedId(null)
-        },
-    })
-
-    
-    const { data: categories = [] } = useQuery({
-        queryKey: queryKeys.categories.admin(),
-        queryFn: () => getCategories(),
-        select: (res) => (res.data || []) as AdminCategory[],
-    })
-    
-    const { mutateAsync, isPending: isUpdating } = useMutation({
-        mutationFn: (data: FormData) => updateProduct(selectedId!, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["admin-products"],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["products"],
-            })
-            setIsEditOpen(false)
-            setSelectedId(null)
-        },
-    })
-    
-    async function onSubmit(data: FormData) {
-        await mutateAsync(data)
-    }
+export default function ProductsTable({ products, onUpdate, onDelete }: Props) {
     
     //// Columns per screen :
     // +xl : 7 (all)
@@ -96,26 +37,6 @@ export default function ProductsTable({ products }: Props) {
 
     return (
         <Table className="">
-            <ProductForm
-                key={selectedId}
-                open={isEditOpen}
-                onOpenChange={setIsEditOpen}
-                categories={categories}
-                title="Edit Product"
-                description="Update product information."
-                buttonText="Update Product"
-                onSubmit={onSubmit}
-                isSubmitting={isUpdating}
-                initialData={selectedProduct}
-            />
-            <DeleteConfirmDialog
-                title="Delete Product"
-                description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
-                onConfirm={handleDelete}
-                isLoading={isDeleting}
-                open={isDeleteOpen}
-                onOpenChange={setIsDeleteOpen}
-            />
             <TableHeader>
                 <TableRow>
                     <TableHead>Name</TableHead>
@@ -182,7 +103,7 @@ export default function ProductsTable({ products }: Props) {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => openEditDialog(product.id)}
+                                    onClick={() => onUpdate(product.id)}
                                     title="Edit"
                                 >
                                     <Edit className="h-4 w-4" />
@@ -206,18 +127,14 @@ export default function ProductsTable({ products }: Props) {
                                             </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
-                                            onClick={() =>
-                                                openEditDialog(product.id)
-                                            }
+                                            onClick={() => onUpdate(product.id)}
                                         >
                                             <Edit className="h-4 w-4 mr-2 hover:text-white" />
                                             Edit
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             variant="destructive"
-                                            onClick={() =>
-                                                openDeleteDialog(product.id)
-                                            }
+                                            onClick={() => onDelete(product.id)}
                                         >
                                             <Trash2 className="h-4 w-4 mr-2" />
                                             Delete
