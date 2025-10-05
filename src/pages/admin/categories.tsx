@@ -1,14 +1,22 @@
-import { getCategories } from "@/features/admin/admin-requests"
-import type { AdminCategory } from "@/features/admin/categories/categories.validation"
-import { AddCategoryDialog } from "@/features/admin/categories/components/add-category-dialog"
+import { Button } from "@/components/ui/button"
+import { addCategory, getCategories } from "@/features/admin/admin-requests"
+import type {
+    AdminCategory,
+    CategoryFormData,
+} from "@/features/admin/categories/categories.validation"
+import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import CategoryList from "@/features/admin/categories/components/category-list"
 import DataTableControls from "@/features/admin/components/data-table-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { useTableControls } from "@/features/admin/hooks/use-table-controls"
 import { queryKeys } from "@/lib/query-keys"
-import { useQuery } from "@tanstack/react-query"
+import { queryClient } from "@/main"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { Plus } from "lucide-react"
+import { useState } from "react"
 
 export default function AdminCategoriesPage() {
+    const [isAddOpen, setIsAddOpen] = useState(false)
     const {
         clearFilters,
         filters,
@@ -39,7 +47,7 @@ export default function AdminCategoriesPage() {
         { label: "Updated Date", value: "updatedAt" },
     ]
 
-    const { data } = useQuery({
+    const { data: categories = [] } = useQuery({
         queryKey: queryKeys.categories.admin(queryParams),
         queryFn: () => getCategories(queryParams),
         select: (res) => {
@@ -47,15 +55,44 @@ export default function AdminCategoriesPage() {
         },
     })
 
+    const { mutateAsync, isPending } = useMutation({
+        mutationFn: addCategory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["admin-categories"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["categories"],
+            })
+            setIsAddOpen(false)
+        },
+    })
+
+    const onSubmit = async (data: CategoryFormData) => await mutateAsync(data)
+
     return (
         <div className="space-y-6 h-full flex flex-col">
             <AdminPageHeader
                 title="Categories"
-                description={`Organize your products with categories (${
-                    data?.length || 0
-                } categories)`}
+                description={`Organize your products with categories (${categories.length} categories)`}
             >
-                <AddCategoryDialog />
+                <CategoryForm
+                    open={isAddOpen}
+                    onOpenChange={setIsAddOpen}
+                    title="Add Category"
+                    description="Add a new product category to organize your inventory."
+                    buttonText="Add Category"
+                    onSubmit={onSubmit}
+                    isSubmitting={isPending}
+                    existingCategories={categories}
+                >
+                    <Button asChild>
+                        <div>
+                            <Plus />
+                            Add Category
+                        </div>
+                    </Button>
+                </CategoryForm>
             </AdminPageHeader>
             <DataTableControls
                 activeFilters={filters}
@@ -69,7 +106,7 @@ export default function AdminCategoriesPage() {
                 onSearchChange={setSearchTerm}
                 onSortChange={setSort}
             />
-            <CategoryList categories={data || []} />
+            <CategoryList categories={categories} />
         </div>
     )
 }

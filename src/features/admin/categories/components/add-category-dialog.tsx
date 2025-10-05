@@ -13,6 +13,12 @@ import { queryKeys } from "@/lib/query-keys"
 
 export function AddCategoryDialog() {
     const [open, onOpenChange] = useState(false)
+    
+    const { data: categories } = useQuery({
+        queryKey: queryKeys.categories.admin(),
+        queryFn: () => getCategories(),
+        select: (res) => res.data as AdminCategory[],
+    })
     const { mutateAsync, isPending } = useMutation({
         mutationFn: addCategory,
         onSuccess: () => {
@@ -24,12 +30,6 @@ export function AddCategoryDialog() {
             })
             onOpenChange(false)
         },
-    })
-
-    const { data: categories } = useQuery({
-        queryKey: queryKeys.categories.admin(),
-        queryFn: () => getCategories(),
-        select: (res) => res.data as AdminCategory[],
     })
 
 
