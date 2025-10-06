@@ -161,7 +161,7 @@ export default function ProductForm({
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const message =
-                    error.response?.data.messsage || "Failed to save product"
+                    error.response?.data.message || "Failed to save product"
                 form.setError("root", {
                     message,
                 })
