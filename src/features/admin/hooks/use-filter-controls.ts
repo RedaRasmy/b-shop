@@ -5,11 +5,13 @@ import type {
     FilterOptions,
     SortOptions,
 } from "@/features/admin/components/filter-controls"
+import { usePagination } from "@/features/admin/hooks/use-pagination"
 
 interface Params {
     defaultSort?: string
     filterOptions: FilterOptions
     sortOptions: SortOptions
+    pagination?: boolean
 }
 
 export function useFilterControls(options: Params) {
@@ -17,7 +19,11 @@ export function useFilterControls(options: Params) {
         defaultSort = "createdAt:desc",
         filterOptions,
         sortOptions,
+        pagination = false,
     } = options
+
+    /// Pagination
+    const { page, setPage } = usePagination()
 
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -60,22 +66,25 @@ export function useFilterControls(options: Params) {
     const setSearchTerm = useCallback(
         (search: string) => {
             updateParams({ search })
+            setPage(1)
         },
-        [updateParams]
+        [updateParams, setPage]
     )
 
     const setFilter = useCallback(
         (key: string, value: string) => {
             updateParams({ [key]: value })
+            setPage(1)
         },
-        [updateParams]
+        [updateParams, setPage]
     )
 
     const setFilters = useCallback(
         (newFilters: Record<string, string>) => {
             updateParams(newFilters)
+            setPage(1)
         },
-        [updateParams]
+        [updateParams, setPage]
     )
 
     const clearFilters = useCallback(() => {
@@ -91,14 +100,16 @@ export function useFilterControls(options: Params) {
 
             return params
         })
-    }, [setSearchParams])
+        setPage(1)
+    }, [setSearchParams, setPage])
 
     const setSort = useCallback(
         (field: string, order: Order) => {
             const sort = `${field}:${order}`
             updateParams({ sort })
+            setPage(1)
         },
-        [updateParams]
+        [updateParams, setPage]
     )
 
     // Build query params object for API calls
@@ -113,8 +124,15 @@ export function useFilterControls(options: Params) {
             params[key] = value || undefined
         })
 
+        if (pagination) {
+            return {
+                ...params,
+                page,
+            } as Record<string, number | string | undefined>
+        }
+
         return params
-    }, [searchTerm, sort, filters])
+    }, [searchTerm, sort, filters, page, pagination])
 
     return {
         // Current values
@@ -143,5 +161,7 @@ export function useFilterControls(options: Params) {
             onSearchChange: setSearchTerm,
             onSortChange: setSort,
         },
+        page,
+        setPage
     }
 }

@@ -17,7 +17,10 @@ type ProductsQuery = {
 }
 export async function getProducts(params: ProductsQuery = {}) {
     return axiosInstance.get("/admin/products", {
-        params,
+        params: {
+            ...params,
+            perPage: 15,
+        },
     })
 }
 

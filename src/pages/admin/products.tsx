@@ -55,9 +55,11 @@ export default function AdminProductsPage() {
         [categories]
     )
 
-    const { queryParams, controls } = useFilterControls({
+    // Filter controls
+    const { queryParams, controls, page, setPage } = useFilterControls({
         filterOptions,
         sortOptions,
+        pagination: true,
     })
 
     const {
@@ -65,11 +67,14 @@ export default function AdminProductsPage() {
         updateForm,
         confirm,
         products,
-        pagination,
         id,
         triggers,
         total,
-    } = useAdminProducts({ queryParams, categories })
+        totalPages,
+    } = useAdminProducts({
+        queryParams,
+        categories,
+    })
 
     return (
         <div className="space-y-6 h-full flex flex-col">
@@ -91,7 +96,11 @@ export default function AdminProductsPage() {
             </AdminPageHeader>
             <FilterControls {...controls} />
             <ProductsTable products={products} {...triggers} />
-            <ProductsPagination {...pagination} />
+            <ProductsPagination
+                page={page}
+                setPage={setPage}
+                totalPages={totalPages}
+            />
         </div>
     )
 }

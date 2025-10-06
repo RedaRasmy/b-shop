@@ -5,12 +5,11 @@ import {
     updateProduct,
 } from "@/features/admin/admin-requests"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
-import { usePagination } from "@/features/admin/hooks/use-pagination"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
 import { queryClient } from "@/main"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { useRef, useState } from "react"
+import {  useRef, useState } from "react"
 
 type ProductsData = {
     data: AdminProduct[]
@@ -34,31 +33,26 @@ export default function useAdminProducts({
     const [selectedId, setSelectedId] = useState<null | string>(null)
 
     const totalRef = useRef(0)
+    const totalPagesRef = useRef(1)
 
-    /// Pagination
-    const { page, perPage, setTotalPages, setPage, totalPages } =
-        usePagination()
 
-    // Update query params to use categoryId instead of categoryName
     const { category, ...params } = queryParams
+
     const finalQueryParams = {
         ...params,
         categoryId: categories.find((c) => c.name === category)?.id,
-        page,
-        perPage,
     }
 
     // Get Products
     const { data: { data: products = [] } = {}, isLoading } = useQuery({
-        queryKey: queryKeys.products.admin(finalQueryParams),
+        queryKey: queryKeys.products.admin(queryParams),
         queryFn: () => getProducts(finalQueryParams),
         select: (res) => {
             const totalPages = res.data.totalPages
             const total = res.data.total
-            console.log("res data : ", res.data)
             if (totalPages) {
                 // set only on page 1 when totalPages exists
-                setTotalPages(totalPages)
+                totalPagesRef.current = totalPages
             }
             if (total) {
                 totalRef.current = total
@@ -169,14 +163,10 @@ export default function useAdminProducts({
             open: isDeleteOpen,
             onOpenChange: setIsDeleteOpen,
         },
-        pagination: {
-            page,
-            setPage,
-            totalPages,
-        },
         isLoading,
         products: tableProducts,
         id: selectedId,
         total: totalRef.current,
+        totalPages : totalPagesRef.current
     }
 }
