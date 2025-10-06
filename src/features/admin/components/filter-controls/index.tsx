@@ -10,6 +10,7 @@ export type FilterOptions = {
     label: string
     value: string
     options: { label: string; value: string }[]
+    nullable?: boolean
 }[]
 
 export type SortOptions = { label: string; value: string }[]

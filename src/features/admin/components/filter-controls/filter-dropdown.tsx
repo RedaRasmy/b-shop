@@ -22,6 +22,7 @@ type Props = {
     options?: FilterOptions
     activeFilters: Record<string, string>
     onClear: () => void
+    nullable?: boolean
 }
 
 export default function FilterDropdown({
@@ -85,6 +86,15 @@ export default function FilterDropdown({
                                             />
                                         </SelectTrigger>
                                         <SelectContent>
+                                            {filter.nullable && (
+                                                <SelectItem
+                                                    className="text-destructive font-semibold"
+                                                    key={"__NULL__"}
+                                                    value='__NULL__'
+                                                >
+                                                    No Category (Deleted)
+                                                </SelectItem>
+                                            )}
                                             {filter.options.map((option) => (
                                                 <SelectItem
                                                     key={option.value}

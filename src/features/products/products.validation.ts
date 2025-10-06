@@ -2,7 +2,7 @@ import { z } from "zod"
 
 // The customer will only get products but can review !
 
-const ImageSchema = z.object({
+export const ImageSchema = z.object({
     id: z.uuid(),
     url: z.url(),
     alt: z.string().default(""),
@@ -25,7 +25,7 @@ export const ProductSchema = z.object({
     description: z.string(),
     images: z.array(ImageSchema).min(1),
     reviews: z.array(ReviewSchema).default([]),
-    categoryId: z.uuid(),
+    categoryId: z.uuid().optional(),
     categoryName: z.string().min(1),
     categorySlug: z.string().min(1),
     averageRating: z.number().min(0).max(5),

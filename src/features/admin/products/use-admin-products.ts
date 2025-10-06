@@ -9,7 +9,7 @@ import type { AdminProduct } from "@/features/admin/products/products.validation
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
 import { queryClient } from "@/main"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import {  useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 type ProductsData = {
     data: AdminProduct[]
@@ -35,12 +35,14 @@ export default function useAdminProducts({
     const totalRef = useRef(0)
     const totalPagesRef = useRef(1)
 
-
     const { category, ...params } = queryParams
 
     const finalQueryParams = {
         ...params,
-        categoryId: categories.find((c) => c.name === category)?.id,
+        categoryId:
+            category === "__NULL__"
+                ? "null" // for deleted categories
+                : categories.find((c) => c.name === category)?.id,
     }
 
     // Get Products
@@ -125,8 +127,8 @@ export default function useAdminProducts({
     /// Table Products
     const tableProducts = products.map((product) => ({
         ...product,
-        categoryName: categories.find((cat) => cat.id === product.categoryId)!
-            .name,
+        categoryName: categories.find((cat) => cat.id === product.categoryId)
+            ?.name,
     }))
 
     return {
@@ -167,6 +169,6 @@ export default function useAdminProducts({
         products: tableProducts,
         id: selectedId,
         total: totalRef.current,
-        totalPages : totalPagesRef.current
+        totalPages: totalPagesRef.current,
     }
 }

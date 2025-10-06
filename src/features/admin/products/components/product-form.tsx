@@ -36,15 +36,21 @@ import type { ChangeEvent, ReactNode } from "react"
 import { generateSlug } from "@/utils/generate-slug"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import axios from "axios"
+import type { Prettify } from "@/lib/types"
 
 type ProductImage = ProductFormData["images"][number]
+
+// categoryId can be undefined if its category have been deleted
+type InitialData = Prettify<
+    Omit<ProductFormData, "categoryId"> & { categoryId?: string }
+>
 
 type Props = {
     buttonText: string
     title: string
     description: string
     onSubmit: (data: FormData) => Promise<unknown>
-    initialData?: ProductFormData
+    initialData?: InitialData
     isSubmitting: boolean
     onOpenChange?: (open: boolean) => void
     open?: boolean
@@ -66,16 +72,18 @@ export default function ProductForm({
 }: Props) {
     const form = useForm<ProductFormData>({
         resolver: zodResolver(ProductFormSchema),
-        defaultValues: initialData || {
-            name: "",
-            slug: "",
-            description: "",
-            price: 0,
-            stock: 0,
-            categoryId: "",
-            status: "inactive",
-            images: [],
-        },
+        defaultValues: initialData
+            ? { ...initialData, categoryId: initialData.categoryId || "" }
+            : {
+                  name: "",
+                  slug: "",
+                  description: "",
+                  price: 0,
+                  stock: 0,
+                  categoryId: "",
+                  status: "inactive",
+                  images: [],
+              },
     })
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +119,7 @@ export default function ProductForm({
         Promise.all(filePromises)
             .then((newImages) => {
                 const finalImages = [...images, ...newImages]
-                form.setValue("images", finalImages ,{shouldValidate:true})
+                form.setValue("images", finalImages, { shouldValidate: true })
             })
             .catch((error) => {
                 console.error("Error reading files:", error)
@@ -312,14 +320,14 @@ export default function ProductForm({
                                 control={form.control}
                                 name="categoryId"
                                 render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="">
                                         <FormLabel>Category</FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Select a category" />
                                                 </SelectTrigger>
                                             </FormControl>
@@ -350,7 +358,7 @@ export default function ProductForm({
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Select a status" />
                                                 </SelectTrigger>
                                             </FormControl>

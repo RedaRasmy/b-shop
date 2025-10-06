@@ -1,18 +1,35 @@
-import { ProductSchema } from "@/features/products/products.validation"
+import {
+    ImageSchema,
+} from "@/features/products/products.validation"
 import { StatusSchema } from "@/lib/zod-schemas"
 import { z } from "zod"
 
 /// GET
 
-export const AdminProductSchema = ProductSchema.extend({
+// export const AdminProductSchema = ProductSchema.extend({
+//     status: StatusSchema,
+//     stock: z.int(),
+// }).omit({
+//     averageRating: true,
+//     categoryName: true,
+//     categorySlug: true,
+//     reviews: true,
+//     reviewCount: true,
+// })
+
+export const AdminProductSchema = z.object({
+    id: z.uuid(),
+    name: z.string(),
+    slug: z.string().min(1).max(255),
+    price: z.number().positive(),
+    inventoryStatus: z.enum(["In Stock", "Low Stock", "Out of Stock"]),
+    description: z.string(),
+    images: z.array(ImageSchema).min(1),
+    categoryId: z.uuid().optional(),
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime(),
     status: StatusSchema,
     stock: z.int(),
-}).omit({
-    averageRating: true,
-    categoryName: true,
-    categorySlug: true,
-    reviews: true,
-    reviewCount: true,
 })
 
 export type AdminProduct = z.infer<typeof AdminProductSchema>
@@ -40,7 +57,7 @@ const ImageFormSchema = z.object({
 })
 
 export const ProductFormSchema = z.object({
-    name: z.string().min(1, "Product name is required"),
+    name: z.string("Product name is required").min(1, "Product name is required"),
     slug: z
         .string()
         .min(1, "Product slug is required")
@@ -52,8 +69,7 @@ export const ProductFormSchema = z.object({
     description: z.string().min(1, "Description is required"),
     price: z.number().min(0, "Price must be positive"),
     stock: z.int().min(0, "Stock must be positive"),
-    // categoryId: z.string().min(1,"Category is Required").uuid(),
-    categoryId: z.string().min(1, "Category is Required"), // for now until add categories
+    categoryId: z.string("Category is required").min(1,"Category is required").uuid(),
     status: StatusSchema,
     images: z
         .array(ImageFormSchema)

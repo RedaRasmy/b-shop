@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event"
 import type { ComponentType, PropsWithChildren } from "react"
 import { BrowserRouter } from "react-router-dom"
 
-export function RenderWithProviders(ui: React.ReactElement, options = {}) {
+export function renderWithProviders(ui: React.ReactElement, options = {}) {
     const wrapper = ({ children }: PropsWithChildren) => (
         <BrowserRouter>
             <AuthProvider>{children}</AuthProvider>
@@ -20,7 +20,7 @@ export function RenderWithProviders(ui: React.ReactElement, options = {}) {
 function setup(jsx: React.ReactElement) {
     return {
         user: userEvent.setup(),
-        render: { ...RenderWithProviders(jsx) },
+        render: { ...renderWithProviders(jsx) },
     }
 }
 

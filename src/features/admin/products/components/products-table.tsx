@@ -15,10 +15,11 @@ import {
     TableCell,
 } from "@/components/ui/table"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
+import type { Prettify } from "@/lib/types"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
 
-type TableProduct = AdminProduct & { categoryName: string }
+type TableProduct = Prettify<AdminProduct & { categoryName?: string }>
 
 type Props = {
     products: TableProduct[]
@@ -27,7 +28,6 @@ type Props = {
 }
 
 export default function ProductsTable({ products, onUpdate, onDelete }: Props) {
-    
     //// Columns per screen :
     // +xl : 7 (all)
     // +lg : 6 (stock-status removed)
@@ -61,7 +61,13 @@ export default function ProductsTable({ products, onUpdate, onDelete }: Props) {
                             {product.stock}
                         </TableCell>
                         <TableCell className="not-lg:hidden">
-                            {product.categoryName}
+                            {product.categoryName ? (
+                                product.categoryName
+                            ) : (
+                                <span className="text-destructive font-semibold">
+                                    (deleted)
+                                </span>
+                            )}
                         </TableCell>
                         <TableCell className="not-md:hidden">
                             <Badge
