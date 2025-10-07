@@ -65,6 +65,7 @@ export default function CategoryList({
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Button
+                                                aria-label="more actions"
                                                 variant="outline"
                                                 size="sm"
                                                 className="h-8 w-8 p-0 ml-2"
@@ -100,6 +101,7 @@ export default function CategoryList({
                                 </div>
                                 <div className="flex gap-2 pt-2">
                                     <Button
+                                        aria-label="edit"
                                         variant={"outline"}
                                         onClick={() => onUpdate(id)}
                                     >

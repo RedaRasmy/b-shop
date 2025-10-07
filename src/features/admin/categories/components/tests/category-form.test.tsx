@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from "vitest"
 import { setup } from "@/tests/test-utils"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
-import { insertCategory } from "@/features/admin/categories/components/tests/mocked-categories"
+import {
+    insertCategory,
+    mockedCategories,
+} from "@/features/admin/categories/components/tests/mocked-categories"
 
 describe("Category Form", () => {
     it("Should render", () => {
@@ -85,6 +88,7 @@ describe("Category Form", () => {
                 title="Form title"
                 open={true}
                 onOpenChange={() => {}}
+                existingCategories={mockedCategories}
             />
         )
 
@@ -97,6 +101,7 @@ describe("Category Form", () => {
             render.getByText(/category name is required/i)
         ).toBeInTheDocument()
 
+        // Test reserved category names validation
         const nameInput = render.getByLabelText("Category Name")
         await user.type(nameInput, "__null__")
         expect(
@@ -109,6 +114,14 @@ describe("Category Form", () => {
 
         expect(
             render.getByText("This category name is not allowed.")
+        ).toBeInTheDocument()
+
+        // Test name already in use validation
+        await user.clear(nameInput)
+        await user.type(nameInput, "Electronics")
+
+        expect(
+            render.getByText("This category name is already in use")
         ).toBeInTheDocument()
     })
 })
