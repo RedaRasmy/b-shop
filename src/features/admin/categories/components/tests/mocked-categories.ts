@@ -8,7 +8,7 @@ export const insertCategory: CategoryFormData = {
     description:
         "Explore our wide range of home and living essentials for every space.",
     slug: "home-living",
-    status: "active",
+    status: "inactive",
 }
 
 export const mockedCategories: AdminCategory[] = [
