@@ -103,5 +103,9 @@ describe("Admin Categories Page", () => {
         })
         // Wait for updated category name
         expect(screen.getByText('New Category Name!')).toBeInTheDocument()
+
+        // Check if inital-data is updated in update form
+        await user.click(screen.getAllByText('Edit')[0])
+        expect(screen.getByDisplayValue('New Category Name!')).toBeInTheDocument()
     })
 })
