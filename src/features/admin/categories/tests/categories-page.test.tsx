@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest"
 import { setup, screen, waitFor } from "@/tests/test-utils"
 import {
     insertCategory,
+    mockedCategories,
     resetMockedCategories,
 } from "@/features/admin/categories/tests/handlers"
 import AdminCategoriesPage from "@/pages/admin/categories"
@@ -61,5 +62,46 @@ describe("Admin Categories Page", () => {
 
         // ✅ Also verify the category name appears
         expect(screen.getByText(name)).toBeInTheDocument()
+    })
+
+    it("should update a category", async () => {
+        const { user } = setup(<AdminCategoriesPage />)
+
+        // ✅ Wait for categories to load (edit buttons appear)
+        await waitFor(() => {
+            expect(
+                screen.getAllByRole("button", { name: /edit/i }).length
+            ).toBeGreaterThan(0)
+        })
+
+        // NOW count them
+        const initialCount = screen.getAllByRole("button", {
+            name: /edit/i,
+        }).length
+        expect(initialCount).toEqual(5)
+
+        // open first-category update dialog 
+        await user.click(screen.getAllByRole('button',{name:'edit'})[0])
+
+        const {name,slug,description} = mockedCategories[0]
+
+        /// check initial data
+        expect(screen.getByDisplayValue(name)).toBeInTheDocument()
+        expect(screen.getByDisplayValue(slug)).toBeInTheDocument()
+        expect(screen.getByDisplayValue(description)).toBeInTheDocument()
+
+        // Update Category Name
+        await user.clear(screen.getByLabelText('Category Name'))
+        await user.type(screen.getByLabelText("Category Name"),'New Category Name!')
+        
+        /// Submit 
+        await user.click(screen.getByRole('button',{name:'Update Category'}))
+
+        await waitFor(() => { 
+            // wait for submit -> auto-close
+            expect(screen.queryByText('Update Category')).not.toBeInTheDocument()
+        })
+        // Wait for updated category name
+        expect(screen.getByText('New Category Name!')).toBeInTheDocument()
     })
 })
