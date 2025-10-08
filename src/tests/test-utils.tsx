@@ -1,5 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { AuthProvider } from "@/features/auth/components/auth-provider"
+import { queryClient } from "@/lib/query-client"
+import { QueryClientProvider } from "@tanstack/react-query"
 import { render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import type { ComponentType, PropsWithChildren } from "react"
@@ -7,9 +9,12 @@ import { BrowserRouter } from "react-router-dom"
 
 export function renderWithProviders(ui: React.ReactElement, options = {}) {
     const wrapper = ({ children }: PropsWithChildren) => (
-        <BrowserRouter>
-            <AuthProvider>{children}</AuthProvider>
-        </BrowserRouter>
+        <QueryClientProvider client={queryClient} >
+
+            <BrowserRouter>
+                <AuthProvider>{children}</AuthProvider>
+            </BrowserRouter>
+        </QueryClientProvider>
     )
     return render(ui, {
         wrapper: wrapper as ComponentType,

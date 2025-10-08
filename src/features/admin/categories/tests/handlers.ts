@@ -83,18 +83,18 @@ export let mockedCategories: AdminCategory[] = [
 
 export const adminCategoriesHandlers = [
     /// ADD
-    http.post("admin/categories", async () => {
+    http.post("api/admin/categories", async () => {
         return HttpResponse.json(insertedCategory) //
     }),
 
     /// GET
-    http.get("admin/categories", async () => {
+    http.get("api/admin/categories", async () => {
         return HttpResponse.json(mockedCategories)
     }),
 
     /// UPDATE
     http.put<Id>(
-        "admin/categories/:id",
+        "api/admin/categories/:id",
         async ({ params: { id }, request }) => {
             const category = (await request.json()) as CategoryFormData
             const existingCategory = mockedCategories.find(
@@ -116,7 +116,7 @@ export const adminCategoriesHandlers = [
     ),
 
     /// DELETE
-    http.delete<Id>("admin/categories/:id", async ({ params: { id } }) => {
+    http.delete<Id>("api/admin/categories/:id", async ({ params: { id } }) => {
         mockedCategories = mockedCategories.filter((cat) => cat.id !== id)
 
         return HttpResponse.json(

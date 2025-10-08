@@ -7,7 +7,7 @@ import {
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
-import { queryClient } from "@/main"
+import { queryClient } from "@/lib/query-client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 

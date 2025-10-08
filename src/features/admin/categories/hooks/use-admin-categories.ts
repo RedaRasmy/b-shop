@@ -9,7 +9,7 @@ import type {
     CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
 import { queryKeys, type CategoriesQuery } from "@/lib/query-keys"
-import { queryClient } from "@/main"
+import { queryClient } from "@/lib/query-client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
