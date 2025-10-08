@@ -1,16 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 import { AuthProvider } from "@/features/auth/components/auth-provider"
-import { queryClient } from "@/lib/query-client"
-import { QueryClientProvider } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import type { ComponentType, PropsWithChildren } from "react"
 import { BrowserRouter } from "react-router-dom"
 
 export function renderWithProviders(ui: React.ReactElement, options = {}) {
+    const testQueryClient = new QueryClient()
     const wrapper = ({ children }: PropsWithChildren) => (
-        <QueryClientProvider client={queryClient} >
-
+        <QueryClientProvider client={testQueryClient}>
             <BrowserRouter>
                 <AuthProvider>{children}</AuthProvider>
             </BrowserRouter>

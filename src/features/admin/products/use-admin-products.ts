@@ -7,7 +7,7 @@ import {
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
-import { queryClient } from "@/lib/query-client"
+import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 
@@ -26,6 +26,7 @@ export default function useAdminProducts({
     queryParams?: ProductsQuery
     categories: AdminCategory[]
 }) {
+    const queryClient = useQueryClient()
     /// States
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [isEditOpen, setIsEditOpen] = useState(false)

@@ -9,7 +9,7 @@ import type {
     CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
 import { queryKeys, type CategoriesQuery } from "@/lib/query-keys"
-import { queryClient } from "@/lib/query-client"
+import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
@@ -18,6 +18,8 @@ export function useAdminCategories({
 }: {
     queryParams?: CategoriesQuery
 }) {
+    const queryClient = useQueryClient()
+
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
     const [isUpdateOpen, setIsUpdateOpen] = useState(false)
