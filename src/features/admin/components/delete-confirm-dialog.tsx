@@ -45,7 +45,7 @@ export function DeleteConfirmDialog({
                     <AlertDialogCancel disabled={isLoading}>
                         Cancel
                     </AlertDialogCancel>
-                    <Button asChild variant={"destructive"}>
+                    <Button asChild aria-label="delete" variant={"destructive"}>
                         <AlertDialogAction
                             onClick={onConfirm}
                             disabled={isLoading}
