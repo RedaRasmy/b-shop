@@ -26,7 +26,7 @@ export const insertedCategory = {
     createdAt: "2025-10-07T12:34:56.789Z",
     updatedAt: "2025-10-07T12:34:56.789Z",
 }
-export let mockedCategories: AdminCategory[] = [
+export const initialCategories: AdminCategory[] = [
     {
         id: "9bce1247-f1a3-44c3-9d1e-7c1c1a8a4e27",
         name: "Electronics",
@@ -79,12 +79,43 @@ export let mockedCategories: AdminCategory[] = [
     },
 ]
 
+export let mockedCategories = [...initialCategories]
+
+export function resetMockedCategories() {
+    mockedCategories = [...initialCategories]
+}
+
 ///  Tanstack query will only use the response data of GET
 
 export const adminCategoriesHandlers = [
     /// ADD
-    http.post("/api/admin/categories", async () => {
-        return HttpResponse.json(insertedCategory) //
+    http.post("/api/admin/categories", async ({request}) => {
+        console.log("🔵 POST handler called!")
+        console.log(
+            "🔵 Before POST, mockedCategories.length:",
+            mockedCategories.length
+        )
+
+        const categoryData = (await request.json()) as CategoryFormData
+        console.log("🔵 New category data:", categoryData)
+
+        const newCategory: AdminCategory = {
+            id: crypto.randomUUID(),
+            ...categoryData,
+            productsCount: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        }
+
+        // ✅ Update the array
+        mockedCategories = [...mockedCategories, newCategory]
+        console.log(
+            "🔵 After POST, mockedCategories.length:",
+            mockedCategories.length
+        )
+        console.log("🔵 Returning category:", newCategory)
+
+        return HttpResponse.json(newCategory, { status: 201 })
     }),
 
     /// GET
