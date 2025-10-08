@@ -158,4 +158,26 @@ describe("Admin Categories Page", () => {
         }).length
         expect(newCount).toEqual(4)
     })
+
+    it("should search", async () => {
+        const { user } = setup(<AdminCategoriesPage />)
+
+        // Wait for categories to load (edit buttons appear)
+        await waitFor(() => {
+            expect(
+                screen.getAllByRole("button", { name: /edit/i }).length
+            ).toBeGreaterThan(0)
+        })
+
+        // Test Searching
+        const searchInput = screen.getByPlaceholderText("Search...")
+        await user.type(searchInput, "Electronics")
+
+        await waitFor(() => {
+            const initialCount = screen.getAllByRole("button", {
+                name: /edit/i,
+            }).length
+            expect(initialCount).toEqual(1)
+        })
+    })
 })

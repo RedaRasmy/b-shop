@@ -89,12 +89,7 @@ export function resetMockedCategories() {
 
 export const adminCategoriesHandlers = [
     /// ADD
-    http.post("/api/admin/categories", async ({request}) => {
-        console.log("🔵 POST handler called!")
-        console.log(
-            "🔵 Before POST, mockedCategories.length:",
-            mockedCategories.length
-        )
+    http.post("/api/admin/categories", async ({ request }) => {
 
         const categoryData = (await request.json()) as CategoryFormData
         console.log("🔵 New category data:", categoryData)
@@ -109,18 +104,45 @@ export const adminCategoriesHandlers = [
 
         // ✅ Update the array
         mockedCategories = [...mockedCategories, newCategory]
-        console.log(
-            "🔵 After POST, mockedCategories.length:",
-            mockedCategories.length
-        )
-        console.log("🔵 Returning category:", newCategory)
 
         return HttpResponse.json(newCategory, { status: 201 })
     }),
 
     /// GET
-    http.get("/api/admin/categories", async () => {
-        return HttpResponse.json(mockedCategories)
+    http.get("/api/admin/categories", async ({ request }) => {
+        const url = new URL(request.url)
+
+        // ✅ Extract query params
+        const search = url.searchParams.get("search") || ""
+        const status = url.searchParams.get("status") || ""
+        const sort = url.searchParams.get("sort") || ""
+
+        console.log("Query params:", { search, status, sort })
+
+        let filteredCategories = [...mockedCategories]
+
+        // ✅ Filter by search (name or description)
+        if (search) {
+            filteredCategories = filteredCategories.filter(
+                (category) =>
+                    category.name
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                    category.description
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+            )
+        }
+
+        // ✅ Filter by status
+        if (status) {
+            filteredCategories = filteredCategories.filter(
+                (category) => category.status === status
+            )
+        }
+
+
+        return HttpResponse.json(filteredCategories)
     }),
 
     /// UPDATE
