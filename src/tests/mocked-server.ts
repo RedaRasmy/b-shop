@@ -1,4 +1,4 @@
-import { adminCategoriesHandlers } from "@/features/admin/categories/components/tests/handlers"
+import { adminCategoriesHandlers } from "@/features/admin/categories/tests/handlers"
 import { authHandlers } from "@/features/auth/tests/handlers"
 import { setupServer } from "msw/node"
 

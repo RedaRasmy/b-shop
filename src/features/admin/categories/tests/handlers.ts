@@ -2,7 +2,11 @@ import type {
     AdminCategory,
     CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
+import { http, HttpResponse } from "msw"
 
+type Id = {
+    id: string
+}
 export const insertCategory: CategoryFormData = {
     name: "Home & Living",
     description:
@@ -11,7 +15,18 @@ export const insertCategory: CategoryFormData = {
     status: "inactive",
 }
 
-export const mockedCategories: AdminCategory[] = [
+export const insertedCategory = {
+    id: "8f3a7e2d-25f4-45ab-8e69-12e4e3b3e9e1",
+    name: "Home & Living",
+    description:
+        "Explore our wide range of home and living essentials for every space.",
+    slug: "home-living",
+    status: "inactive",
+    productsCount: 0,
+    createdAt: "2025-10-07T12:34:56.789Z",
+    updatedAt: "2025-10-07T12:34:56.789Z",
+}
+export let mockedCategories: AdminCategory[] = [
     {
         id: "9bce1247-f1a3-44c3-9d1e-7c1c1a8a4e27",
         name: "Electronics",
@@ -62,4 +77,53 @@ export const mockedCategories: AdminCategory[] = [
         createdAt: "2023-07-19T13:35:00Z",
         updatedAt: "2024-09-01T08:50:00Z",
     },
+]
+
+///  Tanstack query will only use the response data of GET
+
+export const adminCategoriesHandlers = [
+    /// ADD
+    http.post("admin/categories", async () => {
+        return HttpResponse.json(insertedCategory) //
+    }),
+
+    /// GET
+    http.get("admin/categories", async () => {
+        return HttpResponse.json(mockedCategories)
+    }),
+
+    /// UPDATE
+    http.put<Id>(
+        "admin/categories/:id",
+        async ({ params: { id }, request }) => {
+            const category = (await request.json()) as CategoryFormData
+            const existingCategory = mockedCategories.find(
+                (c) => c.id === id
+            ) as AdminCategory
+
+            const udpatedCategory: AdminCategory = {
+                ...existingCategory,
+                ...category,
+                updatedAt: new Date().toString(),
+            }
+
+            mockedCategories = mockedCategories.map((c) =>
+                c.id === id ? udpatedCategory : c
+            )
+
+            return HttpResponse.json(udpatedCategory, { status: 201 })
+        }
+    ),
+
+    /// DELETE
+    http.delete<Id>("admin/categories/:id", async ({ params: { id } }) => {
+        mockedCategories = mockedCategories.filter((cat) => cat.id !== id)
+
+        return HttpResponse.json(
+            {},
+            {
+                status: 204,
+            }
+        )
+    }),
 ]
