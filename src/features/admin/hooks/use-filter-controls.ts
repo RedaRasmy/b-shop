@@ -1,11 +1,12 @@
 import { useSearchParams } from "react-router-dom"
 import type { Order } from "@/lib/types"
-import { useCallback, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import type {
     FilterOptions,
     SortOptions,
 } from "@/features/admin/components/filter-controls"
 import { usePagination } from "@/features/admin/hooks/use-pagination"
+import { useDebounce } from "@/hooks/use-debounce"
 
 interface Params {
     defaultSort?: string
@@ -28,21 +29,18 @@ export function useFilterControls(options: Params) {
     const [searchParams, setSearchParams] = useSearchParams()
 
     // Get current values from URL
-    const searchTerm = searchParams.get("search") || ""
+    const urlSearchTerm = searchParams.get("search") || ""
     const sort = searchParams.get("sort") || defaultSort
 
     const [sortBy, sortOrder] = sort.split(":") as [string, Order]
 
-    // Get all filter params (anything that's not search or sort)
-    const filters = useMemo(() => {
-        const result: Record<string, string> = {}
-        searchParams.forEach((value, key) => {
-            if (!["search", "sort"].includes(key)) {
-                result[key] = value
-            }
-        })
-        return result
-    }, [searchParams])
+    // Debounce search term for API calls only
+    const [searchTerm, setSearchTermState] = useState(urlSearchTerm)
+
+    // Sync local state when URL changes externally (back/forward)
+    useEffect(() => {
+        setSearchTermState(urlSearchTerm)
+    }, [urlSearchTerm])
 
     // Helper to update URL params
     const updateParams = useCallback(
@@ -63,13 +61,37 @@ export function useFilterControls(options: Params) {
         [setSearchParams]
     )
 
-    const setSearchTerm = useCallback(
-        (search: string) => {
-            updateParams({ search })
-            setPage(1)
+    const handleDebouncedSearch = useCallback(
+        (debouncedValue: string) => {
+            if (urlSearchTerm !== debouncedValue) {
+                updateParams({ search: debouncedValue })
+                setPage(1)
+            }
         },
-        [updateParams, setPage]
+        [urlSearchTerm, updateParams, setPage]
     )
+
+    const debouncedSearchTerm = useDebounce({
+        state: searchTerm,
+        delay: 300,
+        onDebounced: handleDebouncedSearch,
+    })
+
+    // Get all filter params (anything that's not search or sort)
+    const filters = useMemo(() => {
+        const result: Record<string, string> = {}
+        searchParams.forEach((value, key) => {
+            if (!["search", "sort"].includes(key)) {
+                result[key] = value
+            }
+        })
+        return result
+    }, [searchParams])
+
+    const setSearchTerm = useCallback((search: string) => {
+        // Only update local state - URL updates via useEffect with debounce
+        setSearchTermState(search)
+    }, [])
 
     const setFilter = useCallback(
         (key: string, value: string) => {
@@ -113,9 +135,10 @@ export function useFilterControls(options: Params) {
     )
 
     // Build query params object for API calls
+
     const queryParams = useMemo(() => {
         const params: Record<string, string | undefined> = {
-            search: searchTerm || undefined,
+            search: debouncedSearchTerm || undefined,
             sort,
         }
 
@@ -132,7 +155,7 @@ export function useFilterControls(options: Params) {
         }
 
         return params
-    }, [searchTerm, sort, filters, page, pagination])
+    }, [debouncedSearchTerm, sort, filters, page, pagination])
 
     return {
         // Current values
@@ -142,7 +165,6 @@ export function useFilterControls(options: Params) {
         sortBy,
         sortOrder,
         queryParams,
-
         // Setters
         setSearchTerm,
         setFilter,
@@ -162,6 +184,6 @@ export function useFilterControls(options: Params) {
             onSortChange: setSort,
         },
         page,
-        setPage
+        setPage,
     }
 }
