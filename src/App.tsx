@@ -31,17 +31,6 @@ export default function App() {
                     >
                         Products
                     </NavLink>
-                    <NavLink
-                        to="/categories"
-                        className={({ isActive }) =>
-                            cn(
-                                "hover:text-accent font-semibold",
-                                isActive && "text-accent"
-                            )
-                        }
-                    >
-                        Categories
-                    </NavLink>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button asChild variant={"ghost"} size={"default"}>

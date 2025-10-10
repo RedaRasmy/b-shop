@@ -8,7 +8,6 @@ import { PublicRoute } from "./features/auth/components/public-route"
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
 const HomePage = lazy(() => import("./pages/home"))
-const CategoriesPage = lazy(() => import("./pages/categories"))
 const ProductsPage = lazy(() => import("./pages/products"))
 const ProductDetailPage = lazy(() => import("./pages/products/product-detail"))
 const AdminLayout = lazy(() => import("./pages/admin"))
@@ -118,29 +117,6 @@ export const router = createBrowserRouter([
                 ],
             },
 
-            // Category Routes
-            {
-                path: "categories",
-                children: [
-                    {
-                        index: true,
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                <CategoriesPage />
-                            </Suspense>
-                        ),
-                    },
-                    {
-                        path: ":categorySlug",
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                {/* <CategoryPage /> */}
-                            </Suspense>
-                        ),
-                    },
-                ],
-            },
-
             // Shopping Routes
             {
                 path: "cart",
@@ -155,16 +131,6 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingPage />}>
                         <WishlistPage />
-                    </Suspense>
-                ),
-            },
-
-            // Search & Discovery
-            {
-                path: "search",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <SearchPage /> */}
                     </Suspense>
                 ),
             },
@@ -260,14 +226,14 @@ export const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-            // {
-            //     path: "review",
-            //     element: (
-            //         <Suspense fallback={<PageLoader />}>
-            //             <CheckoutReviewPage />
-            //         </Suspense>
-            //     ),
-            // },
+            {
+                path: "review",
+                element: (
+                    <Suspense fallback={<LoadingPage />}>
+                        {/* <CheckoutReviewPage /> */}
+                    </Suspense>
+                ),
+            },
             {
                 path: "success/:orderId",
                 element: (
