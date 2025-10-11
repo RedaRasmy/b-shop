@@ -3,17 +3,21 @@ import { z } from "zod"
 // The customer will only get products but can review !
 
 export const ImageSchema = z.object({
-    id: z.uuid(),
+    id: z.string().min(1),
     url: z.url(),
     alt: z.string().default(""),
     isPrimary: z.boolean(),
+    width: z.number(),
+    height: z.number(),
+    size: z.number(),
 })
 
 const ReviewSchema = z.object({
     id: z.uuid(),
     rating: z.int().min(1).max(5),
     comment: z.string(),
-    authorName: z.string(),
+    date : z.iso.datetime(),
+    edited : z.boolean()
 })
 
 export const ProductSchema = z.object({
@@ -29,21 +33,20 @@ export const ProductSchema = z.object({
     categoryName: z.string().min(1),
     averageRating: z.number().min(0).max(5),
     reviewCount: z.int().min(0).default(0),
-    isNew : z.boolean()
+    isNew: z.boolean(),
 })
 
 export type Product = z.infer<typeof ProductSchema>
 
 export const ProductSummarySchema = ProductSchema.omit({
     images: true,
-    reviews : true,
-    description : true,
-    inventoryStatus : true,
-    categoryName : true,
+    reviews: true,
+    description: true,
+    inventoryStatus: true,
+    categoryName: true,
 }).extend({
-    thumbnailUrl : z.string().min(1),
+    thumbnailUrl: z.string().min(1),
 })
-
 
 export type ProductSummary = z.infer<typeof ProductSummarySchema>
 
