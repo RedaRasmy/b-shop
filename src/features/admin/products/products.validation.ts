@@ -4,18 +4,7 @@ import {
 import { StatusSchema } from "@/lib/zod-schemas"
 import { z } from "zod"
 
-/// GET
-
-// export const AdminProductSchema = ProductSchema.extend({
-//     status: StatusSchema,
-//     stock: z.int(),
-// }).omit({
-//     averageRating: true,
-//     categoryName: true,
-//     categorySlug: true,
-//     reviews: true,
-//     reviewCount: true,
-// })
+/// GE
 
 export const AdminProductSchema = z.object({
     id: z.uuid(),

@@ -1,16 +1,15 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import type { Product } from "@/features/products/products.validation"
+import type { ProductSummary } from "@/features/products/products.validation"
 import { Heart, ShoppingCart, Star } from "lucide-react"
 import { Link } from "react-router-dom"
 
 type Props = {
-    product: Product
+    product: ProductSummary
 }
 
 export function ProductCard({ product }: Props) {
-    const mainImageUrl = product.images[0].url
 
     const isNew = false
 
@@ -50,7 +49,7 @@ export function ProductCard({ product }: Props) {
                 <CardContent className="p-0">
                     <div className="aspect-square overflow-hidden">
                         <img
-                            src={mainImageUrl}
+                            src={product.thumbnailUrl}
                             alt={product.name}
                             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                         />

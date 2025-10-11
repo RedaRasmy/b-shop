@@ -25,16 +25,27 @@ export const ProductSchema = z.object({
     description: z.string(),
     images: z.array(ImageSchema).min(1),
     reviews: z.array(ReviewSchema).default([]),
-    categoryId: z.uuid().optional(),
+    categoryId: z.uuid(),
     categoryName: z.string().min(1),
-    categorySlug: z.string().min(1),
     averageRating: z.number().min(0).max(5),
     reviewCount: z.int().min(0).default(0),
-    createdAt : z.iso.datetime(),
-    updatedAt : z.iso.datetime()
+    isNew : z.boolean()
 })
 
 export type Product = z.infer<typeof ProductSchema>
+
+export const ProductSummarySchema = ProductSchema.omit({
+    images: true,
+    reviews : true,
+    description : true,
+    inventoryStatus : true,
+    categoryName : true,
+}).extend({
+    thumbnailUrl : z.string().min(1),
+})
+
+
+export type ProductSummary = z.infer<typeof ProductSummarySchema>
 
 // Add review
 
