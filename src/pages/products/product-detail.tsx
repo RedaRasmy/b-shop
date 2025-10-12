@@ -7,6 +7,8 @@ import type {
     ProductSummary,
 } from "@/features/products/products.validation"
 import { queryKeys } from "@/lib/query-keys"
+import LoadingPage from "@/pages/loading"
+import NotFoundPage from "@/pages/products/not-found"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 
@@ -15,13 +17,18 @@ export default function ProductDetailPage() {
 
     if (!slug) throw new Error("Impossible")
 
-    const { data: product } = useQuery({
+    const {
+        data: product,
+        isError,
+        isLoading,
+    } = useQuery({
         queryKey: queryKeys.products.detail(slug),
         queryFn: () => getProduct(slug),
         select: (res) => {
             console.log("detailed product response : ", res)
             return res.data as Product
         },
+        retry: false,
     })
 
     const { data: relatedProducts = [] } = useQuery({
@@ -39,7 +46,9 @@ export default function ProductDetailPage() {
         },
     })
 
-    console.log("related")
+    if (isLoading) return <LoadingPage />
+
+    if (isError || !product) return <NotFoundPage />
 
     if (product)
         return (

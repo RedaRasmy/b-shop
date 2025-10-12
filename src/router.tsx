@@ -4,6 +4,7 @@ import LoadingPage from "./pages/loading"
 import App from "./App"
 import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
+import NotFoundPage from "@/pages/products/not-found"
 
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
@@ -451,7 +452,7 @@ export const router = createBrowserRouter([
         path: "*",
         element: (
             <Suspense fallback={<LoadingPage />}>
-                {/* <NotFoundPage /> */}
+                <NotFoundPage />
             </Suspense>
         ),
     },
