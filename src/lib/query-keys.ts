@@ -51,6 +51,7 @@ export const queryKeys = {
             serializeParams(params),
         ],
         detail: (id: string | number) => ["products", "detail", id],
+        related: (id: string) => ["products", "related", id],
     },
     categories: {
         base: ["categories"],

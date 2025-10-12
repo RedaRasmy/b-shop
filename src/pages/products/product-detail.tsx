@@ -1,7 +1,11 @@
+import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
-import { getProduct } from "@/features/products/product-requests"
-import type { Product } from "@/features/products/products.validation"
+import { getProduct, getProducts } from "@/features/products/product-requests"
+import type {
+    Product,
+    ProductSummary,
+} from "@/features/products/products.validation"
 import { queryKeys } from "@/lib/query-keys"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
@@ -20,6 +24,23 @@ export default function ProductDetailPage() {
         },
     })
 
+    const { data: relatedProducts = [] } = useQuery({
+        queryKey: queryKeys.products.related(slug),
+        queryFn: () =>
+            getProducts({
+                categoryId: product?.categoryId,
+            }),
+        enabled: !!product,
+        select: (res) => {
+            console.log("related products response : ", res)
+            return res.data.data.filter(
+                (p: ProductSummary) => p.id !== product?.id
+            ) as ProductSummary[]
+        },
+    })
+
+    console.log("related")
+
     if (product)
         return (
             <div className="flex flex-col px-3 md:px-4 lg:px-8 xl:px-20 2xl:px-35 3xl:px-60 3xl  py-2 md:py-3 lg:py-6 xl:py-8  ">
@@ -33,7 +54,25 @@ export default function ProductDetailPage() {
                     onFavoriteChange={() => {}}
                     onAddToCart={() => {}}
                 />
-                {/* <div className="h-500"></div> */}
+                {/* Related Products */}
+                {relatedProducts.length > 0 && (
+                    <div>
+                        <h2 className="text-2xl font-bold mb-6">
+                            Related Products
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                            {relatedProducts.map((product) => (
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                    isFavorite={false}
+                                    onAddToCart={() => {}}
+                                    onFavoriteChange={() => {}}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         )
 }
