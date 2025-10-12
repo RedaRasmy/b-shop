@@ -1,5 +1,5 @@
 import { configureStore , combineReducers } from "@reduxjs/toolkit"
-import * as reducers from './slices/cart'
+import * as reducers from './slices'
 import packageJson from "../../package.json"
 
 import {
