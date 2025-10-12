@@ -9,7 +9,7 @@ export default function App() {
     const isAdmin = user && user.role === "admin"
 
     return (
-        <div className="h-screen flex flex-col">
+        <div className="h-screen w-full">
             <nav className="flex items-center h-15 justify-between border-b border-black/10 px-2 lg:px-4">
                 <div className="flex space-x-6 items-center">
                     <NavLink
@@ -22,6 +22,7 @@ export default function App() {
                     </NavLink>
                     <NavLink
                         to="/products"
+                        end
                         className={({ isActive }) =>
                             cn(
                                 "hover:text-accent font-semibold",
@@ -65,7 +66,7 @@ export default function App() {
                     )}
                 </div>
             </nav>
-            <main className="flex-1 ">
+            <main className="h-[calc(100%-3.75rem)] overflow-auto">
                 <Outlet />
             </main>
         </div>
