@@ -14,5 +14,5 @@ export async function logoutRequest() {
 }
 
 export async function fetchMe() {
-    return axiosInstance.get("/auth/me")
+    return axiosInstance.get("/me")
 }
