@@ -1,5 +1,6 @@
 import type { CategoryFormData } from "@/features/admin/categories/categories.validation"
 import { axiosInstance } from "@/lib/axios"
+import type { AdminCategoriesQuery, AdminProductsQuery } from "@/lib/query-keys"
 
 // Products
 
@@ -7,15 +8,7 @@ export async function addProduct(formData: FormData) {
     return axiosInstance.post("/admin/products", formData)
 }
 
-type ProductsQuery = {
-    search?: string
-    status?: "active" | "inactive"
-    sort?: string
-    categoryId?: string
-    page?: number
-    perPage?: number
-}
-export async function getProducts(params: ProductsQuery = {}) {
+export async function getProducts(params: AdminProductsQuery = {}) {
     return axiosInstance.get("/admin/products", {
         params: {
             ...params,
@@ -38,13 +31,7 @@ export async function addCategory(data: CategoryFormData) {
     return axiosInstance.post("/admin/categories", data)
 }
 
-type CategoriesQuery = {
-    search?: string
-    status?: "active" | "inactive"
-    sort?: string
-}
-
-export async function getCategories(params: CategoriesQuery = {}) {
+export async function getCategories(params: AdminCategoriesQuery = {}) {
     return axiosInstance.get("/admin/categories", {
         params,
     })

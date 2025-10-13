@@ -4,7 +4,7 @@ import LoadingPage from "./pages/loading"
 import App from "./App"
 import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
-import NotFoundPage from "@/pages/products/not-found"
+import NotFoundPage from "@/pages/not-found"
 
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
@@ -22,7 +22,6 @@ const AdminAnalyticsPage = lazy(() => import("./pages/admin/analytics"))
 const AdminShippingPage = lazy(() => import("./pages/admin/shipping"))
 const CartPage = lazy(() => import("./pages/cart"))
 const WishlistPage = lazy(() => import("./pages/wishlist"))
-
 
 export const router = createBrowserRouter([
     // Public Routes with Main Layout
@@ -85,7 +84,7 @@ export const router = createBrowserRouter([
                         <HomePage />
                     </Suspense>
                 ),
-            }, 
+            },
             {
                 path: "contact",
                 element: (

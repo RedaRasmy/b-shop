@@ -12,15 +12,26 @@ type PaginationQuery = {
     perPage?: number
 }
 
-export type ProductsQuery = Prettify<
+
+export type AdminProductsQuery = Prettify<
     BasicQuery &
         PaginationQuery & {
-            category?: string
+            categoryId?: string
             status?: Status
         }
 >
 
-export type CategoriesQuery = Prettify<
+export type ProductsQuery = Prettify<
+    BasicQuery &
+        PaginationQuery & {
+            categoryId?: string
+        }
+>
+
+export type CategoriesQuery = BasicQuery
+
+
+export type AdminCategoriesQuery = Prettify<
     BasicQuery & {
         status?: Status
     }

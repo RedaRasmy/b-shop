@@ -8,7 +8,7 @@ import type {
 } from "@/features/products/products.validation"
 import { queryKeys } from "@/lib/query-keys"
 import LoadingPage from "@/pages/loading"
-import NotFoundPage from "@/pages/products/not-found"
+import NotFoundPage from "@/pages/not-found"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 
