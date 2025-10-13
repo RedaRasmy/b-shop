@@ -1,3 +1,4 @@
+import { Spinner } from "@/components/ui/spinner"
 import { getCategories } from "@/features/categories/categories-requests"
 import type { Category } from "@/features/categories/categories.validation"
 import FilterBar from "@/features/products/components/filter-bar"
@@ -7,11 +8,15 @@ import ShopHeader from "@/features/products/components/shop-header"
 import { getProducts } from "@/features/products/product-requests"
 import type { ProductSummary } from "@/features/products/products.validation"
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
+import type { PaginationResponse } from "@/lib/types"
 import LoadingPage from "@/pages/loading"
-import { useQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { Fragment, useEffect, useRef, useState } from "react"
+import { useInView } from "react-intersection-observer"
 
 export default function ProductsPage() {
+    const { ref, inView } = useInView()
+    const totalPagesRef = useRef(1)
     const [categoryId, setCategoryId] = useState<string | null>(null)
     const [search, setSearch] = useState("")
     const [sortBy, setSortBy] = useState("createdAt:desc")
@@ -25,17 +30,34 @@ export default function ProductsPage() {
     const queryParams: ProductsQuery = {
         categoryId: categoryId || undefined,
         sort: sortBy,
-        search : search || undefined
-        // perPage: 2,
+        search: search || undefined,
     }
 
-    const { data: products } = useQuery({
-        queryKey: queryKeys.products.customer(queryParams),
-        queryFn: () => getProducts(queryParams),
-        select: (res) => res.data.data as ProductSummary[],
-    })
+    const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+        useInfiniteQuery({
+            queryKey: [queryKeys.products.customer(queryParams)],
+            queryFn: async ({ pageParam }) => {
+                const res = await getProducts({
+                    ...queryParams,
+                    page: pageParam,
+                })
+                if (res.data.totalPages) {
+                    totalPagesRef.current = res.data.totalPages
+                }
+                return res.data as PaginationResponse<ProductSummary[]>
+            },
+            initialPageParam: 1,
+            getPreviousPageParam: (data) => data.page - 1,
+            getNextPageParam: (data) =>
+                totalPagesRef.current <= data.page ? undefined : data.page + 1,
+        })
 
-    console.log(products)
+    useEffect(() => {
+        if (inView && hasNextPage && !isFetchingNextPage) {
+            console.log("effect runs")
+            fetchNextPage()
+        }
+    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
     if (isLoading) return <LoadingPage />
 
@@ -51,17 +73,25 @@ export default function ProductsPage() {
                     onSortChange={(sort) => setSortBy(sort)}
                     sortBy={sortBy}
                 />
-                {products && products.length > 0 && (
+                {data && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                        {products.map((product) => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                                isFavorite
-                                onAddToCart={() => {}}
-                                onFavoriteChange={() => {}}
-                            />
+                        {data.pages.map(({ data }, index) => (
+                            <Fragment key={index}>
+                                {data.map((product: ProductSummary) => (
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                        isFavorite
+                                        onAddToCart={() => {}}
+                                        onFavoriteChange={() => {}}
+                                    />
+                                ))}
+                            </Fragment>
                         ))}
+                        {isFetchingNextPage && hasNextPage && (
+                            <Spinner className="w-full mx-auto my-auto size-8" />
+                        )}
+                        <div ref={ref} />
                     </div>
                 )}
             </div>
