@@ -42,7 +42,6 @@ export const ProductSummarySchema = ProductSchema.omit({
     images: true,
     reviews: true,
     description: true,
-    inventoryStatus: true,
     categoryName: true,
 }).extend({
     thumbnailUrl: z.string().min(1),

@@ -4,7 +4,7 @@ import type { Prettify } from "@/lib/types"
 import { createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "@/redux/store"
 
-type CartItem = Prettify<ProductSummary & { quantity: number }>
+export type CartItem = Prettify<ProductSummary & { quantity: number }>
 
 export type CartState = {
     items: CartItem[]
