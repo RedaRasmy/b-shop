@@ -1,14 +1,14 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import type { CartItem } from "@/redux/slices/cart"
+import type { CartProduct } from "@/features/cart/types"
 import { Minus, Plus, Trash2 } from "lucide-react"
 
 type Props = {
-    items: CartItem[]
+    items: CartProduct[]
     onRemove: (id: string) => void
-    onPlus: (id: string) => void
-    onMinus: (id: string) => void
+    onPlus: (productId: string, currentQuantity: number) => void
+    onMinus: (productId: string, currentQuantity: number) => void
 }
 
 export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
@@ -61,7 +61,9 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => onMinus(item.id)}
+                                            onClick={() =>
+                                                onMinus(item.id, item.quantity)
+                                            }
                                             disabled={
                                                 item.inventoryStatus ===
                                                 "Out of Stock"
@@ -75,7 +77,9 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => onPlus(item.id)}
+                                            onClick={() =>
+                                                onPlus(item.id, item.quantity)
+                                            }
                                             disabled={
                                                 item.inventoryStatus ===
                                                 "Out of Stock"

@@ -12,7 +12,6 @@ type PaginationQuery = {
     perPage?: number
 }
 
-
 export type AdminProductsQuery = Prettify<
     BasicQuery &
         PaginationQuery & {
@@ -29,7 +28,6 @@ export type ProductsQuery = Prettify<
 >
 
 export type CategoriesQuery = BasicQuery
-
 
 export type AdminCategoriesQuery = Prettify<
     BasicQuery & {
@@ -82,5 +80,10 @@ export const queryKeys = {
             categoryId,
             "products",
         ],
+    },
+    cart: {
+        base: ["cart"],
+        auth: () => ["cart", "auth"],
+        guest: (ids: string[]) => ["cart", "guest", ...ids.slice().sort()],
     },
 }
