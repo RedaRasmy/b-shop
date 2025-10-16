@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { Link } from "react-router-dom"
 
-export function CartHeader({ itemsNumber }: { itemsNumber: number }) {
+export function CartHeader({ itemCount }: { itemCount: number }) {
     return (
         <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" asChild>
@@ -13,7 +13,7 @@ export function CartHeader({ itemsNumber }: { itemsNumber: number }) {
                 </Link>
             </Button>
             <h1 className="text-3xl font-bold">Shopping Cart</h1>
-            <Badge variant="secondary">{itemsNumber} items</Badge>
+            <Badge variant="secondary">{itemCount} items</Badge>
         </div>
     )
 }

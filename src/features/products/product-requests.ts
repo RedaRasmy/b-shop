@@ -8,7 +8,7 @@ export async function getProducts(params: ProductsQuery = {}) {
 }
 
 export async function getProductsByIds(ids: string[]) {
-    return axiosInstance.post("/products/bult", ids)
+    return axiosInstance.post("/products/bulk", ids)
 }
 
 export async function getProduct(slug: string) {

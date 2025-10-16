@@ -8,12 +8,12 @@ import {
 import type { CartProduct } from "@/features/cart/types"
 import { getProductsByIds } from "@/features/products/product-requests"
 import type { ProductSummary } from "@/features/products/products.validation"
-// import { useDebounce } from "@/hooks/use-debounce"
+import { useDebounce } from "@/hooks/use-debounce"
 import { queryKeys } from "@/lib/query-keys"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, type CartItem } from "@/redux/slices/cart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCallback } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 export default function useCart(isAuthenticated: boolean) {
     const dispatch = useAppDispatch()
@@ -21,11 +21,28 @@ export default function useCart(isAuthenticated: boolean) {
     const localCart = useAppSelector((state) => state.cart)
     const ids = localCart.map((item) => item.productId)
 
+    const [pendingUpdates, setPendingUpdates] = useState<
+        Record<string, number>
+    >({})
+
+    useDebounce({
+        state: pendingUpdates,
+        delay: 500,
+        onDebounced: (updates) => {
+            if (!isAuthenticated) return
+
+            Object.entries(updates).forEach(([id, quantity]) => {
+                updateMutation.mutate({ id, quantity })
+            })
+            setPendingUpdates({})
+        },
+    })
+
     // Fetch authenticated cart
     const {
         data: authCart,
-        isLoading,
-        error,
+        isLoading: isAuthCartLoading,
+        error: authCartError,
     } = useQuery({
         queryKey: queryKeys.cart.auth(),
         queryFn: getCart,
@@ -36,8 +53,8 @@ export default function useCart(isAuthenticated: boolean) {
 
     const {
         data: guestCart,
-        // isLoading  ,
-        // error,
+        isLoading: isGuestCartLoading,
+        error: guestCartError,
     } = useQuery({
         queryKey: queryKeys.cart.guest(ids),
         queryFn: () => getProductsByIds(ids),
@@ -83,7 +100,7 @@ export default function useCart(isAuthenticated: boolean) {
             await updateCartItem({ id, quantity })
         },
         onError: () => {
-            queryClient.invalidateQueries({ queryKey: ["cart"] })
+            queryClient.invalidateQueries({ queryKey: queryKeys.cart.auth() })
         },
     })
 
@@ -98,7 +115,9 @@ export default function useCart(isAuthenticated: boolean) {
         },
         onSuccess: () => {
             if (isAuthenticated) {
-                queryClient.invalidateQueries({ queryKey: ["cart"] })
+                queryClient.invalidateQueries({
+                    queryKey: queryKeys.cart.auth(),
+                })
             }
         },
     })
@@ -158,7 +177,10 @@ export default function useCart(isAuthenticated: boolean) {
     // }, [guestCart, authCart, dispatch, queryClient])
 
     // Cart data
-    const items = isAuthenticated ? authCart || [] : guestCart || []
+    const items = useMemo(
+        () => (isAuthenticated ? authCart || [] : guestCart || []),
+        [isAuthenticated, authCart, guestCart]
+    )
 
     // Computed values
     const itemCount = items.reduce((acc, item) => acc + item.quantity, 0)
@@ -179,11 +201,31 @@ export default function useCart(isAuthenticated: boolean) {
         (productId: string, quantity: number) => {
             if (quantity <= 0) {
                 deleteMutation.mutate({ id: productId })
+                return
+            }
+
+            if (isAuthenticated) {
+                // Optimistic update for immediate UI feedback
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                queryClient.setQueryData(queryKeys.cart.auth(), (old: any) => {
+                    if (!old?.data) return old
+                    return {
+                        ...old,
+                        data: old.data.map((item: CartProduct) =>
+                            item.id === productId ? { ...item, quantity } : item
+                        ),
+                    }
+                })
+
+                setPendingUpdates((prev) => ({
+                    ...prev,
+                    [productId]: quantity,
+                }))
             } else {
-                updateMutation.mutate({ id: productId, quantity })
+                dispatch(cartActions.setQuantity({ productId, quantity }))
             }
         },
-        [updateMutation, deleteMutation]
+        [isAuthenticated, queryClient, dispatch, deleteMutation]
     )
 
     const incrementQuantity = useCallback(
@@ -215,9 +257,10 @@ export default function useCart(isAuthenticated: boolean) {
         items,
         itemCount,
         subtotal,
-        isLoading,
+        isLoading: isAuthCartLoading || isGuestCartLoading,
         error:
-            error ||
+            authCartError ||
+            guestCartError ||
             addMutation.error ||
             updateMutation.error ||
             deleteMutation.error ||

@@ -16,6 +16,7 @@ export default function CartPage() {
         incrementQuantity,
         removeItem,
         subtotal,
+        itemCount
     } = useCart(isAuthenticated)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
@@ -24,7 +25,7 @@ export default function CartPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <CartHeader itemsNumber={5} />
+            <CartHeader itemCount={itemCount} />
             <div className="grid lg:grid-cols-3 gap-8">
                 <CartItems
                     items={items}
