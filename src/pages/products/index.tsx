@@ -87,8 +87,6 @@ export default function ProductsPage() {
                                         key={product.id}
                                         product={product}
                                         onAddToCart={() => addItem(product.id)}
-                                        isFavorite
-                                        onFavoriteChange={() => {}}
                                     />
                                 ))}
                             </Fragment>

@@ -1,10 +1,9 @@
 import { Link, NavLink, Outlet } from "react-router-dom"
 import { useAuth } from "./features/auth/use-auth"
 import { Button } from "./components/ui/button"
-import { Heart, ShoppingCart, User } from "lucide-react"
+import {  ShoppingCart, User } from "lucide-react"
 import { cn } from "./lib/utils"
 import useCart from "@/features/cart/hooks/use-cart"
-import { Badge } from "@/components/ui/badge"
 
 export default function App() {
     const { user, isAuthenticated } = useAuth()
@@ -37,12 +36,7 @@ export default function App() {
                         Products
                     </NavLink>
                 </div>
-                <div className="flex items-center gap-3">
-                    <Button asChild variant={"ghost"} size={"default"}>
-                        <Link to="/wishlist">
-                            <Heart />
-                        </Link>
-                    </Button>
+                <div className="flex items-center gap-5">
                     <Button
                         asChild
                         variant={"ghost"}

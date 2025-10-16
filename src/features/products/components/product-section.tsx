@@ -2,28 +2,20 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { Product } from "@/features/products/products.validation"
 import {
-    Heart,
     Minus,
     Plus,
-    RotateCcw,
-    Shield,
     ShoppingCart,
     Star,
-    Truck,
 } from "lucide-react"
 import { useState } from "react"
 
 type Props = {
     product: Product
-    onFavoriteChange: (isFavorite: boolean) => void
-    isFavorite: boolean
     onAddToCart: (quantity: number) => void
 }
 
 export default function ProductSection({
     product,
-    isFavorite,
-    onFavoriteChange,
     onAddToCart,
 }: Props) {
     const [selectedImage, setSelectedImage] = useState(0)
@@ -129,35 +121,14 @@ export default function ProductSection({
                         </div>
                     </div>
 
-                    <div className="flex gap-3">
-                        <Button
-                            size="lg"
-                            className="flex-1"
-                            onClick={() => onAddToCart(quantity)}
-                        >
-                            <ShoppingCart className="h-5 w-5 mr-2" />
-                            Add to Cart
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            onClick={() => onFavoriteChange(!isFavorite)}
-                            className={
-                                isFavorite
-                                    ? "text-red-500 border-red-500 hover:bg-red-50"
-                                    : "hover:text-red-500 hover:border-red-500"
-                            }
-                        >
-                            <Heart
-                                className={`h-5 w-5 ${
-                                    isFavorite ? "fill-current" : ""
-                                }`}
-                            />
-                            <span className="ml-2">
-                                {isFavorite ? "Saved" : "Save"}
-                            </span>
-                        </Button>
-                    </div>
+                    <Button
+                        size="lg"
+                        className="w-full"
+                        onClick={() => onAddToCart(quantity)}
+                    >
+                        <ShoppingCart className="h-5 w-5 mr-2" />
+                        Add to Cart
+                    </Button>
                 </div>
 
                 {/* <Separator /> */}
@@ -179,7 +150,7 @@ export default function ProductSection({
                 </div> */}
 
                 {/* Trust Badges */}
-                <div className="flex gap-6 text-sm">
+                {/* <div className="flex gap-6 text-sm">
                     <div className="flex items-center gap-2">
                         <Truck className="h-5 w-5 text-primary" />
                         <span>Free Shipping</span>
@@ -192,7 +163,7 @@ export default function ProductSection({
                         <RotateCcw className="h-5 w-5 text-primary" />
                         <span>30-Day Returns</span>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

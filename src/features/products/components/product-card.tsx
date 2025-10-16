@@ -2,22 +2,17 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import type { ProductSummary } from "@/features/products/products.validation"
-import { cn } from "@/lib/utils"
-import { Heart, ShoppingCart, Star } from "lucide-react"
+import {  ShoppingCart, Star } from "lucide-react"
 import { Link } from "react-router-dom"
 
 type Props = {
     product: ProductSummary
-    isFavorite: boolean
-    onFavoriteChange: (isFavorite: boolean) => void
     onAddToCart: () => void
 }
 
 export function ProductCard({
     product,
-    isFavorite,
     onAddToCart,
-    onFavoriteChange,
 }: Props) {
     return (
         <Card className="group relative overflow-hidden border-0 shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-card">
@@ -30,21 +25,6 @@ export function ProductCard({
                         New
                     </Badge>
                 )}
-            </div>
-
-            <div className="absolute top-3 right-3 z-10 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button
-                    variant="secondary"
-                    size="icon"
-                    className="bg-background cursor-pointer"
-                    onClick={() => onFavoriteChange(!isFavorite)}
-                >
-                    <Heart
-                        className={cn("size-5", {
-                            "fill-destructive text-destructive": isFavorite,
-                        })}
-                    />
-                </Button>
             </div>
 
             <Link to={`/products/${product.slug}`}>

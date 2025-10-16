@@ -65,8 +65,6 @@ export default function ProductDetailPage() {
                 <ProductSection
                     product={product}
                     onAddToCart={(quantity) => addItem(product.id, quantity)}
-                    isFavorite={false}
-                    onFavoriteChange={() => {}}
                 />
                 {/* Related Products */}
                 {relatedProducts.length > 0 && (
@@ -80,8 +78,6 @@ export default function ProductDetailPage() {
                                     key={product.id}
                                     product={product}
                                     onAddToCart={() => addItem(product.id)}
-                                    isFavorite={false}
-                                    onFavoriteChange={() => {}}
                                 />
                             ))}
                         </div>

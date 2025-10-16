@@ -21,7 +21,6 @@ const AdminCustomersPage = lazy(() => import("./pages/admin/customers"))
 const AdminAnalyticsPage = lazy(() => import("./pages/admin/analytics"))
 const AdminShippingPage = lazy(() => import("./pages/admin/shipping"))
 const CartPage = lazy(() => import("./pages/cart"))
-const WishlistPage = lazy(() => import("./pages/wishlist"))
 
 export const router = createBrowserRouter([
     // Public Routes with Main Layout
@@ -125,15 +124,7 @@ export const router = createBrowserRouter([
                         <CartPage />
                     </Suspense>
                 ),
-            },
-            {
-                path: "wishlist",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        <WishlistPage />
-                    </Suspense>
-                ),
-            },
+            },    
 
             // Legal Pages
             {
