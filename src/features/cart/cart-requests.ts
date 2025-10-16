@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib/axios"
+import type { CartItem } from "@/redux/slices/cart"
 
 export const getCart = async function () {
     return axiosInstance.get("/me/cart")
@@ -29,4 +30,8 @@ export const deleteCartItem = async function (id: string) {
 
 export const clearCartRequest = async function () {
     return axiosInstance.delete("/me/cart")
+}
+
+export const mergeCartRequest = async function (items: CartItem[]) {
+    return axiosInstance.post("/me/cart/merge", items)
 }

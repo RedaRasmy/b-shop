@@ -3,6 +3,7 @@ import {
     clearCartRequest,
     deleteCartItem,
     getCart,
+    mergeCartRequest,
     updateCartItem,
 } from "@/features/cart/cart-requests"
 import type { CartProduct } from "@/features/cart/types"
@@ -13,9 +14,12 @@ import { queryKeys } from "@/lib/query-keys"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, type CartItem } from "@/redux/slices/cart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
-export default function useCart(isAuthenticated: boolean) {
+export default function useCart(
+    isAuthenticated: boolean,
+    isAuthLoading: boolean
+) {
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
     const localCart = useAppSelector((state) => state.cart)
@@ -138,44 +142,6 @@ export default function useCart(isAuthenticated: boolean) {
         },
     })
 
-    // // Sync guest cart to server on login
-    // const syncCartOnLogin = useCallback(async () => {
-    //     if (guestCart.length === 0) return
-
-    //     try {
-    //         // Add all guest items to server
-    //         for (const item of guestCart) {
-    //             try {
-    //                 await addCartItem({
-    //                     productId: item.id,
-    //                     quantity: item.quantity,
-    //                 })
-    //             } catch (error: any) {
-    //                 // If item already exists (409), update it instead
-    //                 if (error.response?.status === 409) {
-    //                     const existing = authCart?.find(
-    //                         (c) => c.productId === item.productId
-    //                     )
-    //                     if (existing) {
-    //                         await cartApi.updateItem(
-    //                             existing.id,
-    //                             existing.quantity + item.quantity
-    //                         )
-    //                     }
-    //                 }
-    //             }
-    //         }
-
-    //         // Clear guest cart
-    //         dispatch(cartActions.clearCart())
-
-    //         // Refresh server cart
-    //         queryClient.invalidateQueries({ queryKey: ["cart"] })
-    //     } catch (error) {
-    //         console.error("Failed to sync cart:", error)
-    //     }
-    // }, [guestCart, authCart, dispatch, queryClient])
-
     // Cart data
     const items = useMemo(
         () => (isAuthenticated ? authCart || [] : guestCart || []),
@@ -253,6 +219,42 @@ export default function useCart(isAuthenticated: boolean) {
         clearMutation.mutate()
     }, [clearMutation])
 
+    /// Carts Merging
+
+    const prevAuthRef = useRef(isAuthenticated)
+    const hasInitialized = useRef(false)
+
+    // Auto-sync when user logs in
+    useEffect(() => {
+        // Wait for auth to finish loading
+        if (isAuthLoading) return
+
+        // Skip first render after auth loads
+        if (!hasInitialized.current) {
+            hasInitialized.current = true
+            prevAuthRef.current = isAuthenticated
+            return
+        }
+
+        // Now we can safely detect login
+        const justLoggedIn = prevAuthRef.current === false && isAuthenticated
+
+        if (justLoggedIn && localCart.length > 0) {
+            mergeCartRequest(localCart)
+                .then(() => {
+                    dispatch(cartActions.clearCart())
+                    queryClient.invalidateQueries({
+                        queryKey: queryKeys.cart.auth(),
+                    })
+                })
+                .catch((error) => {
+                    console.error("Failed to sync cart:", error)
+                })
+        }
+
+        prevAuthRef.current = isAuthenticated
+    }, [isAuthenticated, isAuthLoading, localCart, queryClient, dispatch])
+
     return {
         items,
         itemCount,
@@ -271,7 +273,6 @@ export default function useCart(isAuthenticated: boolean) {
         decrementQuantity,
         removeItem,
         clearCart,
-        // syncCartOnLogin,
         isUpdating: updateMutation.isPending,
         isAdding: addMutation.isPending,
         isDeleting: deleteMutation.isPending,

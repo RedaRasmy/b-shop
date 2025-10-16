@@ -16,8 +16,8 @@ export default function CartPage() {
         incrementQuantity,
         removeItem,
         subtotal,
-        itemCount
-    } = useCart(isAuthenticated)
+        itemCount,
+    } = useCart(isAuthenticated, isAuthLoading)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 

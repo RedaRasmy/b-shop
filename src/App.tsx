@@ -1,15 +1,15 @@
 import { Link, NavLink, Outlet } from "react-router-dom"
 import { useAuth } from "./features/auth/use-auth"
 import { Button } from "./components/ui/button"
-import {  ShoppingCart, User } from "lucide-react"
+import { ShoppingCart, User } from "lucide-react"
 import { cn } from "./lib/utils"
 import useCart from "@/features/cart/hooks/use-cart"
 
 export default function App() {
-    const { user, isAuthenticated } = useAuth()
+    const { user, isAuthenticated, isLoading } = useAuth()
     const isAdmin = user && user.role === "admin"
 
-    const { itemCount } = useCart(isAuthenticated)
+    const { itemCount } = useCart(isAuthenticated, isLoading)
 
     return (
         <div className="h-screen w-full">

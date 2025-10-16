@@ -49,7 +49,7 @@ export default function ProductDetailPage() {
     })
 
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
-    const { addItem } = useCart(isAuthenticated)
+    const { addItem } = useCart(isAuthenticated,isAuthLoading)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 
