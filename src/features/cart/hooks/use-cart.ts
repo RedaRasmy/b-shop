@@ -169,7 +169,7 @@ export default function useCart(isAuthenticated: boolean) {
 
     // Helper functions
     const addItem = useCallback(
-        (productId: string, quantity: number) => {
+        (productId: string, quantity: number = 1) => {
             addMutation.mutate({ productId, quantity })
         },
         [addMutation]

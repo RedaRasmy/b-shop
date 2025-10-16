@@ -1,4 +1,6 @@
 import { Spinner } from "@/components/ui/spinner"
+import { useAuth } from "@/features/auth/use-auth"
+import useCart from "@/features/cart/hooks/use-cart"
 import { getCategories } from "@/features/categories/categories-requests"
 import type { Category } from "@/features/categories/categories.validation"
 import FilterBar from "@/features/products/components/filter-bar"
@@ -59,7 +61,10 @@ export default function ProductsPage() {
         }
     }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
-    if (isLoading) return <LoadingPage />
+    const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
+    const { addItem } = useCart(isAuthenticated)
+
+    if (isAuthLoading || isLoading) return <LoadingPage />
 
     return (
         <div>
@@ -81,8 +86,8 @@ export default function ProductsPage() {
                                     <ProductCard
                                         key={product.id}
                                         product={product}
+                                        onAddToCart={() => addItem(product.id)}
                                         isFavorite
-                                        onAddToCart={() => {}}
                                         onFavoriteChange={() => {}}
                                     />
                                 ))}

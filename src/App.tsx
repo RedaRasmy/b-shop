@@ -3,10 +3,14 @@ import { useAuth } from "./features/auth/use-auth"
 import { Button } from "./components/ui/button"
 import { Heart, ShoppingCart, User } from "lucide-react"
 import { cn } from "./lib/utils"
+import useCart from "@/features/cart/hooks/use-cart"
+import { Badge } from "@/components/ui/badge"
 
 export default function App() {
     const { user, isAuthenticated } = useAuth()
     const isAdmin = user && user.role === "admin"
+
+    const { itemCount } = useCart(isAuthenticated)
 
     return (
         <div className="h-screen w-full">
@@ -39,9 +43,17 @@ export default function App() {
                             <Heart />
                         </Link>
                     </Button>
-                    <Button asChild variant={"ghost"} size={"default"}>
+                    <Button
+                        asChild
+                        variant={"ghost"}
+                        size={"default"}
+                        className="relative"
+                    >
                         <Link to="/cart">
-                            <ShoppingCart />
+                            <ShoppingCart className="size-4.5" />
+                            <span className="absolute -top-1 -right-1 text-xs text-white bg-destructive rounded-full size-4 flex items-center justify-center ">
+                                {itemCount}
+                            </span>
                         </Link>
                     </Button>
                     {!isAuthenticated ? (

@@ -1,3 +1,5 @@
+import { useAuth } from "@/features/auth/use-auth"
+import useCart from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
@@ -46,7 +48,10 @@ export default function ProductDetailPage() {
         },
     })
 
-    if (isLoading) return <LoadingPage />
+    const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
+    const { addItem } = useCart(isAuthenticated)
+
+    if (isAuthLoading || isLoading) return <LoadingPage />
 
     if (isError || !product) return <NotFoundPage />
 
@@ -59,9 +64,9 @@ export default function ProductDetailPage() {
                 />
                 <ProductSection
                     product={product}
+                    onAddToCart={(quantity) => addItem(product.id, quantity)}
                     isFavorite={false}
                     onFavoriteChange={() => {}}
-                    onAddToCart={() => {}}
                 />
                 {/* Related Products */}
                 {relatedProducts.length > 0 && (
@@ -74,8 +79,8 @@ export default function ProductDetailPage() {
                                 <ProductCard
                                     key={product.id}
                                     product={product}
+                                    onAddToCart={() => addItem(product.id)}
                                     isFavorite={false}
-                                    onAddToCart={() => {}}
                                     onFavoriteChange={() => {}}
                                 />
                             ))}
