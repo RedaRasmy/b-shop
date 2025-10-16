@@ -16,7 +16,7 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
         <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
                 <Card key={item.id}>
-                    <CardContent className="p-6">
+                    <CardContent className="px-6">
                         <div className="flex gap-4">
                             <img
                                 src={item.thumbnailUrl}
@@ -26,7 +26,7 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
 
                             <div className="flex-1 space-y-2">
                                 <div className="flex justify-between items-start">
-                                    <div>
+                                    <div className="flex gap-4 items-center">
                                         <h3 className="font-semibold text-lg">
                                             {item.name}
                                         </h3>
@@ -44,7 +44,7 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => onRemove(item.id)}
-                                        className="text-destructive hover:text-destructive"
+                                        className="text-destructive hover:text-white"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>

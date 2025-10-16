@@ -45,9 +45,11 @@ export default function App() {
                     >
                         <Link to="/cart">
                             <ShoppingCart className="size-4.5" />
-                            <span className="absolute -top-1 -right-1 text-xs text-white bg-destructive rounded-full size-4 flex items-center justify-center ">
-                                {itemCount}
-                            </span>
+                            {itemCount > 0 && (
+                                <span className="absolute -top-1 font-mono -right-1 text-xs text-white bg-destructive rounded-full size-5 flex items-center justify-center ">
+                                    {itemCount}
+                                </span>
+                            )}
                         </Link>
                     </Button>
                     {!isAuthenticated ? (
