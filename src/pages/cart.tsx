@@ -12,12 +12,11 @@ export default function CartPage() {
     const {
         isLoading,
         items,
-        decrementQuantity,
-        incrementQuantity,
+        updateQuantity,
         removeItem,
         subtotal,
         itemCount,
-    } = useCart(isAuthenticated, isAuthLoading)
+    } = useCart(isAuthenticated)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 
@@ -29,8 +28,8 @@ export default function CartPage() {
             <div className="grid lg:grid-cols-3 gap-8">
                 <CartItems
                     items={items}
-                    onMinus={decrementQuantity}
-                    onPlus={incrementQuantity}
+                    onMinus={(id, quantity) => updateQuantity(id, quantity - 1)}
+                    onPlus={(id, quantity) => updateQuantity(id, quantity + 1)}
                     onRemove={removeItem}
                 />
                 <OrderSummary shipping={0} tax={0} subtotal={subtotal} />

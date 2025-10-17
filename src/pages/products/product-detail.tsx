@@ -12,10 +12,13 @@ import { queryKeys } from "@/lib/query-keys"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
 import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { useParams } from "react-router-dom"
 
 export default function ProductDetailPage() {
+    console.log("page renders")
     const { slug } = useParams<{ slug: string }>()
+
 
     if (!slug) throw new Error("Impossible")
 
@@ -27,29 +30,30 @@ export default function ProductDetailPage() {
         queryKey: queryKeys.products.detail(slug),
         queryFn: () => getProduct(slug),
         select: (res) => {
-            console.log("detailed product response : ", res)
             return res.data as Product
         },
-        retry: false,
+        // retry: false,
     })
 
-    const { data: relatedProducts = [] } = useQuery({
-        queryKey: queryKeys.products.related(slug),
+    const { data: sameCategoryProducts } = useQuery({
+        queryKey: queryKeys.products.related(product?.categoryId),
         queryFn: () =>
             getProducts({
                 categoryId: product?.categoryId,
             }),
-        enabled: !!product,
+        enabled: !!product?.categoryId,
         select: (res) => {
-            console.log("related products response : ", res)
-            return res.data.data.filter(
-                (p: ProductSummary) => p.id !== product?.id
-            ) as ProductSummary[]
+            return res.data.data as ProductSummary[]
         },
     })
 
+    const relatedProducts = useMemo(() => {
+        return sameCategoryProducts?.filter((p) => p.id !== product?.id) || []
+    }, [sameCategoryProducts, product?.id])
+
+
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
-    const { addItem } = useCart(isAuthenticated,isAuthLoading)
+    const { addItem } = useCart(isAuthenticated)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 

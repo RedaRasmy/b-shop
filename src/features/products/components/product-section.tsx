@@ -22,6 +22,7 @@ export default function ProductSection({
     const [quantity, setQuantity] = useState(1)
 
     const mainImage = product.images[selectedImage]
+    
 
     return (
         <div className="grid lg:grid-cols-2 gap-12 mb-16">

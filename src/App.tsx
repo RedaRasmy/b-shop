@@ -6,10 +6,10 @@ import { cn } from "./lib/utils"
 import useCart from "@/features/cart/hooks/use-cart"
 
 export default function App() {
-    const { user, isAuthenticated, isLoading } = useAuth()
+    const { user, isAuthenticated } = useAuth()
     const isAdmin = user && user.role === "admin"
 
-    const { itemCount } = useCart(isAuthenticated, isLoading)
+    const { itemCount } = useCart(isAuthenticated)
 
     return (
         <div className="h-screen w-full">

@@ -13,10 +13,18 @@ import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
 import type { PaginationResponse } from "@/lib/types"
 import LoadingPage from "@/pages/loading"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { Fragment, useEffect, useRef, useState } from "react"
+import {
+    Fragment,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 import { useInView } from "react-intersection-observer"
 
 export default function ProductsPage() {
+    console.log("products page renders...")
     const { ref, inView } = useInView()
     const totalPagesRef = useRef(1)
     const [categoryId, setCategoryId] = useState<string | null>(null)
@@ -29,25 +37,36 @@ export default function ProductsPage() {
         select: (res) => res.data as Category[],
     })
 
-    const queryParams: ProductsQuery = {
-        categoryId: categoryId || undefined,
-        sort: sortBy,
-        search: search || undefined,
-    }
+    const queryParams: ProductsQuery = useMemo(
+        () => ({
+            categoryId: categoryId || undefined,
+            sort: sortBy,
+            search: search || undefined,
+        }),
+        [categoryId, search, sortBy]
+    )
 
-    const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
-        useInfiniteQuery({
-            queryKey: [queryKeys.products.customer(queryParams)],
-            queryFn: async ({ pageParam }) => {
-                const res = await getProducts({
-                    ...queryParams,
-                    page: pageParam,
-                })
+    const fetchProducts = useCallback(
+        ({ pageParam = 1 }) => {
+            return getProducts({
+                categoryId: categoryId || undefined,
+                sort: sortBy,
+                search: search || undefined,
+                page: pageParam,
+            }).then((res) => {
                 if (res.data.totalPages) {
                     totalPagesRef.current = res.data.totalPages
                 }
                 return res.data as PaginationResponse<ProductSummary[]>
-            },
+            })
+        },
+        [categoryId, sortBy, search]
+    )
+
+    const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+        useInfiniteQuery({
+            queryKey: [queryKeys.products.customer(queryParams)],
+            queryFn: fetchProducts,
             initialPageParam: 1,
             getPreviousPageParam: (data) => data.page - 1,
             getNextPageParam: (data) =>
@@ -56,13 +75,12 @@ export default function ProductsPage() {
 
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {
-            console.log("effect runs")
             fetchNextPage()
         }
     }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
-    const { addItem } = useCart(isAuthenticated, isAuthLoading)
+    const { addItem } = useCart(isAuthenticated)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 

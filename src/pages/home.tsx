@@ -44,8 +44,8 @@ export default function HomePage() {
         },
     })
 
-    const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
-    const { addItem } = useCart(isAuthenticated, isAuthLoading)
+    const { isAuthenticated } = useAuth()
+    const { addItem } = useCart(isAuthenticated)
 
     return (
         <div className="space-y-16">

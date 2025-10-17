@@ -1,8 +1,10 @@
+import type { CartProduct } from "@/features/cart/types"
 import { axiosInstance } from "@/lib/axios"
 import type { CartItem } from "@/redux/slices/cart"
 
 export const getCart = async function () {
-    return axiosInstance.get("/me/cart")
+    const res = await axiosInstance.get("/me/cart")
+    return res.data as CartProduct[]
 }
 
 export const addCartItem = async function (cartItem: {
@@ -25,7 +27,7 @@ export const updateCartItem = async function ({
 }
 
 export const deleteCartItem = async function (id: string) {
-    return axiosInstance.delete("/me/cart/" + id)
+    axiosInstance.delete("/me/cart/" + id)
 }
 
 export const clearCartRequest = async function () {

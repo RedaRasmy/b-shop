@@ -1,5 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { createSlice } from "@reduxjs/toolkit"
+import {  createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "@/redux/store"
 
 export type CartItem = {
@@ -100,6 +100,7 @@ export const cartActions = cartSlice.actions
 export default cartSlice.reducer
 
 // Selectors
-export const selectCartItems = (state: RootState) => state.cart
 export const selectIsInCart = (state: RootState, productId: string) =>
     state.cart.some((item) => item.productId === productId)
+
+export const selectCart = (state: RootState) => state.cart

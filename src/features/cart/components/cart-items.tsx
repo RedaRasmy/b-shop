@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import type { CartProduct } from "@/features/cart/types"
 import { Minus, Plus, Trash2 } from "lucide-react"
+import { useState } from "react"
 
 type Props = {
     items: CartProduct[]
@@ -12,6 +13,18 @@ type Props = {
 }
 
 export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
+    const [isDisabled, setIsDisabled] = useState(false)
+
+    const handlePlus = (id: string, quantity: number) => {
+        setIsDisabled(true)
+        onPlus(id, quantity)
+        setTimeout(() => setIsDisabled(false), 300)
+    }
+    const handleMinus = (id: string, quantity: number) => {
+        setIsDisabled(true)
+        onMinus(id, quantity)
+        setTimeout(() => setIsDisabled(false), 300)
+    }
     return (
         <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
@@ -62,11 +75,11 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
                                             variant="outline"
                                             size="sm"
                                             onClick={() =>
-                                                onMinus(item.id, item.quantity)
+                                                handleMinus(item.id, item.quantity)
                                             }
                                             disabled={
                                                 item.inventoryStatus ===
-                                                "Out of Stock"
+                                                    "Out of Stock" || isDisabled
                                             }
                                         >
                                             <Minus className="h-4 w-4" />
@@ -78,11 +91,11 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
                                             variant="outline"
                                             size="sm"
                                             onClick={() =>
-                                                onPlus(item.id, item.quantity)
+                                                handlePlus(item.id, item.quantity)
                                             }
                                             disabled={
                                                 item.inventoryStatus ===
-                                                "Out of Stock"
+                                                    "Out of Stock" || isDisabled
                                             }
                                         >
                                             <Plus className="h-4 w-4" />

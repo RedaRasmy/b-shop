@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactNode } from "react"
+import { useState, useEffect, type ReactNode, useCallback, useMemo } from "react"
 import type { User } from "@/lib/types"
 import { AuthContext } from "@/features/auth/auth-context"
 import { fetchMe, logoutRequest } from "@/features/auth/auth-requests"
@@ -7,12 +7,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
 
-    function set(user: User) {
+    const set = useCallback((user: User) => {
         setUser(user)
         setLoading(false)
-    }
+    }, [])
 
-    const logout = async () => {
+    const logout = useCallback(async () => {
         try {
             await logoutRequest()
         } catch (err) {
@@ -20,9 +20,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } finally {
             setUser(null)
         }
-    }
+    }, [])
 
-    const refreshUser = async () => {
+    const refreshUser = useCallback(async () => {
         try {
             const { data } = await fetchMe()
             setUser(data.user)
@@ -31,23 +31,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } finally {
             setLoading(false)
         }
-    }
+    }, [])
 
     useEffect(() => {
         // On mount, try to refresh user automatically
         refreshUser()
-    }, [])
+    }, [refreshUser])
+
+    const contextValue = useMemo(
+        () => ({
+            user,
+            isAuthenticated: !!user,
+            isLoading: loading,
+            logout,
+            refreshUser,
+            setUser: set,
+        }),
+        [user, loading, logout,refreshUser , set]
+    )
 
     return (
         <AuthContext.Provider
-            value={{
-                user,
-                isAuthenticated: !!user,
-                isLoading: loading,
-                logout,
-                refreshUser,
-                setUser: set,
-            }}
+            value={contextValue}
         >
             {children}
         </AuthContext.Provider>
