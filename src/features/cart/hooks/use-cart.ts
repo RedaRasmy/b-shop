@@ -13,7 +13,7 @@ import { queryKeys } from "@/lib/query-keys"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 
 export default function useCart(isAuthenticated: boolean) {
     console.log("useCart runs...")
@@ -37,6 +37,17 @@ export default function useCart(isAuthenticated: boolean) {
         staleTime: 1000 * 60 * 5,
     })
 
+    const selectGuestCart = useCallback(
+        (data: ProductSummary[]) => {
+            return data.map((product: ProductSummary) => ({
+                ...product,
+                quantity: localCart.find((itm) => itm.productId === product.id)!
+                    .quantity,
+            })) as CartProduct[]
+        },
+        [localCart]
+    )
+
     const {
         data: guestCart,
         isLoading: isGuestCartLoading,
@@ -46,12 +57,7 @@ export default function useCart(isAuthenticated: boolean) {
         queryFn: () => getProductsByIds(ids),
         enabled: !isAuthenticated && ids.length > 0,
         staleTime: 1000 * 60 * 5,
-        select: (res) =>
-            res.data.map((product: ProductSummary) => ({
-                ...product,
-                quantity: localCart.find((itm) => itm.productId === product.id)!
-                    .quantity,
-            })) as CartProduct[],
+        select: selectGuestCart ,
     })
 
     // Mutations
