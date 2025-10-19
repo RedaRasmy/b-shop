@@ -8,6 +8,8 @@ export type User = {
     email: string
     role: "admin" | "customer"
     isEmailVerified: boolean
+    // fullName : string | null
+    // phone : string | null
 }
 
 export type Status = "active" | "inactive"

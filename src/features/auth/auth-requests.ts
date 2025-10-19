@@ -13,6 +13,3 @@ export async function logoutRequest() {
     return axiosInstance.post("/auth/logout")
 }
 
-export async function fetchMe() {
-    return axiosInstance.get("/me")
-}

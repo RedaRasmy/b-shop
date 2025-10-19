@@ -1,9 +1,9 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "@/features/auth/use-auth"
+import ProfileTab from "@/features/profile/components/profile-tab"
 
 export default function ProfilePage() {
-    const { logout } = useAuth()
+    const { user } = useAuth()
     return (
         <div className="container mx-auto px-4 py-8 max-w-6xl">
             <h1 className="text-3xl font-bold mb-8">Account</h1>
@@ -17,7 +17,15 @@ export default function ProfilePage() {
                 </TabsList>
 
                 {/* Profile Tab */}
-                <TabsContent value="profile">profile</TabsContent>
+                <TabsContent value="profile">
+                    <ProfileTab
+                        defaultValues={{
+                            email: user?.email || "",
+                            fullName: "",
+                            phone: "",
+                        }}
+                    />
+                </TabsContent>
 
                 {/* Orders Tab */}
                 <TabsContent value="orders">orders</TabsContent>

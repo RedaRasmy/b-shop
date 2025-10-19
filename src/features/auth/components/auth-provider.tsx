@@ -1,7 +1,14 @@
-import { useState, useEffect, type ReactNode, useCallback, useMemo } from "react"
+import {
+    useState,
+    useEffect,
+    type ReactNode,
+    useCallback,
+    useMemo,
+} from "react"
 import type { User } from "@/lib/types"
 import { AuthContext } from "@/features/auth/auth-context"
-import { fetchMe, logoutRequest } from "@/features/auth/auth-requests"
+import { logoutRequest } from "@/features/auth/auth-requests"
+import { fetchMe } from "@/features/profile/profile-requests"
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
@@ -24,8 +31,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const refreshUser = useCallback(async () => {
         try {
-            const { data } = await fetchMe()
-            setUser(data.user)
+            const profile = await fetchMe()
+            setUser(profile)
         } catch {
             setUser(null)
         } finally {
@@ -47,13 +54,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             refreshUser,
             setUser: set,
         }),
-        [user, loading, logout,refreshUser , set]
+        [user, loading, logout, refreshUser, set]
     )
 
     return (
-        <AuthContext.Provider
-            value={contextValue}
-        >
+        <AuthContext.Provider value={contextValue}>
             {children}
         </AuthContext.Provider>
     )
