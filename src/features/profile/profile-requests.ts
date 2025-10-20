@@ -12,3 +12,7 @@ export async function updateProfile(infos: {
 }) {
     return axiosInstance.patch("/me", infos)
 }
+
+export async function updatePassword(data:{oldPassword:string;newPassword:string}) {
+    await axiosInstance.patch('/me/password',data)
+}

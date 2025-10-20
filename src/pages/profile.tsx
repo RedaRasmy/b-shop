@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useAuth } from "@/features/auth/use-auth"
 import ProfileTab from "@/features/profile/components/profile-tab"
+import SettingsTab from "@/features/profile/components/settings-tab"
 
 export default function ProfilePage() {
     return (
@@ -27,7 +27,9 @@ export default function ProfilePage() {
                 <TabsContent value="addresses">addresses</TabsContent>
 
                 {/* Settings Tab */}
-                <TabsContent value="settings">settings</TabsContent>
+                <TabsContent value="settings">
+                  <SettingsTab/>
+                </TabsContent>
             </Tabs>
 
             {/* <AddAddressDialog
