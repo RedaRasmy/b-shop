@@ -27,22 +27,35 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { Switch } from "@/components/ui/switch"
 
 const Schema = z.object({
     label: z.string().min(3).max(50),
-    city: z.string().min(100),
-    addressLine1: z.string().min(1).max(255),
-    addressLine2: z.string().min(1).max(255).nullable(),
+    city: z
+        .string("City name is required")
+        .min(1, "City name is required")
+        .max(100),
+    addressLine1: z
+        .string("Street address is required")
+        .min(1, "Street address is required")
+        .max(255, "Max length is 255"),
     isDefault: z.boolean(),
-    postalCode: z.string().min(1).max(20),
+    postalCode: z
+        .string("Postal code is required")
+        .min(1, "Postal code is required")
+        .max(20, "Max length is 20"),
 })
 
 interface Props {
     open: boolean
     onOpenChange: (open: boolean) => void
     address?: Address
-    onSubmit: (data: IAddress) => Promise<void>
+    onSubmit: (data: IAddress) => Promise<unknown>
     isSubmitting: boolean
+    title: string
+    description: string
+    buttonText: string
+    error?: string
 }
 
 export function AddressFormDialog({
@@ -51,38 +64,57 @@ export function AddressFormDialog({
     address,
     onSubmit,
     isSubmitting,
+    title,
+    description,
+    buttonText,
+    error,
 }: Props) {
-    const form = useForm({
+    const form = useForm<IAddress>({
         resolver: zodResolver(Schema),
         defaultValues: address || {
             label: "Home",
+            addressLine1: "",
+            city: "",
+            isDefault: false,
+            postalCode: "",
         },
     })
+
+    async function handleSubmit(data: IAddress) {
+        try {
+            console.log("handle submit runs")
+            await onSubmit(data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit Address</DialogTitle>
-                    <DialogDescription>
-                        Update your address details
-                    </DialogDescription>
+                    <DialogTitle>{title}</DialogTitle>
+                    <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
+                    <p className="text-destructive">{error}</p>
                     <form
-                        onSubmit={form.handleSubmit(onSubmit)}
+                        onSubmit={form.handleSubmit(handleSubmit)}
                         className="space-y-4"
                     >
-                        const form = useForm()
                         <FormField
                             control={form.control}
                             name="label"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Addresse Type</FormLabel>
+                                    <FormLabel>Address Type</FormLabel>
                                     <FormControl>
-                                        <Select {...field}>
-                                            <SelectTrigger>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            defaultValue={field.value}
+                                        >
+                                            <SelectTrigger className="w-full">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -141,9 +173,29 @@ export function AddressFormDialog({
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="isDefault"
+                            render={({ field }) => (
+                                <FormItem className="flex w-full gap-4 mt-6">
+                                    <FormLabel>
+                                        Set as default address
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Switch
+                                            className="scale-[1.2]"
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            defaultChecked={field.value}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <DialogFooter>
                             <Button type="submit" disabled={isSubmitting}>
-                                Save Changes
+                                {buttonText}
                             </Button>
                         </DialogFooter>
                     </form>

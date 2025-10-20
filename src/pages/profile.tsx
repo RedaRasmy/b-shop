@@ -1,4 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import AddressesTab from "@/features/profile/components/addresses-tab"
 import ProfileTab from "@/features/profile/components/profile-tab"
 import SettingsTab from "@/features/profile/components/settings-tab"
 
@@ -24,34 +25,15 @@ export default function ProfilePage() {
                 <TabsContent value="orders">orders</TabsContent>
 
                 {/* Addresses Tab */}
-                <TabsContent value="addresses">addresses</TabsContent>
+                <TabsContent value="addresses">
+                    <AddressesTab />
+                </TabsContent>
 
                 {/* Settings Tab */}
                 <TabsContent value="settings">
-                  <SettingsTab/>
+                    <SettingsTab />
                 </TabsContent>
             </Tabs>
-
-            {/* <AddAddressDialog
-          open={showAddAddress}
-          onOpenChange={setShowAddAddress}
-          onAdd={handleAddAddress}
-        />
-
-        <EditAddressDialog
-          open={showEditAddress}
-          onOpenChange={setShowEditAddress}
-          address={selectedAddress}
-          onEdit={handleEditAddress}
-        />
-
-        <DeleteConfirmDialog
-          open={showDeleteAddress}
-          onOpenChange={setShowDeleteAddress}
-          title="Delete Address"
-          description="Are you sure you want to delete this address? This action cannot be undone."
-          onConfirm={handleDeleteAddress}
-        /> */}
         </div>
     )
 }

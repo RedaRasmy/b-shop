@@ -1,4 +1,5 @@
-import type { Profile } from "@/features/profile/profile.validation"
+
+import type { Address, IAddress, Profile } from "@/features/profile/profile.validation"
 import { axiosInstance } from "@/lib/axios"
 
 export async function fetchMe() {
@@ -13,6 +14,30 @@ export async function updateProfile(infos: {
     return axiosInstance.patch("/me", infos)
 }
 
-export async function updatePassword(data:{oldPassword:string;newPassword:string}) {
-    await axiosInstance.patch('/me/password',data)
+export async function updatePassword(data: {
+    oldPassword: string
+    newPassword: string
+}) {
+    await axiosInstance.patch("/me/password", data)
+}
+
+/// Addresses
+
+export async function getAddresses() {
+    const res = await axiosInstance.get("/me/addresses")
+    return res.data as Address[]
+}
+
+
+
+export async function addAddress(data: IAddress) {
+    return axiosInstance.post("/me/addresses", data)
+}
+
+export async function updateAddress(data: IAddress) {
+    return axiosInstance.patch("/me/addresses", data)
+}
+
+export async function deleteAddress(id: string) {
+    return axiosInstance.delete("/me/addresses/" + id)
 }
