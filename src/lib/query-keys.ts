@@ -60,11 +60,7 @@ export const queryKeys = {
             serializeParams(params),
         ],
         detail: (id: string | number) => ["products", "detail", id],
-        related: (id?:string) => [
-            "products",
-            "related",
-            id,
-        ],
+        related: (id?: string) => ["products", "related", id],
     },
     categories: {
         base: ["categories"],
@@ -90,4 +86,11 @@ export const queryKeys = {
         auth: () => ["cart", "auth"],
         guest: (ids: string[]) => ["cart", "guest", ...ids.slice().sort()],
     },
+    profile: ["me"],
+    orders: {
+        base: ["orders"],
+        customer: () => ["orders", "customer"],
+        admin: () => ["orders", "admin"],
+    },
+    addresses: ["addresses"],
 }

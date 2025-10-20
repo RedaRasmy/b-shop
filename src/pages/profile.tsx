@@ -3,9 +3,8 @@ import { useAuth } from "@/features/auth/use-auth"
 import ProfileTab from "@/features/profile/components/profile-tab"
 
 export default function ProfilePage() {
-    const { user } = useAuth()
     return (
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
             <h1 className="text-3xl font-bold mb-8">Account</h1>
 
             <Tabs className="space-y-6" defaultValue="profile">
@@ -18,13 +17,7 @@ export default function ProfilePage() {
 
                 {/* Profile Tab */}
                 <TabsContent value="profile">
-                    <ProfileTab
-                        defaultValues={{
-                            email: user?.email || "",
-                            fullName: "",
-                            phone: "",
-                        }}
-                    />
+                    <ProfileTab />
                 </TabsContent>
 
                 {/* Orders Tab */}

@@ -6,44 +6,83 @@ import {
     FormField,
     FormItem,
     FormLabel,
+    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { fetchMe, updateProfile } from "@/features/profile/profile-requests"
 import { ProfileInfosSchema } from "@/features/profile/profile.validation"
+import { queryKeys } from "@/lib/query-keys"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {useForm } from "react-hook-form"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
 
 type FormState = {
     fullName: string
-    email: string
     phone: string
 }
 
-type Props = {
-    defaultValues: FormState
-}
-
-export default function ProfileTab({ defaultValues }: Props) {
-    const form = useForm<FormState>({
-        resolver: zodResolver(ProfileInfosSchema),
-        defaultValues,
+export default function ProfileTab() {
+    const queryClient = useQueryClient()
+    const { data: profile, isLoading } = useQuery({
+        queryKey: queryKeys.profile,
+        queryFn: fetchMe,
     })
 
-    const message = ""
+    const form = useForm<FormState>({
+        resolver: zodResolver(ProfileInfosSchema),
+        defaultValues: {
+            fullName: profile?.fullName || "",
+            phone: profile?.phone || "",
+        },
+    })
 
-    // const {data} = useQuery({
-    //     queryKey : ['me'],
-    //     queryFn : fetchMe
-    // })
+    useEffect(() => {
+        if (profile) {
+            form.reset({
+                fullName: profile.fullName || "",
+                phone: profile.phone || "",
+            })
+        }
+    }, [profile, form])
 
-    function onSubmit() {
-        console.log("submit")
+    const { mutateAsync, isPending } = useMutation({
+        mutationFn: updateProfile,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.profile,
+            })
+        },
+        onError: (err) => {
+            form.setError("root", { message: err.message })
+        },
+    })
+
+    const error = form.formState.errors.root?.message
+
+    async function onSubmit(data: FormState) {
+        try {
+            if (
+                data.fullName === profile?.fullName &&
+                data.phone === profile.phone
+            )
+                return
+
+            await mutateAsync({
+                fullName: data.fullName,
+                phone: data.phone,
+            })
+        } catch (err) {
+            console.error(err)
+        }
     }
 
+    if (isLoading || !profile) return null
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-3xl">Contact Information</CardTitle>
+                <CardTitle className="text-2xl">Contact Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                 <Form {...form}>
@@ -51,9 +90,7 @@ export default function ProfileTab({ defaultValues }: Props) {
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-5 my-auto place-self-center w-[min(90%,400px)] not-md:w-full"
                     >
-                        <div>
-                            <p className="text-red-500 my-2">{message}</p>
-                        </div>
+                        <p className="text-destructive">{error}</p>
                         <FormField
                             control={form.control}
                             name="fullName"
@@ -67,13 +104,14 @@ export default function ProfileTab({ defaultValues }: Props) {
                                             {...field}
                                         />
                                     </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
                         <FormField
-                            control={form.control}
                             name="email"
                             disabled
+                            defaultValue={profile.email}
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
@@ -96,6 +134,7 @@ export default function ProfileTab({ defaultValues }: Props) {
                                             {...field}
                                         />
                                     </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -103,7 +142,7 @@ export default function ProfileTab({ defaultValues }: Props) {
                             <Button
                                 type="submit"
                                 className="cursor-pointer"
-                                disabled={form.formState.isSubmitting}
+                                disabled={isPending}
                             >
                                 Save changes
                             </Button>
