@@ -1,5 +1,8 @@
-
-import type { Address, IAddress, Profile } from "@/features/profile/profile.validation"
+import type {
+    Address,
+    IAddress,
+    Profile,
+} from "@/features/profile/profile.validation"
 import { axiosInstance } from "@/lib/axios"
 
 export async function fetchMe() {
@@ -28,14 +31,18 @@ export async function getAddresses() {
     return res.data as Address[]
 }
 
-
-
 export async function addAddress(data: IAddress) {
     return axiosInstance.post("/me/addresses", data)
 }
 
-export async function updateAddress(data: IAddress) {
-    return axiosInstance.patch("/me/addresses", data)
+export async function updateAddress({
+    id,
+    data,
+}: {
+    id: string
+    data: Partial<IAddress>
+}) {
+    return axiosInstance.patch("/me/addresses/" + id, data)
 }
 
 export async function deleteAddress(id: string) {
