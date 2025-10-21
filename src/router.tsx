@@ -4,8 +4,9 @@ import LoadingPage from "./pages/loading"
 import App from "./App"
 import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
-import NotFoundPage from "@/pages/not-found"
 
+const NotFoundPage = lazy(() => import("./pages/not-found"))
+const CheckoutPage = lazy(() => import("./pages/checkout"))
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
 const HomePage = lazy(() => import("./pages/home"))
@@ -23,15 +24,12 @@ const AdminShippingPage = lazy(() => import("./pages/admin/shipping"))
 const CartPage = lazy(() => import("./pages/cart"))
 
 export const router = createBrowserRouter([
-    // Public Routes with Main Layout
     {
         path: "/",
         element: <App />,
-        // errorElement: <NotFoundPage />,
         children: [
             {
                 path: "/auth",
-                // element: <></>,
                 children: [
                     {
                         index: true,
@@ -124,7 +122,7 @@ export const router = createBrowserRouter([
                         <CartPage />
                     </Suspense>
                 ),
-            },    
+            },
 
             // Legal Pages
             {
@@ -180,148 +178,9 @@ export const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-        ],
-    },
-
-    // Checkout Routes with Checkout Layout (Protected)
-    {
-        path: "/checkout",
-        element: (
-            // <ProtectedRoute>
-            //     <CheckoutLayout />
-            // </ProtectedRoute>
-            <></>
-        ),
-        children: [
             {
-                index: true,
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <CheckoutPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "shipping",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <CheckoutShippingPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "payment",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <CheckoutPaymentPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "review",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <CheckoutReviewPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "success/:orderId",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <OrderSuccessPage /> */}
-                    </Suspense>
-                ),
-            },
-        ],
-    },
-
-    // Account Routes (Protected)
-    {
-        path: "/account",
-        element: (
-            // <ProtectedRoute>
-            //     <MainLayout />
-            // </ProtectedRoute>
-            <></>
-        ),
-        children: [
-            {
-                index: true,
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <AccountDashboard /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "profile",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <ProfilePage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "orders",
-                children: [
-                    {
-                        index: true,
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                {/* <OrderHistoryPage /> */}
-                            </Suspense>
-                        ),
-                    },
-                    {
-                        path: ":orderId",
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                {/* <OrderDetailPage /> */}
-                            </Suspense>
-                        ),
-                    },
-                ],
-            },
-            // {
-            //     path: "addresses",
-            //     element: (
-            //         <Suspense fallback={<PageLoader />}>
-            //             <AddressesPage />
-            //         </Suspense>
-            //     ),
-            // },
-            // {
-            //     path: "payment-methods",
-            //     element: (
-            //         <Suspense fallback={<PageLoader />}>
-            //             <PaymentMethodsPage />
-            //         </Suspense>
-            //     ),
-            // },
-            {
-                path: "wishlist",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <AccountWishlistPage /> */}
-                    </Suspense>
-                ),
-            },
-            // {
-            //     path: "reviews",
-            //     element: (
-            //         <Suspense fallback={<PageLoader />}>
-            //             <UserReviewsPage />
-            //         </Suspense>
-            //     ),
-            // },
-            {
-                path: "settings",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <AccountSettingsPage /> */}
-                    </Suspense>
-                ),
+                path: "/checkout",
+                element: <CheckoutPage />,
             },
         ],
     },
@@ -346,32 +205,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "products",
-                children: [
-                    {
-                        index: true,
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                <AdminProductsPage />
-                            </Suspense>
-                        ),
-                    },
-                    {
-                        path: "new",
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                {/* <AdminProductCreatePage /> */}
-                            </Suspense>
-                        ),
-                    },
-                    {
-                        path: ":id/edit",
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                {/* <AdminProductEditPage /> */}
-                            </Suspense>
-                        ),
-                    },
-                ],
+                element: (
+                    <Suspense fallback={<LoadingPage/>}>
+                        <AdminProductsPage />
+                    </Suspense>
+                ),
             },
             {
                 path: "orders",
