@@ -37,7 +37,6 @@ export default function AddressesTab() {
     const addMutation = useMutation({
         mutationFn: addAddress,
         onSuccess: () => {
-            // setId(null)
             setIsAddOpen(false)
             queryClient.invalidateQueries({
                 queryKey: queryKeys.addresses,
@@ -139,7 +138,6 @@ export default function AddressesTab() {
                 </Card>
 
                 <AddressFormDialog
-                    key={"add-form-dialog"}
                     title="Add New Address"
                     description="Add a new shipping or billing address"
                     buttonText="Add Address"
@@ -147,7 +145,6 @@ export default function AddressesTab() {
                     onOpenChange={setIsAddOpen}
                     onSubmit={addMutation.mutateAsync}
                     isSubmitting={addMutation.isPending}
-                    address={undefined}
                 />
 
                 {id && (

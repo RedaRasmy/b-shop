@@ -84,6 +84,7 @@ export function AddressFormDialog({
         try {
             console.log("handle submit runs")
             await onSubmit(data)
+            form.reset()
         } catch (err) {
             console.error(err)
         }
