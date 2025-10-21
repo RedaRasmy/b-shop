@@ -88,7 +88,7 @@ export default function ProfileTab() {
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-5 my-auto place-self-center w-[min(90%,400px)] not-md:w-full"
+                        className="space-y-5 "
                     >
                         <p className="text-destructive">{error}</p>
                         <FormField
@@ -138,7 +138,7 @@ export default function ProfileTab() {
                                 </FormItem>
                             )}
                         />
-                        <div className="flex flex-row-reverse mt-6">
+                        <div className="flex mt-6">
                             <Button
                                 type="submit"
                                 className="cursor-pointer"

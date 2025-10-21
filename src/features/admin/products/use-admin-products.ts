@@ -36,14 +36,14 @@ export default function useAdminProducts({
     const totalRef = useRef(0)
     const totalPagesRef = useRef(1)
 
-    const { category, ...params } = queryParams
+    const { categoryId, ...params } = queryParams
 
     const finalQueryParams = {
         ...params,
         categoryId:
-            category === "__NULL__"
+            categoryId === "__NULL__"
                 ? "null" // for deleted categories
-                : categories.find((c) => c.name === category)?.id,
+                : categories.find((c) => c.name === categoryId)?.id,
     }
 
     // Get Products
