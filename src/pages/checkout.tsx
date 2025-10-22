@@ -2,6 +2,7 @@ import { Form } from "@/components/ui/form"
 import { CheckoutFormSchema } from "@/features/checkout/checkout.validation"
 import CheckoutHeader from "@/features/checkout/components/checkout-header"
 import ContactInfos from "@/features/checkout/components/contact-infos"
+import ShippingAddress from "@/features/checkout/components/shipping-address"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -25,6 +26,10 @@ export default function CheckoutPage() {
                 >
                     <div className="lg:col-span-2 space-y-6">
                         <ContactInfos />
+                        <ShippingAddress
+                            addresses={[]}
+                            onSelectAddress={() => {}}
+                        />
                     </div>
                 </form>
             </Form>
