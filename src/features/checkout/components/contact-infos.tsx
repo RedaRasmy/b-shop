@@ -58,7 +58,7 @@ export default function ContactInfos() {
                     name="phone"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Phone number</FormLabel>
+                            <FormLabel>Phone Number</FormLabel>
                             <FormControl>
                                 <Input placeholder="" {...field} />
                             </FormControl>

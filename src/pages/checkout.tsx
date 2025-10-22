@@ -1,12 +1,18 @@
 import { Form } from "@/components/ui/form"
+import { useAuth } from "@/features/auth/use-auth"
+import useCart from "@/features/cart/hooks/use-cart"
 import { CheckoutFormSchema } from "@/features/checkout/checkout.validation"
 import CheckoutHeader from "@/features/checkout/components/checkout-header"
+import CheckoutOrderSummary from "@/features/checkout/components/checkout-order-summary"
 import ContactInfos from "@/features/checkout/components/contact-infos"
 import ShippingAddress from "@/features/checkout/components/shipping-address"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 export default function CheckoutPage() {
+    const { isAuthenticated } = useAuth()
+    const { subtotal, items } = useCart(isAuthenticated)
+
     // get defaults
 
     const form = useForm({
@@ -31,6 +37,11 @@ export default function CheckoutPage() {
                             onSelectAddress={() => {}}
                         />
                     </div>
+                    <CheckoutOrderSummary
+                        isPending={false}
+                        orderItems={items}
+                        subtotal={subtotal}
+                    />
                 </form>
             </Form>
         </div>
