@@ -48,8 +48,7 @@ export function LoginForm() {
                 navigate("/profile")
             }
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onError: (err: any) => {
+        onError: (err) => {
             const message =
                 (err.response?.data?.message as string) ||
                 "Something went wrong , Please try again."
