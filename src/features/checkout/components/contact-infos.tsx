@@ -30,7 +30,7 @@ export default function ContactInfos() {
                         name="fullName"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Full name</FormLabel>
+                                <FormLabel>Full Name</FormLabel>
                                 <FormControl>
                                     <Input placeholder="" {...field} />
                                 </FormControl>

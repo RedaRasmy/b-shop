@@ -3,18 +3,17 @@ import z from "zod"
 export const CheckoutFormSchema = z.object({
     /// Contact Informations
     fullName: z
-        .string()
+        .string("Name is required")
         .min(3, "Full name must be at least 3 characters")
         .max(100, "Full name must not exceed 100 characters"),
     phone: z
-        .string()
+        .string("Phone number is required")
         .min(10, "Phone number must be at least 9 digits")
         .max(15, "Phone number must not exceed 16 digits")
         .regex(/^[0-9+\-\s()]+$/, "Please enter a valid phone number"),
-    email: z.email(),
+    email: z.string().min(1, "Email is required").email("Email is not valid"),
 
     /// Address
-    label: z.string().min(3).max(50),
     city: z
         .string("City name is required")
         .min(1, "City name is required")
