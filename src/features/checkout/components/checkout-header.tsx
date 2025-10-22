@@ -13,7 +13,7 @@ export default function CheckoutHeader() {
                 </Link>
             </Button>
             <h1 className="text-3xl font-bold">Checkout</h1>
-            <Badge variant="secondary">Secure Checkout</Badge>
+            <Badge variant="secondary" className="not-sm:hidden">Secure Checkout</Badge>
         </div>
     )
 }

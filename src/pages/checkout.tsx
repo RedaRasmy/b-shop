@@ -1,9 +1,33 @@
-import CheckoutHeader from "@/features/checkout/components/checkout-header";
+import { Form } from "@/components/ui/form"
+import { CheckoutFormSchema } from "@/features/checkout/checkout.validation"
+import CheckoutHeader from "@/features/checkout/components/checkout-header"
+import ContactInfos from "@/features/checkout/components/contact-infos"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 
 export default function CheckoutPage() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-        <CheckoutHeader/>
-    </div>
-  )
+    // get defaults
+
+    const form = useForm({
+        resolver: zodResolver(CheckoutFormSchema),
+        defaultValues: {},
+    })
+
+    async function submit() {}
+
+    return (
+        <div className="container mx-auto px-4 py-8 2xl:px-40">
+            <CheckoutHeader />
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(submit)}
+                    className="grid lg:grid-cols-3 gap-8"
+                >
+                    <div className="lg:col-span-2 space-y-6">
+                        <ContactInfos />
+                    </div>
+                </form>
+            </Form>
+        </div>
+    )
 }

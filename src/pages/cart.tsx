@@ -23,7 +23,7 @@ export default function CartPage() {
     if (items.length === 0) return <EmptyCart />
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 2xl:px-40">
             <CartHeader itemCount={itemCount} />
             <div className="grid lg:grid-cols-3 gap-8">
                 <CartItems
