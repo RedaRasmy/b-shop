@@ -65,7 +65,7 @@ export default function ProductsPage() {
 
     const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
         useInfiniteQuery({
-            queryKey: [queryKeys.products.customer(queryParams)],
+            queryKey: queryKeys.products.infinite(queryParams),
             queryFn: fetchProducts,
             initialPageParam: 1,
             getPreviousPageParam: (data) => data.page - 1,
