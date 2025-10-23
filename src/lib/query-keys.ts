@@ -55,9 +55,9 @@ export const queryKeys = {
             serializeParams(params),
         ],
         infinite: (params?: ProductsQuery) => [
-            "infinite",
             "products",
             "customer",
+            "infinite",
             serializeParams(params),
         ],
         admin: (params?: ProductsQuery) => [
