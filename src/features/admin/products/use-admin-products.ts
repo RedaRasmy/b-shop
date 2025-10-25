@@ -48,7 +48,7 @@ export default function useAdminProducts({
 
     // Get Products
     const { data: { data: products = [] } = {}, isLoading } = useQuery({
-        queryKey: queryKeys.products.admin(queryParams),
+        queryKey: queryKeys.products.admin(finalQueryParams),
         queryFn: () => getProducts(finalQueryParams),
         select: (res) => {
             const totalPages = res.data.totalPages
