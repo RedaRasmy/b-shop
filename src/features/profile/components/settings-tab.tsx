@@ -1,7 +1,7 @@
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { TabsContent } from "@/components/ui/tabs"
-import { CreditCard, LogOut, Settings } from "lucide-react"
+import { LogOut, Settings } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/features/auth/use-auth"
 import { useForm } from "react-hook-form"
@@ -157,38 +157,6 @@ export default function SettingsTab() {
                                 </Button>
                             </form>
                         </Form>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <CreditCard className="h-5 w-5" />
-                            Payment Methods
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4">
-                            <div className="border rounded-lg p-4 flex justify-between items-center">
-                                <div>
-                                    <p className="font-medium">
-                                        •••• •••• •••• 1234
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        Expires 12/26
-                                    </p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button variant="outline" size="sm">
-                                        Edit
-                                    </Button>
-                                    <Button variant="outline" size="sm">
-                                        Remove
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                        <Button className="mt-4">Add Payment Method</Button>
                     </CardContent>
                 </Card>
             </div>
