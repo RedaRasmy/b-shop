@@ -48,3 +48,5 @@ export async function updateAddress({
 export async function deleteAddress(id: string) {
     return axiosInstance.delete("/me/addresses/" + id)
 }
+
+

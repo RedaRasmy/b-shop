@@ -27,7 +27,7 @@ export default function ContactInfos() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
                     <FormField
                         control={control}
-                        name="fullName"
+                        name="name"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Full Name</FormLabel>

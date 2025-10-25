@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -13,7 +12,6 @@ export default function CheckoutHeader() {
                 </Link>
             </Button>
             <h1 className="text-3xl font-bold">Checkout</h1>
-            <Badge variant="secondary" className="not-sm:hidden">Secure Checkout</Badge>
         </div>
     )
 }
