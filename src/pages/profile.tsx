@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import AddressesTab from "@/features/profile/components/addresses-tab"
+import OrdersTab from "@/features/profile/components/orders-tab"
 import ProfileTab from "@/features/profile/components/profile-tab"
 import SettingsTab from "@/features/profile/components/settings-tab"
 import { useSearchParams } from "react-router-dom"
@@ -33,7 +34,9 @@ export default function ProfilePage() {
                     <ProfileTab />
                 </TabsContent>
 
-                <TabsContent value="orders">orders</TabsContent>
+                <TabsContent value="orders">
+                    <OrdersTab />
+                </TabsContent>
 
                 <TabsContent value="addresses">
                     <AddressesTab />

@@ -49,4 +49,23 @@ export async function deleteAddress(id: string) {
     return axiosInstance.delete("/me/addresses/" + id)
 }
 
+/// Orders
 
+type Orders = {
+    items: {
+        productName: string
+        productId: string
+        quantity: number
+        priceAtPurchase: string
+    }[]
+    id: number
+    status: "pending" | "processing" | "shipped" | "completed" | "canceled"
+    createdAt: Date
+    total: string
+}[]
+
+export default async function getOrders() {
+    const res = await axiosInstance.get("/me/orders")
+
+    return res.data as Orders
+}
