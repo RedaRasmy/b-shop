@@ -7,11 +7,11 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { type CheckoutFormData } from "@/features/checkout/checkout.validation"
+import { type OrderFormData } from "@/features/order/order.validation"
 import { useFormContext } from "react-hook-form"
 
 export default function ContactInfos() {
-    const { control } = useFormContext<CheckoutFormData>()
+    const { control } = useFormContext<OrderFormData>()
 
     return (
         <Card>

@@ -1,15 +1,15 @@
 import { Form } from "@/components/ui/form"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
-import { placeOrder } from "@/features/checkout/checkout-requests"
+import { placeOrder } from "@/features/order/order-requests"
 import {
-    CheckoutFormSchema,
-    type CheckoutFormData,
-} from "@/features/checkout/checkout.validation"
-import CheckoutHeader from "@/features/checkout/components/checkout-header"
-import CheckoutOrderSummary from "@/features/checkout/components/checkout-order-summary"
-import ContactInfos from "@/features/checkout/components/contact-infos"
-import ShippingAddress from "@/features/checkout/components/shipping-address"
+    OrderFormSchema,
+    type OrderFormData,
+} from "@/features/order/order.validation"
+import Header from "@/features/order/components/header"
+import OrderSummary from "@/features/order/components/order-summary"
+import ContactInfos from "@/features/order/components/contact-infos"
+import ShippingAddress from "@/features/order/components/shipping-address"
 import { fetchMe, getAddresses } from "@/features/profile/profile-requests"
 import { queryKeys } from "@/lib/query-keys"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,7 +17,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 
-export default function CheckoutPage() {
+export default function OrderPage() {
     const { isAuthenticated } = useAuth()
     const { subtotal, items } = useCart(isAuthenticated)
     const queryClient = useQueryClient()
@@ -35,7 +35,7 @@ export default function CheckoutPage() {
     const defaultAddress = addresses?.find((ad) => ad.isDefault)
 
     const form = useForm({
-        resolver: zodResolver(CheckoutFormSchema),
+        resolver: zodResolver(OrderFormSchema),
         defaultValues: {
             name: "",
             email: "",
@@ -70,7 +70,7 @@ export default function CheckoutPage() {
         },
     })
 
-    async function submit(data: CheckoutFormData) {
+    async function submit(data: OrderFormData) {
         try {
             await mutateAsync({
                 ...data,
@@ -87,7 +87,7 @@ export default function CheckoutPage() {
 
     return (
         <div className="container mx-auto px-4 py-8 2xl:px-40">
-            <CheckoutHeader />
+            <Header />
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(submit)}
@@ -100,7 +100,7 @@ export default function CheckoutPage() {
                             onSelectAddress={() => {}}
                         />
                     </div>
-                    <CheckoutOrderSummary
+                    <OrderSummary
                         isPending={isPending || items.length < 1}
                         orderItems={items}
                         subtotal={subtotal}

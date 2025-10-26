@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import type { CartProduct } from "@/features/cart/types"
-import { Shield, Truck } from "lucide-react"
+import { Truck } from "lucide-react"
 
 type Props = {
     orderItems: CartProduct[]
@@ -12,7 +12,7 @@ type Props = {
     isPending: boolean
 }
 
-export default function CheckoutOrderSummary({
+export default function OrderSummary({
     orderItems,
     shippingCost = 0,
     subtotal,
@@ -84,10 +84,6 @@ export default function CheckoutOrderSummary({
                 </Button>
 
                 <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                        <Shield className="h-4 w-4" />
-                        <span>Secure</span>
-                    </div>
                     <div className="flex items-center gap-1">
                         <Truck className="h-4 w-4" />
                         <span>Fast Delivery</span>

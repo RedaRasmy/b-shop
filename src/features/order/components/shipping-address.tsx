@@ -15,7 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { CheckoutFormData } from "@/features/checkout/checkout.validation"
+import type { OrderFormData } from "@/features/order/order.validation"
 import type { Address } from "@/features/profile/profile.validation"
 import { MapPin } from "lucide-react"
 import { useFormContext } from "react-hook-form"
@@ -27,7 +27,7 @@ export default function ShippingAddress({
     addresses: Address[]
     onSelectAddress: (id: string) => void
 }) {
-    const { control } = useFormContext<CheckoutFormData>()
+    const { control } = useFormContext<OrderFormData>()
 
     return (
         <Card>

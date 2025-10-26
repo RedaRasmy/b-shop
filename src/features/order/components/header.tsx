@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { Link } from "react-router-dom"
 
-export default function CheckoutHeader() {
+export default function Header() {
     return (
         <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" asChild>
@@ -11,7 +11,7 @@ export default function CheckoutHeader() {
                     Back to Cart
                 </Link>
             </Button>
-            <h1 className="text-3xl font-bold">Checkout</h1>
+            <h1 className="text-3xl font-bold">Order</h1>
         </div>
     )
 }

@@ -6,7 +6,7 @@ import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
 
 const NotFoundPage = lazy(() => import("./pages/not-found"))
-const CheckoutPage = lazy(() => import("./pages/checkout"))
+const OrderPage = lazy(() => import("./pages/order"))
 const RegisterPage = lazy(() => import("./pages/auth/register"))
 const LoginPage = lazy(() => import("./pages/auth/login"))
 const HomePage = lazy(() => import("./pages/home"))
@@ -179,8 +179,8 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/checkout",
-                element: <CheckoutPage />,
+                path: "/order",
+                element: <OrderPage />,
             },
         ],
     },

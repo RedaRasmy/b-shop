@@ -1,6 +1,6 @@
 import z from "zod"
 
-export const CheckoutFormSchema = z.object({
+export const OrderFormSchema = z.object({
     /// Contact Informations
     name: z
         .string("Name is required")
@@ -32,4 +32,4 @@ export const CheckoutFormSchema = z.object({
         .max(20, "Max length is 20"),
 })
 
-export type CheckoutFormData = z.infer<typeof CheckoutFormSchema>
+export type OrderFormData = z.infer<typeof OrderFormSchema>

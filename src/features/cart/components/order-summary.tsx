@@ -55,7 +55,7 @@ export default function OrderSummary({ subtotal, shipping, tax }: Props) {
                     </div>
 
                     <Button size="lg" className="w-full" asChild>
-                        <Link to="/checkout">Proceed to Checkout</Link>
+                        <Link to="/order">Proceed to Order</Link>
                     </Button>
 
                     <div className="flex items-center justify-center gap-2 font-semibold text-xs text-muted-foreground text-center">
