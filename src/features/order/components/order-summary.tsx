@@ -10,6 +10,7 @@ type Props = {
     shippingCost?: number
     tax?: number
     isPending: boolean
+    error?: string
 }
 
 export default function OrderSummary({
@@ -18,6 +19,7 @@ export default function OrderSummary({
     subtotal,
     tax = 0,
     isPending,
+    error,
 }: Props) {
     const total = subtotal + shippingCost + tax
 
@@ -89,6 +91,7 @@ export default function OrderSummary({
                         <span>Fast Delivery</span>
                     </div>
                 </div>
+                <p className="text-destructive">{error}</p>
             </CardContent>
         </Card>
     )

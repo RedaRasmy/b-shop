@@ -97,6 +97,7 @@ export const queryKeys = {
         base: ["orders"],
         customer: () => ["orders", "customer"],
         admin: () => ["orders", "admin"],
+        success: (token: string) => ["orders", "success", token],
     },
     addresses: ["addresses"],
 }

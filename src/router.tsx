@@ -4,6 +4,7 @@ import LoadingPage from "./pages/loading"
 import App from "./App"
 import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
+import OrderSuccessPage from "@/pages/order-success"
 
 const NotFoundPage = lazy(() => import("./pages/not-found"))
 const OrderPage = lazy(() => import("./pages/order"))
@@ -182,6 +183,10 @@ export const router = createBrowserRouter([
                 path: "/order",
                 element: <OrderPage />,
             },
+            {
+                path: "/order-success/:token",
+                element: <OrderSuccessPage />,
+            },
         ],
     },
 
@@ -206,7 +211,7 @@ export const router = createBrowserRouter([
             {
                 path: "products",
                 element: (
-                    <Suspense fallback={<LoadingPage/>}>
+                    <Suspense fallback={<LoadingPage />}>
                         <AdminProductsPage />
                     </Suspense>
                 ),

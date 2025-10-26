@@ -6,5 +6,13 @@ import type { CartItem } from "@/redux/slices/cart"
 type Order = Prettify<OrderFormData & { items: CartItem[] }>
 
 export async function placeOrder(order: Order) {
-    return axiosInstance.post("/orders", order)
+    const res = await axiosInstance.post("/orders", order)
+
+    return res.data.orderToken as string
+}
+
+export async function getOrder(token: string) {
+    const res = await axiosInstance.get("/orders/" + token)
+
+    return res.data as { total: string; id: number }
 }

@@ -16,11 +16,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 
 export default function OrderPage() {
     const { isAuthenticated } = useAuth()
     const { subtotal, items } = useCart(isAuthenticated)
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
 
     // get defaults
     const { data: profile } = useQuery({
@@ -61,14 +63,20 @@ export default function OrderPage() {
         }
     }, [profile, defaultAddress, form])
 
-    const { mutateAsync, isPending } = useMutation({
+    const { mutateAsync, isPending, isError } = useMutation({
         mutationFn: placeOrder,
-        onSuccess: () => {
+        onSuccess: (token) => {
             queryClient.invalidateQueries({
                 queryKey: queryKeys.cart.base,
             })
+
+            navigate("/order-success/" + token)
         },
     })
+
+    const errorMessage = isError
+        ? "Something went wrong , try again."
+        : undefined
 
     async function submit(data: OrderFormData) {
         try {
@@ -104,6 +112,7 @@ export default function OrderPage() {
                         isPending={isPending || items.length < 1}
                         orderItems={items}
                         subtotal={subtotal}
+                        error={errorMessage}
                     />
                 </form>
             </Form>
