@@ -1,8 +1,8 @@
 import type {
     AdminCategory,
     CategoryFormData,
-} from "@/features/admin/categories/categories.validation"
-import type { AdminProduct } from "@/features/admin/products/products.validation"
+} from "@/features/admin/categories/validation"
+import type { AdminProduct } from "@/features/admin/products/types"
 import type { AdminCategoriesQuery } from "@/features/categories/query-keys"
 import type { AdminProductsQuery } from "@/features/products/query-keys"
 import { axiosInstance } from "@/lib/axios"

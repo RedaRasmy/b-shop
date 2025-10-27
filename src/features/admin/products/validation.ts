@@ -1,27 +1,5 @@
-import { ImageSchema } from "@/features/products/validation"
 import { StatusSchema } from "@/lib/zod-schemas"
 import { z } from "zod"
-
-/// GET
-
-export const AdminProductSchema = z.object({
-    id: z.uuid(),
-    name: z.string(),
-    slug: z.string().min(1).max(255),
-    price: z.number().positive(),
-    inventoryStatus: z.enum(["In Stock", "Low Stock", "Out of Stock"]),
-    description: z.string(),
-    images: z.array(ImageSchema).min(1),
-    categoryId: z.uuid().optional(),
-    createdAt: z.iso.datetime(),
-    updatedAt: z.iso.datetime(),
-    status: StatusSchema,
-    stock: z.int(),
-})
-
-export type AdminProduct = z.infer<typeof AdminProductSchema>
-
-/// POST
 
 const ImageFormSchema = z.object({
     id: z.string().optional(),

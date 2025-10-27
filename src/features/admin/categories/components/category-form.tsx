@@ -31,7 +31,7 @@ import {
     CategoryFormSchema,
     type AdminCategory,
     type CategoryFormData,
-} from "@/features/admin/categories/categories.validation"
+} from "@/features/admin/categories/validation"
 import type { ChangeEvent, ReactNode } from "react"
 import axios from "axios"
 import { createSlug } from "@/lib/slugify"

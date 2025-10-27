@@ -1,7 +1,7 @@
 import type {
     AdminCategory,
     CategoryFormData,
-} from "@/features/admin/categories/categories.validation"
+} from "@/features/admin/categories/validation"
 import { http, HttpResponse } from "msw"
 
 type Id = {
@@ -90,7 +90,6 @@ export function resetMockedCategories() {
 export const adminCategoriesHandlers = [
     /// ADD
     http.post("/api/admin/categories", async ({ request }) => {
-
         const categoryData = (await request.json()) as CategoryFormData
         console.log("🔵 New category data:", categoryData)
 
@@ -140,7 +139,6 @@ export const adminCategoriesHandlers = [
                 (category) => category.status === status
             )
         }
-
 
         return HttpResponse.json(filteredCategories)
     }),

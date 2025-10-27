@@ -9,7 +9,7 @@ import {
 } from "@/features/cart/requests"
 import type { CartProduct } from "@/features/cart/types"
 import { getProductsByIds } from "@/features/products/requests"
-import type { ProductSummary } from "@/features/products/validation"
+import type { ProductSummary } from "@/features/products/types"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"

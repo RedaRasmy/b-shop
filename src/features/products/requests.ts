@@ -1,6 +1,6 @@
-import type { Product, ProductSummary } from "@/features/products/validation"
+import type { ProductsQuery } from "@/features/products/query-keys"
+import type { Product, ProductSummary } from "@/features/products/types"
 import { axiosInstance } from "@/lib/axios"
-import type { ProductsQuery } from "@/lib/query-keys"
 import type { PaginationResponse } from "@/types/global-types"
 
 export async function getProducts(params: ProductsQuery = {}) {

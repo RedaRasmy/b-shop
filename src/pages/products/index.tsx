@@ -10,7 +10,6 @@ import SearchBar from "@/features/products/components/search-bar"
 import ShopHeader from "@/features/products/components/shop-header"
 import { productKeys, type ProductsQuery } from "@/features/products/query-keys"
 import { getProducts } from "@/features/products/requests"
-import type { ProductSummary } from "@/features/products/validation"
 import LoadingPage from "@/pages/loading"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import {
@@ -98,7 +97,7 @@ export default function ProductsPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                         {data.pages.map(({ data }, index) => (
                             <Fragment key={index}>
-                                {data.map((product: ProductSummary) => (
+                                {data.map((product) => (
                                     <ProductCard
                                         key={product.id}
                                         product={product}

@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import type { Product } from "@/features/products/validation"
+import type { Product } from "@/features/products/types"
 import { Minus, Plus, ShoppingCart, Star } from "lucide-react"
 import { useState } from "react"
 

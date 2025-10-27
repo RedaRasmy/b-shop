@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import type { ProductSummary } from "@/features/products/validation"
+import type { ProductSummary } from "@/features/products/types"
 import { ShoppingCart, Star } from "lucide-react"
 import { Link } from "react-router-dom"
 
