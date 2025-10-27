@@ -3,8 +3,9 @@ import type {
     CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
+import type { AdminCategoriesQuery } from "@/features/categories/query-keys"
 import { axiosInstance } from "@/lib/axios"
-import type { AdminCategoriesQuery, AdminProductsQuery } from "@/lib/query-keys"
+import type { AdminProductsQuery } from "@/lib/query-keys"
 import type { PaginationResponse } from "@/types/global-types"
 
 // Products

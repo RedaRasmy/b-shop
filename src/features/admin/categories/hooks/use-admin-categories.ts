@@ -5,10 +5,10 @@ import {
     updateCategory,
 } from "@/features/admin/requests"
 import type { CategoryFormData } from "@/features/admin/categories/categories.validation"
-import { queryKeys, type CategoriesQuery } from "@/lib/query-keys"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
+import { categoryKeys, type CategoriesQuery } from "@/features/categories/query-keys"
 
 export function useAdminCategories({
     queryParams,
@@ -24,7 +24,7 @@ export function useAdminCategories({
     const [selectedId, setSelectedId] = useState<string | null>(null)
 
     const { data: categories = [], isLoading } = useQuery({
-        queryKey: queryKeys.categories.admin(queryParams),
+        queryKey: categoryKeys.admin(queryParams),
         queryFn: () => getCategories(queryParams),
     })
 

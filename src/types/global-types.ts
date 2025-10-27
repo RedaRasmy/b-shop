@@ -12,3 +12,15 @@ export type PaginationResponse<T> = {
     total: number | null
     totalPages: number | null
 }
+
+export type BasicQuery = {
+    search?: string
+    sort?: string
+}
+
+export type PaginationQuery = {
+    page?: number
+    perPage?: number
+}
+
+export type Id = string | number

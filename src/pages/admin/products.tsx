@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { getCategories } from "@/features/admin/requests"
-import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import FilterControls, {
     type FilterOptions,
@@ -11,10 +10,10 @@ import ProductForm from "@/features/admin/products/components/product-form"
 import ProductsPagination from "@/features/admin/products/components/products-pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
 import useAdminProducts from "@/features/admin/products/use-admin-products"
-import { queryKeys } from "@/lib/query-keys"
 import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useMemo } from "react"
+import { categoryKeys } from "@/features/categories/query-keys"
 
 const sortOptions = [
     { label: "Name", value: "name" },
@@ -28,11 +27,8 @@ const sortOptions = [
 export default function AdminProductsPage() {
     // get categories
     const { data: categories = [] } = useQuery({
-        queryKey: queryKeys.categories.admin(),
+        queryKey: categoryKeys.admin(),
         queryFn: () => getCategories(),
-        select: (res) => {
-            return res.data as AdminCategory[]
-        },
     })
 
     const filterOptions = useMemo<FilterOptions>(

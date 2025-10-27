@@ -1,14 +1,9 @@
-import type { Status, Prettify } from "@/types/global-types"
-
-type BasicQuery = {
-    search?: string
-    sort?: string
-}
-
-type PaginationQuery = {
-    page?: number
-    perPage?: number
-}
+import type {
+    Status,
+    Prettify,
+    BasicQuery,
+    PaginationQuery,
+} from "@/types/global-types"
 
 export type AdminProductsQuery = Prettify<
     BasicQuery &
@@ -25,14 +20,6 @@ export type ProductsQuery = Prettify<
         }
 >
 
-export type CategoriesQuery = BasicQuery
-
-export type AdminCategoriesQuery = Prettify<
-    BasicQuery & {
-        status?: Status
-    }
->
-
 export const queryKeys = {
     products: {
         base: ["products"],
@@ -46,20 +33,5 @@ export const queryKeys = {
         admin: (params?: ProductsQuery) => ["products", "admin", params],
         detail: (id: string | number) => ["products", "detail", id],
         related: (id?: string) => ["products", "related", id],
-    },
-    categories: {
-        base: ["categories"],
-        customer: (params?: CategoriesQuery) => [
-            "categories",
-            "customer",
-            params,
-        ],
-        admin: (params?: CategoriesQuery) => ["categories", "admin", params],
-        detail: (id: string | number) => ["categories", "detail", id],
-        products: (categoryId: string) => [
-            "categories",
-            categoryId,
-            "products",
-        ],
     },
 }

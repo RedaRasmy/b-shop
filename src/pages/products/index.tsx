@@ -1,6 +1,7 @@
 import { Spinner } from "@/components/ui/spinner"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
+import { categoryKeys } from "@/features/categories/query-keys"
 import { getCategories } from "@/features/categories/requests"
 import type { Category } from "@/features/categories/validation"
 import FilterBar from "@/features/products/components/filter-bar"
@@ -30,7 +31,7 @@ export default function ProductsPage() {
     const [sortBy, setSortBy] = useState("createdAt:desc")
 
     const { data: categories = [], isLoading } = useQuery({
-        queryKey: queryKeys.categories.customer(),
+        queryKey: categoryKeys.customer(),
         queryFn: getCategories,
         select: (res) => res.data as Category[],
     })
