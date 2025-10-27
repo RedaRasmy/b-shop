@@ -1,13 +1,13 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { orderKeys } from "@/features/order/query-keys"
 import getOrders from "@/features/profile/requests"
-import { queryKeys } from "@/lib/query-keys"
 import { useQuery } from "@tanstack/react-query"
 import { Package } from "lucide-react"
 
 export default function OrdersTab() {
     const { data: orders } = useQuery({
-        queryKey: queryKeys.orders.customer(),
+        queryKey: orderKeys.customer(),
         queryFn: getOrders,
     })
 

@@ -87,15 +87,10 @@ export const queryKeys = {
             "products",
         ],
     },
-    // cart: {
-    //     base: ["cart"],
-    //     auth: () => ["cart", "auth"],
-    //     guest: (ids: string[]) => ["cart", "guest", ...ids.slice().sort()],
+    // orders: {
+    //     base: ["orders"],
+    //     customer: () => ["orders", "customer"],
+    //     admin: () => ["orders", "admin"],
+    //     success: (token: string) => ["orders", "success", token],
     // },
-    orders: {
-        base: ["orders"],
-        customer: () => ["orders", "customer"],
-        admin: () => ["orders", "admin"],
-        success: (token: string) => ["orders", "success", token],
-    },
 }
