@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
+import { productKeys } from "@/features/products/query-keys"
 import { getProducts } from "@/features/products/requests"
-import { queryKeys } from "@/lib/query-keys"
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Headphones, Shield, Star, Truck } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -33,7 +33,7 @@ const features = [
 
 export default function HomePage() {
     const { data: products = [] } = useQuery({
-        queryKey: queryKeys.products.customer(),
+        queryKey: productKeys.customer(),
         queryFn: () =>
             getProducts({
                 perPage: 4,

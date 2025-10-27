@@ -8,9 +8,9 @@ import FilterBar from "@/features/products/components/filter-bar"
 import { ProductCard } from "@/features/products/components/product-card"
 import SearchBar from "@/features/products/components/search-bar"
 import ShopHeader from "@/features/products/components/shop-header"
+import { productKeys, type ProductsQuery } from "@/features/products/query-keys"
 import { getProducts } from "@/features/products/requests"
 import type { ProductSummary } from "@/features/products/validation"
-import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
 import LoadingPage from "@/pages/loading"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import {
@@ -63,7 +63,7 @@ export default function ProductsPage() {
 
     const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
         useInfiniteQuery({
-            queryKey: queryKeys.products.infinite(queryParams),
+            queryKey: productKeys.infinite(queryParams),
             queryFn: fetchProducts,
             initialPageParam: 1,
             getPreviousPageParam: (data) => data.page - 1,

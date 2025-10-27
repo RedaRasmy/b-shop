@@ -3,9 +3,8 @@ import useCart from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
+import { productKeys } from "@/features/products/query-keys"
 import { getProduct, getProducts } from "@/features/products/requests"
-import type { ProductSummary } from "@/features/products/validation"
-import { queryKeys } from "@/lib/query-keys"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
 import { useQuery } from "@tanstack/react-query"
@@ -13,29 +12,31 @@ import { useMemo } from "react"
 import { useParams } from "react-router-dom"
 
 export default function ProductDetailPage() {
-    console.log("page renders")
     const { slug } = useParams<{ slug: string }>()
 
-    if (!slug) throw new Error("Impossible")
+    if (!slug)
+        throw new Error(
+            "ProductDetailPage should be in a dynamic route with :slug"
+        )
 
     const {
         data: product,
         isError,
         isLoading,
     } = useQuery({
-        queryKey: queryKeys.products.detail(slug),
+        queryKey: productKeys.detail(slug),
         queryFn: () => getProduct(slug),
     })
 
     const { data: sameCategoryProducts } = useQuery({
-        queryKey: queryKeys.products.related(product?.categoryId),
+        queryKey: productKeys.related(product?.categoryId),
         queryFn: () =>
             getProducts({
                 categoryId: product?.categoryId,
             }),
-        enabled: !!product?.categoryId,
+        enabled: !!product,
         select: (data) => {
-            return data.data as ProductSummary[]
+            return data.data
         },
     })
 
