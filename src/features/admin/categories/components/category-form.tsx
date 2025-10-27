@@ -33,8 +33,8 @@ import {
     type CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
 import type { ChangeEvent, ReactNode } from "react"
-import { generateSlug } from "@/utils/generate-slug"
 import axios from "axios"
+import { createSlug } from "@/lib/slugify"
 
 type Props = {
     buttonText: string
@@ -109,7 +109,7 @@ export function CategoryForm({
         }
 
         /// Generate default slug
-        const newSlug = generateSlug(newName)
+        const newSlug = createSlug(newName)
 
         // Check if slug exists (excluding current category in edit mode)
         const slugExists = existingCategories.some(

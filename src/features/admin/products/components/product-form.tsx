@@ -33,10 +33,10 @@ import {
 } from "@/features/admin/products/products.validation"
 import ImagesInput from "@/features/admin/products/components/images-input"
 import type { ChangeEvent, ReactNode } from "react"
-import { generateSlug } from "@/utils/generate-slug"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import axios from "axios"
 import type { Prettify } from "@/types/global-types"
+import { createSlug } from "@/lib/slugify"
 
 type ProductImage = ProductFormData["images"][number]
 
@@ -184,7 +184,7 @@ export default function ProductForm({
     function handleNameChange(e: ChangeEvent<HTMLInputElement>) {
         const newName = e.target.value
         form.setValue("name", newName, { shouldValidate: true })
-        const slug = generateSlug(newName)
+        const slug = createSlug(newName)
         form.setValue("slug", slug, { shouldValidate: true })
     }
 
