@@ -5,19 +5,10 @@ import {
     updateProduct,
 } from "@/features/admin/admin-requests"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
-import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useRef, useState } from "react"
-
-type ProductsData = {
-    data: AdminProduct[]
-    page: number
-    perPage: number
-    total: number | null
-    totalPages: number | null
-}
 
 export default function useAdminProducts({
     queryParams = {},
@@ -47,12 +38,12 @@ export default function useAdminProducts({
     }
 
     // Get Products
-    const { data: { data: products = [] } = {}, isLoading } = useQuery({
+    const { data: products = [], isLoading } = useQuery({
         queryKey: queryKeys.products.admin(finalQueryParams),
         queryFn: () => getProducts(finalQueryParams),
-        select: (res) => {
-            const totalPages = res.data.totalPages
-            const total = res.data.total
+        select: (data) => {
+            const totalPages = data.totalPages
+            const total = data.total
             if (totalPages) {
                 // set only on page 1 when totalPages exists
                 totalPagesRef.current = totalPages
@@ -60,7 +51,7 @@ export default function useAdminProducts({
             if (total) {
                 totalRef.current = total
             }
-            return res.data as ProductsData
+            return data.data
         },
     })
 

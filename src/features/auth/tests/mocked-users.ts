@@ -1,4 +1,4 @@
-import type { User } from "@/lib/types"
+import type { User } from "@/types/global-types"
 
 export const mockedAdmin: User = {
     id: "test-id-admin",

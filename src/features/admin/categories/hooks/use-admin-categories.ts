@@ -5,7 +5,6 @@ import {
     updateCategory,
 } from "@/features/admin/admin-requests"
 import type {
-    AdminCategory,
     CategoryFormData,
 } from "@/features/admin/categories/categories.validation"
 import { queryKeys, type CategoriesQuery } from "@/lib/query-keys"
@@ -29,9 +28,6 @@ export function useAdminCategories({
     const { data: categories = [], isLoading } = useQuery({
         queryKey: queryKeys.categories.admin(queryParams),
         queryFn: () => getCategories(queryParams),
-        select: (res) => {
-            return res.data as AdminCategory[]
-        },
     })
 
     const selectedCategory = categories.find((c) => c.id === selectedId)

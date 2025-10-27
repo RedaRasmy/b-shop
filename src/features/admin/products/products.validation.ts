@@ -4,7 +4,7 @@ import {
 import { StatusSchema } from "@/lib/zod-schemas"
 import { z } from "zod"
 
-/// GE
+/// GET
 
 export const AdminProductSchema = z.object({
     id: z.uuid(),

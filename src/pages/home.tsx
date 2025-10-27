@@ -3,7 +3,6 @@ import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
 import { getProducts } from "@/features/products/product-requests"
-import type { ProductSummary } from "@/features/products/products.validation"
 import { queryKeys } from "@/lib/query-keys"
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Headphones, Shield, Star, Truck } from "lucide-react"
@@ -40,7 +39,7 @@ export default function HomePage() {
                 perPage: 4,
             }),
         select: (res) => {
-            return res.data.data as ProductSummary[]
+            return res.data
         },
     })
 
@@ -135,7 +134,6 @@ export default function HomePage() {
                         </div>
                     ))}
                 </div>
-
             </section>
 
             <section className="bg-accent py-20">

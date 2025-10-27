@@ -36,7 +36,7 @@ import type { ChangeEvent, ReactNode } from "react"
 import { generateSlug } from "@/utils/generate-slug"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import axios from "axios"
-import type { Prettify } from "@/lib/types"
+import type { Prettify } from "@/types/global-types"
 
 type ProductImage = ProductFormData["images"][number]
 

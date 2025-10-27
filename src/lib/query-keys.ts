@@ -1,4 +1,4 @@
-import type { Status, Prettify } from "@/lib/types"
+import type { Status, Prettify } from "@/types/global-types"
 
 type Params = Record<string, string | number | boolean>
 

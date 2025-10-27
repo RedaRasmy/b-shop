@@ -1,6 +1,11 @@
-import type { CategoryFormData } from "@/features/admin/categories/categories.validation"
+import type {
+    AdminCategory,
+    CategoryFormData,
+} from "@/features/admin/categories/categories.validation"
+import type { AdminProduct } from "@/features/admin/products/products.validation"
 import { axiosInstance } from "@/lib/axios"
 import type { AdminCategoriesQuery, AdminProductsQuery } from "@/lib/query-keys"
+import type { PaginationResponse } from "@/types/global-types"
 
 // Products
 
@@ -9,12 +14,13 @@ export async function addProduct(formData: FormData) {
 }
 
 export async function getProducts(params: AdminProductsQuery = {}) {
-    return axiosInstance.get("/admin/products", {
+    const res = await axiosInstance.get("/admin/products", {
         params: {
             ...params,
             perPage: 15,
         },
     })
+    return res.data as PaginationResponse<AdminProduct[]>
 }
 
 export async function updateProduct(id: string, formData: FormData) {
@@ -32,9 +38,10 @@ export async function addCategory(data: CategoryFormData) {
 }
 
 export async function getCategories(params: AdminCategoriesQuery = {}) {
-    return axiosInstance.get("/admin/categories", {
+    const res = await axiosInstance.get("/admin/categories", {
         params,
     })
+    return res.data as AdminCategory[]
 }
 
 export async function updateCategory(id: string, data: CategoryFormData) {

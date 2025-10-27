@@ -5,10 +5,10 @@ import {
     useCallback,
     useMemo,
 } from "react"
-import type { User } from "@/lib/types"
 import { AuthContext } from "@/features/auth/auth-context"
 import { logoutRequest } from "@/features/auth/auth-requests"
 import { fetchMe } from "@/features/profile/profile-requests"
+import type { User } from "@/features/auth/auth.validation"
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)

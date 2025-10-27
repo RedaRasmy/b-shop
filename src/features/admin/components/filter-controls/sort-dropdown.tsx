@@ -5,7 +5,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { Order } from "@/lib/types"
+import type { Order } from "@/types/global-types"
 import { SortAsc, SortDesc } from "lucide-react"
 
 type Option = { label: string; value: string }

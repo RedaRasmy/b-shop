@@ -4,10 +4,7 @@ import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
 import { getProduct, getProducts } from "@/features/products/product-requests"
-import type {
-    Product,
-    ProductSummary,
-} from "@/features/products/products.validation"
+import type { ProductSummary } from "@/features/products/products.validation"
 import { queryKeys } from "@/lib/query-keys"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
@@ -19,7 +16,6 @@ export default function ProductDetailPage() {
     console.log("page renders")
     const { slug } = useParams<{ slug: string }>()
 
-
     if (!slug) throw new Error("Impossible")
 
     const {
@@ -29,10 +25,6 @@ export default function ProductDetailPage() {
     } = useQuery({
         queryKey: queryKeys.products.detail(slug),
         queryFn: () => getProduct(slug),
-        select: (res) => {
-            return res.data as Product
-        },
-        // retry: false,
     })
 
     const { data: sameCategoryProducts } = useQuery({
@@ -42,15 +34,14 @@ export default function ProductDetailPage() {
                 categoryId: product?.categoryId,
             }),
         enabled: !!product?.categoryId,
-        select: (res) => {
-            return res.data.data as ProductSummary[]
+        select: (data) => {
+            return data.data as ProductSummary[]
         },
     })
 
     const relatedProducts = useMemo(() => {
         return sameCategoryProducts?.filter((p) => p.id !== product?.id) || []
     }, [sameCategoryProducts, product?.id])
-
 
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
     const { addItem } = useCart(isAuthenticated)

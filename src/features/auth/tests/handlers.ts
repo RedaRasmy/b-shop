@@ -1,4 +1,4 @@
-import type { Credentials } from "@/lib/types"
+import type { Credentials } from "@/types/global-types"
 import { http, HttpResponse } from "msw"
 import {
     mockedAdmin,

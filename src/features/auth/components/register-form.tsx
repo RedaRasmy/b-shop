@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -14,16 +13,16 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { emailPasswordSchema } from "@/lib/zod-schemas"
 import { useMutation } from "@tanstack/react-query"
 import { registerRequest } from "@/features/auth/auth-requests"
 import { useAuth } from "@/features/auth/use-auth"
-import type { User } from "@/lib/types"
+import {
+    emailPasswordSchema,
+    type Credentials,
+} from "@/features/auth/auth.validation"
 
 export function RegisterForm() {
-    type FormState = z.infer<typeof emailPasswordSchema>
-
-    const form = useForm<FormState>({
+    const form = useForm({
         resolver: zodResolver(emailPasswordSchema),
         defaultValues: {
             email: "",
@@ -37,9 +36,9 @@ export function RegisterForm() {
 
     const mutation = useMutation({
         mutationFn: registerRequest,
-        onSuccess: (res) => {
-            setUser(res.data.user)
-            if ((res.data.user as User).role === "admin") {
+        onSuccess: (user) => {
+            setUser(user)
+            if (user.role === "admin") {
                 navigate("/admin")
             } else {
                 navigate("/profile")
@@ -56,7 +55,7 @@ export function RegisterForm() {
         },
     })
 
-    async function onSubmit(values: FormState) {
+    async function onSubmit(values: Credentials) {
         try {
             await mutation.mutateAsync(values)
         } catch {

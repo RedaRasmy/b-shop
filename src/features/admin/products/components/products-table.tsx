@@ -15,7 +15,7 @@ import {
     TableCell,
 } from "@/components/ui/table"
 import type { AdminProduct } from "@/features/admin/products/products.validation"
-import type { Prettify } from "@/lib/types"
+import type { Prettify } from "@/types/global-types"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
 

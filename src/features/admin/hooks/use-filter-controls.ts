@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom"
-import type { Order } from "@/lib/types"
+import type { Order } from "@/types/global-types"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import type {
     FilterOptions,

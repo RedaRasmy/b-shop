@@ -10,7 +10,6 @@ import ShopHeader from "@/features/products/components/shop-header"
 import { getProducts } from "@/features/products/product-requests"
 import type { ProductSummary } from "@/features/products/products.validation"
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
-import type { PaginationResponse } from "@/lib/types"
 import LoadingPage from "@/pages/loading"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import {
@@ -24,7 +23,6 @@ import {
 import { useInView } from "react-intersection-observer"
 
 export default function ProductsPage() {
-    console.log("products page renders...")
     const { ref, inView } = useInView()
     const totalPagesRef = useRef(1)
     const [categoryId, setCategoryId] = useState<string | null>(null)
@@ -47,18 +45,17 @@ export default function ProductsPage() {
     )
 
     const fetchProducts = useCallback(
-        ({ pageParam = 1 }) => {
-            return getProducts({
+        async ({ pageParam = 1 }) => {
+            const data = await getProducts({
                 categoryId: categoryId || undefined,
                 sort: sortBy,
                 search: search || undefined,
                 page: pageParam,
-            }).then((res) => {
-                if (res.data.totalPages) {
-                    totalPagesRef.current = res.data.totalPages
-                }
-                return res.data as PaginationResponse<ProductSummary[]>
             })
+            if (data.totalPages) {
+                totalPagesRef.current = data.totalPages
+            }
+            return data
         },
         [categoryId, sortBy, search]
     )
