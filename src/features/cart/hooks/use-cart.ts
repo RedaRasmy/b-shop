@@ -1,3 +1,4 @@
+import { cartKeys } from "@/features/cart/query-keys"
 import {
     addCartItem,
     clearCartRequest,
@@ -9,7 +10,6 @@ import {
 import type { CartProduct } from "@/features/cart/types"
 import { getProductsByIds } from "@/features/products/requests"
 import type { ProductSummary } from "@/features/products/validation"
-import { queryKeys } from "@/lib/query-keys"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
@@ -31,7 +31,7 @@ export default function useCart(isAuthenticated: boolean) {
         isLoading: isAuthCartLoading,
         error: authCartError,
     } = useQuery({
-        queryKey: queryKeys.cart.auth(),
+        queryKey: cartKeys.auth(),
         queryFn: getCart,
         enabled: isAuthenticated,
         staleTime: 1000 * 60 * 5,
@@ -53,7 +53,7 @@ export default function useCart(isAuthenticated: boolean) {
         isLoading: isGuestCartLoading,
         error: guestCartError,
     } = useQuery({
-        queryKey: queryKeys.cart.guest(ids),
+        queryKey: cartKeys.guest(ids),
         queryFn: () => getProductsByIds(ids),
         enabled: !isAuthenticated && ids.length > 0,
         staleTime: 1000 * 60 * 5,
@@ -73,7 +73,7 @@ export default function useCart(isAuthenticated: boolean) {
         onSuccess: () => {
             if (isAuthenticated) {
                 queryClient.invalidateQueries({
-                    queryKey: queryKeys.cart.auth(),
+                    queryKey: cartKeys.auth(),
                 })
             }
         },
@@ -96,7 +96,7 @@ export default function useCart(isAuthenticated: boolean) {
         onSuccess: () => {
             if (isAuthenticated) {
                 queryClient.invalidateQueries({
-                    queryKey: queryKeys.cart.auth(),
+                    queryKey: cartKeys.auth(),
                 })
             }
         },
@@ -113,7 +113,7 @@ export default function useCart(isAuthenticated: boolean) {
         onSuccess: () => {
             if (isAuthenticated) {
                 queryClient.invalidateQueries({
-                    queryKey: queryKeys.cart.auth(),
+                    queryKey: cartKeys.auth(),
                 })
             }
         },
@@ -130,7 +130,7 @@ export default function useCart(isAuthenticated: boolean) {
         onSuccess: () => {
             if (isAuthenticated) {
                 queryClient.invalidateQueries({
-                    queryKey: queryKeys.cart.auth(),
+                    queryKey: cartKeys.auth(),
                 })
             }
         },

@@ -11,13 +11,13 @@ import OrderSummary from "@/features/order/components/order-summary"
 import ContactInfos from "@/features/order/components/contact-infos"
 import ShippingAddress from "@/features/order/components/shipping-address"
 import { fetchMe, getAddresses } from "@/features/profile/requests"
-import { queryKeys } from "@/lib/query-keys"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { profileKeys } from "@/features/profile/query-keys"
+import { cartKeys } from "@/features/cart/query-keys"
 
 export default function OrderPage() {
     const { isAuthenticated } = useAuth()
@@ -68,7 +68,7 @@ export default function OrderPage() {
         mutationFn: placeOrder,
         onSuccess: (token) => {
             queryClient.invalidateQueries({
-                queryKey: queryKeys.cart.base,
+                queryKey: cartKeys.base,
             })
 
             navigate("/order-success/" + token)
