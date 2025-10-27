@@ -15,8 +15,8 @@ import {
     deleteAddress,
     getAddresses,
     updateAddress,
-} from "@/features/profile/profile-requests"
-import type { IAddress } from "@/features/profile/profile.validation"
+} from "@/features/profile/requests"
+import type { IAddress } from "@/features/profile/validation"
 import { queryKeys } from "@/lib/query-keys"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { MapPin } from "lucide-react"

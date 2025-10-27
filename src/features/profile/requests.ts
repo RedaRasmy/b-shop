@@ -1,8 +1,4 @@
-import type {
-    Address,
-    IAddress,
-    Profile,
-} from "@/features/profile/profile.validation"
+import type { Address, IAddress, Profile } from "@/features/profile/validation"
 import { axiosInstance } from "@/lib/axios"
 
 export async function fetchMe() {

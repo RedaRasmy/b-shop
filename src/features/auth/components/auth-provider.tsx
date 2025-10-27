@@ -6,9 +6,9 @@ import {
     useMemo,
 } from "react"
 import { AuthContext } from "@/features/auth/auth-context"
-import { logoutRequest } from "@/features/auth/auth-requests"
-import { fetchMe } from "@/features/profile/profile-requests"
-import type { User } from "@/features/auth/auth.validation"
+import { logoutRequest } from "@/features/auth/requests"
+import { fetchMe } from "@/features/profile/requests"
+import type { User } from "@/features/auth/validation"
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)

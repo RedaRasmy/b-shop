@@ -1,7 +1,4 @@
-import type {
-    Product,
-    ProductSummary,
-} from "@/features/products/products.validation"
+import type { Product, ProductSummary } from "@/features/products/validation"
 import { axiosInstance } from "@/lib/axios"
 import type { ProductsQuery } from "@/lib/query-keys"
 import type { PaginationResponse } from "@/types/global-types"

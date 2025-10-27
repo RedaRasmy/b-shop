@@ -18,7 +18,7 @@ import {
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod"
-import type { Address, IAddress } from "@/features/profile/profile.validation"
+import type { Address, IAddress } from "@/features/profile/validation"
 import {
     Form,
     FormControl,

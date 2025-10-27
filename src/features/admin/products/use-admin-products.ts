@@ -3,7 +3,7 @@ import {
     deleteProduct,
     getProducts,
     updateProduct,
-} from "@/features/admin/admin-requests"
+} from "@/features/admin/requests"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import { queryKeys, type ProductsQuery } from "@/lib/query-keys"
 import { useQueryClient } from "@tanstack/react-query"

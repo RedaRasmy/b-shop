@@ -1,16 +1,16 @@
 import { Form } from "@/components/ui/form"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
-import { placeOrder } from "@/features/order/order-requests"
+import { placeOrder } from "@/features/order/requests"
 import {
     OrderFormSchema,
     type OrderFormData,
-} from "@/features/order/order.validation"
+} from "@/features/order/validation"
 import Header from "@/features/order/components/header"
 import OrderSummary from "@/features/order/components/order-summary"
 import ContactInfos from "@/features/order/components/contact-infos"
 import ShippingAddress from "@/features/order/components/shipping-address"
-import { fetchMe, getAddresses } from "@/features/profile/profile-requests"
+import { fetchMe, getAddresses } from "@/features/profile/requests"
 import { queryKeys } from "@/lib/query-keys"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"

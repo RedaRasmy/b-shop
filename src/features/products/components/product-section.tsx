@@ -1,12 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import type { Product } from "@/features/products/products.validation"
-import {
-    Minus,
-    Plus,
-    ShoppingCart,
-    Star,
-} from "lucide-react"
+import type { Product } from "@/features/products/validation"
+import { Minus, Plus, ShoppingCart, Star } from "lucide-react"
 import { useState } from "react"
 
 type Props = {
@@ -14,15 +9,11 @@ type Props = {
     onAddToCart: (quantity: number) => void
 }
 
-export default function ProductSection({
-    product,
-    onAddToCart,
-}: Props) {
+export default function ProductSection({ product, onAddToCart }: Props) {
     const [selectedImage, setSelectedImage] = useState(0)
     const [quantity, setQuantity] = useState(1)
 
     const mainImage = product.images[selectedImage]
-    
 
     return (
         <div className="grid lg:grid-cols-2 gap-12 mb-16">

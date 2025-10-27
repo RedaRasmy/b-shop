@@ -1,6 +1,4 @@
-import {
-    ImageSchema,
-} from "@/features/products/products.validation"
+import { ImageSchema } from "@/features/products/validation"
 import { StatusSchema } from "@/lib/zod-schemas"
 import { z } from "zod"
 
@@ -46,7 +44,9 @@ const ImageFormSchema = z.object({
 })
 
 export const ProductFormSchema = z.object({
-    name: z.string("Product name is required").min(1, "Product name is required"),
+    name: z
+        .string("Product name is required")
+        .min(1, "Product name is required"),
     slug: z
         .string()
         .min(1, "Product slug is required")
@@ -58,7 +58,10 @@ export const ProductFormSchema = z.object({
     description: z.string().min(1, "Description is required"),
     price: z.number().min(0, "Price must be positive"),
     stock: z.int().min(0, "Stock must be positive"),
-    categoryId: z.string("Category is required").min(1,"Category is required").uuid(),
+    categoryId: z
+        .string("Category is required")
+        .min(1, "Category is required")
+        .uuid(),
     status: StatusSchema,
     images: z
         .array(ImageFormSchema)

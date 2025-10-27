@@ -6,7 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { Category } from "@/features/categories/categories.validation"
+import type { Category } from "@/features/categories/validation"
 
 type Props = {
     categories: Category[]
@@ -23,7 +23,6 @@ export default function FilterBar({
     sortBy,
     onSortChange,
 }: Props) {
-
     const sortOptions = [
         { value: "createdAt:desc", label: "Newest" },
         { value: "price:asc", label: "Price: Low to High" },

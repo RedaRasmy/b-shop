@@ -7,7 +7,7 @@ import { useAuth } from "@/features/auth/use-auth"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod"
-import { PasswordSchema } from "@/features/auth/auth.validation"
+import { PasswordSchema } from "@/features/auth/validation"
 import {
     Form,
     FormControl,
@@ -16,7 +16,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { updatePassword } from "@/features/profile/profile-requests"
+import { updatePassword } from "@/features/profile/requests"
 import { useMutation } from "@tanstack/react-query"
 import type { AxiosError } from "axios"
 import { useState } from "react"

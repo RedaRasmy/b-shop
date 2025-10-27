@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useMutation } from "@tanstack/react-query"
-import { loginRequest } from "@/features/auth/auth-requests"
+import { loginRequest } from "@/features/auth/requests"
 import { useAuth } from "@/features/auth/use-auth"
 import { useNavigate } from "react-router-dom"
 import {
     emailPasswordSchema,
     type Credentials,
-} from "@/features/auth/auth.validation"
+} from "@/features/auth/validation"
 
 export function LoginForm() {
     const form = useForm({

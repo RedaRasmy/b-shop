@@ -3,10 +3,8 @@ import {
     deleteCategory,
     getCategories,
     updateCategory,
-} from "@/features/admin/admin-requests"
-import type {
-    CategoryFormData,
-} from "@/features/admin/categories/categories.validation"
+} from "@/features/admin/requests"
+import type { CategoryFormData } from "@/features/admin/categories/categories.validation"
 import { queryKeys, type CategoriesQuery } from "@/lib/query-keys"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"

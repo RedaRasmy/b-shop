@@ -15,8 +15,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { OrderFormData } from "@/features/order/order.validation"
-import type { Address } from "@/features/profile/profile.validation"
+import type { OrderFormData } from "@/features/order/validation"
+import type { Address } from "@/features/profile/validation"
 import { MapPin } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 

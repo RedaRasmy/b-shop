@@ -1,4 +1,4 @@
-import type { OrderFormData } from "@/features/order/order.validation"
+import type { OrderFormData } from "@/features/order/validation"
 import { axiosInstance } from "@/lib/axios"
 import type { Prettify } from "@/types/global-types"
 import type { CartItem } from "@/redux/slices/cart"

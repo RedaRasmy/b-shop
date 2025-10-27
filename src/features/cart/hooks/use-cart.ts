@@ -5,10 +5,10 @@ import {
     getCart,
     // mergeCartRequest,
     updateCartItem,
-} from "@/features/cart/cart-requests"
+} from "@/features/cart/requests"
 import type { CartProduct } from "@/features/cart/types"
-import { getProductsByIds } from "@/features/products/product-requests"
-import type { ProductSummary } from "@/features/products/products.validation"
+import { getProductsByIds } from "@/features/products/requests"
+import type { ProductSummary } from "@/features/products/validation"
 import { queryKeys } from "@/lib/query-keys"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"
@@ -57,7 +57,7 @@ export default function useCart(isAuthenticated: boolean) {
         queryFn: () => getProductsByIds(ids),
         enabled: !isAuthenticated && ids.length > 0,
         staleTime: 1000 * 60 * 5,
-        select: selectGuestCart ,
+        select: selectGuestCart,
     })
 
     // Mutations

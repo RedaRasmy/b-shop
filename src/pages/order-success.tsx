@@ -11,7 +11,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { useQuery } from "@tanstack/react-query"
 import { queryKeys } from "@/lib/query-keys"
-import { getOrder } from "@/features/order/order-requests"
+import { getOrder } from "@/features/order/requests"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
 import { useAuth } from "@/features/auth/use-auth"

@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button"
-import { getCategories } from "@/features/admin/admin-requests"
+import { getCategories } from "@/features/admin/requests"
 import type { AdminCategory } from "@/features/admin/categories/categories.validation"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
-import FilterControls, { type FilterOptions } from "@/features/admin/components/filter-controls"
+import FilterControls, {
+    type FilterOptions,
+} from "@/features/admin/components/filter-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
 import ProductForm from "@/features/admin/products/components/product-form"
@@ -50,9 +52,9 @@ export default function AdminProductsPage() {
                     label: c.name,
                     value: c.name,
                 })),
-                nullable : true
+                nullable: true,
             },
-        ] ,
+        ],
         [categories]
     )
 
@@ -79,7 +81,7 @@ export default function AdminProductsPage() {
 
     return (
         <div className="space-y-6 h-full flex flex-col">
-            <ProductForm key={"update-form-dialog" + id} {...updateForm}  />
+            <ProductForm key={"update-form-dialog" + id} {...updateForm} />
             <DeleteConfirmDialog
                 key={"delete-confirm-dialog" + id}
                 {...confirm}

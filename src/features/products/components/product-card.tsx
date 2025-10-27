@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import type { ProductSummary } from "@/features/products/products.validation"
-import {  ShoppingCart, Star } from "lucide-react"
+import type { ProductSummary } from "@/features/products/validation"
+import { ShoppingCart, Star } from "lucide-react"
 import { Link } from "react-router-dom"
 
 type Props = {
@@ -10,10 +10,7 @@ type Props = {
     onAddToCart: () => void
 }
 
-export function ProductCard({
-    product,
-    onAddToCart,
-}: Props) {
+export function ProductCard({ product, onAddToCart }: Props) {
     return (
         <Card className="group relative overflow-hidden border-0 shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-card">
             <div className="absolute top-3 left-3 z-10 flex gap-2">

@@ -7,7 +7,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { type OrderFormData } from "@/features/order/order.validation"
+import { type OrderFormData } from "@/features/order/validation"
 import { useFormContext } from "react-hook-form"
 
 export default function ContactInfos() {

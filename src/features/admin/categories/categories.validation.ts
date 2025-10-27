@@ -1,4 +1,4 @@
-import { CategorySchema } from "@/features/categories/categories.validation"
+import { CategorySchema } from "@/features/categories/validation"
 import { SlugSchema, StatusSchema } from "@/lib/zod-schemas"
 import z from "zod"
 
