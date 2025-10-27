@@ -17,6 +17,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { profileKeys } from "@/features/profile/query-keys"
 
 export default function OrderPage() {
     const { isAuthenticated } = useAuth()
@@ -26,11 +27,11 @@ export default function OrderPage() {
 
     // get defaults
     const { data: profile } = useQuery({
-        queryKey: queryKeys.profile,
+        queryKey: profileKeys.me(),
         queryFn: fetchMe,
     })
     const { data: addresses } = useQuery({
-        queryKey: queryKeys.addresses,
+        queryKey: profileKeys.addresses(),
         queryFn: getAddresses,
     })
 

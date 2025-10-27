@@ -92,12 +92,10 @@ export const queryKeys = {
         auth: () => ["cart", "auth"],
         guest: (ids: string[]) => ["cart", "guest", ...ids.slice().sort()],
     },
-    profile: ["me"],
     orders: {
         base: ["orders"],
         customer: () => ["orders", "customer"],
         admin: () => ["orders", "admin"],
         success: (token: string) => ["orders", "success", token],
     },
-    addresses: ["addresses"],
 }

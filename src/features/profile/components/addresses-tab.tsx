@@ -10,6 +10,7 @@ import {
 import { TabsContent } from "@/components/ui/tabs"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import { AddressFormDialog } from "@/features/profile/components/address-form-dialog"
+import { profileKeys } from "@/features/profile/query-keys"
 import {
     addAddress,
     deleteAddress,
@@ -17,7 +18,6 @@ import {
     updateAddress,
 } from "@/features/profile/requests"
 import type { IAddress } from "@/features/profile/validation"
-import { queryKeys } from "@/lib/query-keys"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { MapPin } from "lucide-react"
 import { useState } from "react"
@@ -28,10 +28,12 @@ export default function AddressesTab() {
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
+    const addressKey = profileKeys.addresses()
+
     const queryClient = useQueryClient()
 
     const { data: addresses } = useQuery({
-        queryKey: queryKeys.addresses,
+        queryKey: addressKey,
         queryFn: getAddresses,
     })
 
@@ -40,7 +42,7 @@ export default function AddressesTab() {
         onSuccess: () => {
             setIsAddOpen(false)
             queryClient.invalidateQueries({
-                queryKey: queryKeys.addresses,
+                queryKey: addressKey,
             })
         },
     })
@@ -51,7 +53,7 @@ export default function AddressesTab() {
             setId(null)
             setIsEditOpen(false)
             queryClient.invalidateQueries({
-                queryKey: queryKeys.addresses,
+                queryKey: addressKey,
             })
         },
     })
@@ -62,7 +64,7 @@ export default function AddressesTab() {
             setId(null)
             setIsDeleteOpen(false)
             queryClient.invalidateQueries({
-                queryKey: queryKeys.addresses,
+                queryKey: addressKey,
             })
         },
     })

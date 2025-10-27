@@ -9,9 +9,9 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { profileKeys } from "@/features/profile/query-keys"
 import { fetchMe, updateProfile } from "@/features/profile/requests"
 import { ProfileInfosSchema } from "@/features/profile/validation"
-import { queryKeys } from "@/lib/query-keys"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
@@ -25,7 +25,7 @@ type FormState = {
 export default function ProfileTab() {
     const queryClient = useQueryClient()
     const { data: profile, isLoading } = useQuery({
-        queryKey: queryKeys.profile,
+        queryKey: profileKeys.me(),
         queryFn: fetchMe,
     })
 
@@ -50,7 +50,7 @@ export default function ProfileTab() {
         mutationFn: updateProfile,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: queryKeys.profile,
+                queryKey: profileKeys.me(),
             })
         },
         onError: (err) => {
