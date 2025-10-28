@@ -27,14 +27,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import {
-    CategoryFormSchema,
-    type CategoryFormData,
-} from "@/features/admin/categories/validation"
 import type { ChangeEvent, ReactNode } from "react"
 import axios from "axios"
 import { createSlug } from "@/lib/slugify"
-import type { AdminCategory } from "@/features/admin/categories/types"
+import {
+    CategoryFormSchema,
+    type CategoryFormData,
+} from "@/features/categories/validation"
+import type { AdminCategory } from "@/features/categories/types"
 
 type Props = {
     buttonText: string

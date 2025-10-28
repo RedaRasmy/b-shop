@@ -1,6 +1,6 @@
-import type { AdminCategory } from "@/features/admin/categories/types"
-import type { CategoryFormData } from "@/features/admin/categories/validation"
 import type { AdminCategoriesQuery } from "@/features/categories/query-keys"
+import type { AdminCategory } from "@/features/categories/types"
+import type { CategoryFormData } from "@/features/categories/validation"
 import { axiosInstance } from "@/lib/axios"
 
 // Customer

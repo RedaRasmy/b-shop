@@ -1,4 +1,4 @@
-import type { CategoryFormData } from "@/features/admin/categories/validation"
+
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
@@ -12,6 +12,7 @@ import {
     getAdminCategories,
     updateCategory,
 } from "@/features/categories/requests"
+import type { CategoryFormData } from "@/features/categories/validation"
 
 export function useAdminCategories({
     queryParams,

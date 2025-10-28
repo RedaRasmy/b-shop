@@ -1,7 +1,5 @@
-import type { AdminCategory } from "@/features/admin/categories/types"
-import type {
-    CategoryFormData,
-} from "@/features/admin/categories/validation"
+import type { AdminCategory } from "@/features/categories/types"
+import type { CategoryFormData } from "@/features/categories/validation"
 import { http, HttpResponse } from "msw"
 
 type Id = {

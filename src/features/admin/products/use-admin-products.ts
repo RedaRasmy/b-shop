@@ -5,13 +5,13 @@ import {
     productKeys,
     type AdminProductsQuery,
 } from "@/features/products/query-keys"
-import type { AdminCategory } from "@/features/admin/categories/types"
 import {
     addProduct,
     deleteProduct,
     getAdminProducts,
     updateProduct,
 } from "@/features/products/requests"
+import type { AdminCategory } from "@/features/categories/types"
 
 export default function useAdminProducts({
     queryParams = {},

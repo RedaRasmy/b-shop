@@ -7,7 +7,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type { AdminCategory } from "@/features/admin/categories/types"
+import type { AdminCategory } from "@/features/categories/types"
 import { format } from "date-fns"
 import { Edit, MoreHorizontal, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
