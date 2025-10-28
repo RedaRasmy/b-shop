@@ -1,9 +1,3 @@
-import {
-    addProduct,
-    deleteProduct,
-    getProducts,
-    updateProduct,
-} from "@/features/admin/requests"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useRef, useState } from "react"
@@ -12,6 +6,12 @@ import {
     type AdminProductsQuery,
 } from "@/features/products/query-keys"
 import type { AdminCategory } from "@/features/admin/categories/types"
+import {
+    addProduct,
+    deleteProduct,
+    getAdminProducts,
+    updateProduct,
+} from "@/features/products/requests"
 
 export default function useAdminProducts({
     queryParams = {},
@@ -43,7 +43,7 @@ export default function useAdminProducts({
     // Get Products
     const { data: products = [], isLoading } = useQuery({
         queryKey: productKeys.admin(finalQueryParams),
-        queryFn: () => getProducts(finalQueryParams),
+        queryFn: () => getAdminProducts(finalQueryParams),
         select: (data) => {
             const totalPages = data.totalPages
             const total = data.total

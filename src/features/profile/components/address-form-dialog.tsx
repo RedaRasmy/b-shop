@@ -41,7 +41,7 @@ interface Props {
     title: string
     description: string
     buttonText: string
-    error?: string
+    error?: string 
 }
 
 export function AddressFormDialog({

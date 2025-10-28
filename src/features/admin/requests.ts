@@ -1,34 +1,31 @@
 import type { AdminCategory } from "@/features/admin/categories/types"
 import type { CategoryFormData } from "@/features/admin/categories/validation"
-import type { AdminProduct } from "@/features/admin/products/types"
 import type { AdminCategoriesQuery } from "@/features/categories/query-keys"
-import type { AdminProductsQuery } from "@/features/products/query-keys"
 import { axiosInstance } from "@/lib/axios"
-import type { PaginationResponse } from "@/types/global-types"
 
 // Products
 
-export async function addProduct(formData: FormData) {
-    return axiosInstance.post("/admin/products", formData)
-}
+// export async function addProduct(formData: FormData) {
+//     return axiosInstance.post("/admin/products", formData)
+// }
 
-export async function getProducts(params: AdminProductsQuery = {}) {
-    const res = await axiosInstance.get("/admin/products", {
-        params: {
-            ...params,
-            perPage: 15,
-        },
-    })
-    return res.data as PaginationResponse<AdminProduct[]>
-}
+// export async function getProducts(params: AdminProductsQuery = {}) {
+//     const res = await axiosInstance.get("/admin/products", {
+//         params: {
+//             ...params,
+//             perPage: 15,
+//         },
+//     })
+//     return res.data as PaginationResponse<AdminProduct[]>
+// }
 
-export async function updateProduct(id: string, formData: FormData) {
-    return axiosInstance.put("/admin/products/" + id, formData)
-}
+// export async function updateProduct(id: string, formData: FormData) {
+//     return axiosInstance.put("/admin/products/" + id, formData)
+// }
 
-export async function deleteProduct(id: string) {
-    return axiosInstance.delete("/admin/products/" + id)
-}
+// export async function deleteProduct(id: string) {
+//     return axiosInstance.delete("/admin/products/" + id)
+// }
 
 // Categories
 
