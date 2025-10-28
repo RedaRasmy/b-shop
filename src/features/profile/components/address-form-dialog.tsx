@@ -17,8 +17,6 @@ import {
 } from "@/components/ui/select"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import z from "zod"
-import type { Address, IAddress } from "@/features/profile/validation"
 import {
     Form,
     FormControl,
@@ -28,29 +26,17 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Switch } from "@/components/ui/switch"
-
-const Schema = z.object({
-    label: z.string().min(3).max(50),
-    city: z
-        .string("City name is required")
-        .min(1, "City name is required")
-        .max(100),
-    addressLine1: z
-        .string("Street address is required")
-        .min(1, "Street address is required")
-        .max(255, "Max length is 255"),
-    isDefault: z.boolean(),
-    postalCode: z
-        .string("Postal code is required")
-        .min(1, "Postal code is required")
-        .max(20, "Max length is 20"),
-})
+import type { Address } from "@/features/profile/types"
+import {
+    AddressFormSchema,
+    type AddressFormData,
+} from "@/features/profile/validation"
 
 interface Props {
     open: boolean
     onOpenChange: (open: boolean) => void
     address?: Address
-    onSubmit: (data: IAddress) => Promise<unknown>
+    onSubmit: (data: AddressFormData) => Promise<unknown>
     isSubmitting: boolean
     title: string
     description: string
@@ -69,8 +55,8 @@ export function AddressFormDialog({
     buttonText,
     error,
 }: Props) {
-    const form = useForm<IAddress>({
-        resolver: zodResolver(Schema),
+    const form = useForm({
+        resolver: zodResolver(AddressFormSchema),
         defaultValues: address || {
             label: "Home",
             addressLine1: "",
@@ -80,7 +66,7 @@ export function AddressFormDialog({
         },
     })
 
-    async function handleSubmit(data: IAddress) {
+    async function handleSubmit(data: AddressFormData) {
         try {
             console.log("handle submit runs")
             await onSubmit(data)

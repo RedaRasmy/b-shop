@@ -1,5 +1,7 @@
 import z from "zod"
 
+/// Contact
+
 export const ProfileInfosSchema = z.object({
     fullName: z
         .string()
@@ -12,29 +14,23 @@ export const ProfileInfosSchema = z.object({
         .regex(/^[0-9+\-\s()]+$/, "Please enter a valid phone number"),
 })
 
-export type Profile = {
-    id: string
-    email: string
-    role: "admin" | "customer"
-    isEmailVerified: boolean
-    fullName: string | null
-    phone: string | null
-}
+/// Address
 
-export type Address = {
-    id: string
-    createdAt: Date
-    updatedAt: Date
-    customerId: string
-    label: string
-    city: string
-    postalCode: string
-    addressLine1: string
-    // addressLine2: string | null
-    isDefault: boolean
-}
+export const AddressFormSchema = z.object({
+    label: z.string().min(3).max(50),
+    city: z
+        .string("City name is required")
+        .min(1, "City name is required")
+        .max(100),
+    addressLine1: z
+        .string("Street address is required")
+        .min(1, "Street address is required")
+        .max(255, "Max length is 255"),
+    isDefault: z.boolean(),
+    postalCode: z
+        .string("Postal code is required")
+        .min(1, "Postal code is required")
+        .max(20, "Max length is 20"),
+})
 
-export type IAddress = Omit<
-    Address,
-    "id" | "createdAt" | "updatedAt" | "customerId"
->
+export type AddressFormData = z.infer<typeof AddressFormSchema>

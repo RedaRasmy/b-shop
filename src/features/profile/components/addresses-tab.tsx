@@ -17,7 +17,7 @@ import {
     getAddresses,
     updateAddress,
 } from "@/features/profile/requests"
-import type { IAddress } from "@/features/profile/validation"
+import type { AddressFormData } from "@/features/profile/validation"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { MapPin } from "lucide-react"
 import { useState } from "react"
@@ -48,7 +48,7 @@ export default function AddressesTab() {
     })
 
     const updateMutation = useMutation({
-        mutationFn: (data: IAddress) => updateAddress({ id: id!, data }),
+        mutationFn: (data: AddressFormData) => updateAddress({ id: id!, data }),
         onSuccess: () => {
             setId(null)
             setIsEditOpen(false)

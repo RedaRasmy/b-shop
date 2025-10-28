@@ -1,5 +1,6 @@
 import type { Order } from "@/features/order/types"
-import type { Address, IAddress, Profile } from "@/features/profile/validation"
+import type { Address, Profile } from "@/features/profile/types"
+import type { AddressFormData } from "@/features/profile/validation"
 import { axiosInstance } from "@/lib/axios"
 
 export async function fetchMe() {
@@ -28,7 +29,7 @@ export async function getAddresses() {
     return res.data as Address[]
 }
 
-export async function addAddress(data: IAddress) {
+export async function addAddress(data: AddressFormData) {
     return axiosInstance.post("/me/addresses", data)
 }
 
@@ -37,7 +38,7 @@ export async function updateAddress({
     data,
 }: {
     id: string
-    data: Partial<IAddress>
+    data: Partial<AddressFormData>
 }) {
     return axiosInstance.patch("/me/addresses/" + id, data)
 }
