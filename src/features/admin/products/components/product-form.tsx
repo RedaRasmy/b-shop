@@ -33,10 +33,10 @@ import {
 } from "@/features/admin/products/validation"
 import ImagesInput from "@/features/admin/products/components/images-input"
 import type { ChangeEvent, ReactNode } from "react"
-import type { AdminCategory } from "@/features/admin/categories/validation"
 import axios from "axios"
 import type { Prettify } from "@/types/global-types"
 import { createSlug } from "@/lib/slugify"
+import type { AdminCategory } from "@/features/admin/categories/types"
 
 type ProductImage = ProductFormData["images"][number]
 

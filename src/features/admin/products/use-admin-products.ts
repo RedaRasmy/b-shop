@@ -4,7 +4,6 @@ import {
     getProducts,
     updateProduct,
 } from "@/features/admin/requests"
-import type { AdminCategory } from "@/features/admin/categories/validation"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useRef, useState } from "react"
@@ -12,6 +11,7 @@ import {
     productKeys,
     type AdminProductsQuery,
 } from "@/features/products/query-keys"
+import type { AdminCategory } from "@/features/admin/categories/types"
 
 export default function useAdminProducts({
     queryParams = {},

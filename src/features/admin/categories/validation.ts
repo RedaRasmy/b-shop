@@ -1,17 +1,5 @@
-import { CategorySchema } from "@/features/categories/validation"
 import { SlugSchema, StatusSchema } from "@/lib/zod-schemas"
 import z from "zod"
-
-/// Get
-
-export const AdminCategorySchema = CategorySchema.extend({
-    status: StatusSchema,
-    productsCount: z.int().min(0),
-})
-
-export type AdminCategory = z.infer<typeof AdminCategorySchema>
-
-/// Post
 
 const RESERVED_CATEGORY_NAMES = ["__NULL__", "__ALL__"]
 

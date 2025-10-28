@@ -1,5 +1,5 @@
+import type { AdminCategory } from "@/features/admin/categories/types"
 import type {
-    AdminCategory,
     CategoryFormData,
 } from "@/features/admin/categories/validation"
 import { http, HttpResponse } from "msw"

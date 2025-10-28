@@ -6,7 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { Category } from "@/features/categories/validation"
+import type { Category } from "@/features/categories/types"
 
 type Props = {
     categories: Category[]
