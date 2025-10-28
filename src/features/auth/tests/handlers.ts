@@ -1,4 +1,3 @@
-import type { Credentials } from "@/types/global-types"
 import { http, HttpResponse } from "msw"
 import {
     mockedAdmin,
@@ -6,6 +5,7 @@ import {
     mockedCustomer,
     mockedCustomerCredentials,
 } from "./mocked-users"
+import type { Credentials } from "@/features/auth/validation"
 
 export const authHandlers = [
     // Login

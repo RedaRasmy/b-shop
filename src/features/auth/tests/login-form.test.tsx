@@ -24,15 +24,15 @@ vi.mock("react-router-dom", async () => {
     }
 })
 
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+    },
+})
+
 // Test wrapper with all providers
 function TestWrapper({ children }: { children: React.ReactNode }) {
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: { retry: false },
-            mutations: { retry: false },
-        },
-    })
-
     return (
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
@@ -301,7 +301,9 @@ describe("RegisterForm", () => {
 
         // Wait for error
         await waitFor(() => {
-            expect(screen.getByText("Email or password is incorrect")).toBeInTheDocument()
+            expect(
+                screen.getByText("Email or password is incorrect")
+            ).toBeInTheDocument()
         })
 
         // Clear form and try again with valid data

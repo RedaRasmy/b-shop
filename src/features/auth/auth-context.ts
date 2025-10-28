@@ -1,4 +1,4 @@
-import type { User } from "@/features/auth/validation"
+import type { User } from "@/features/auth/types"
 import { createContext } from "react"
 
 interface AuthContextType {

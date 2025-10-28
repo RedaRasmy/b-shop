@@ -16,14 +16,11 @@ import { useMutation } from "@tanstack/react-query"
 import { loginRequest } from "@/features/auth/requests"
 import { useAuth } from "@/features/auth/use-auth"
 import { useNavigate } from "react-router-dom"
-import {
-    emailPasswordSchema,
-    type Credentials,
-} from "@/features/auth/validation"
+import { CredentialsSchema, type Credentials } from "@/features/auth/validation"
 
 export function LoginForm() {
     const form = useForm({
-        resolver: zodResolver(emailPasswordSchema),
+        resolver: zodResolver(CredentialsSchema),
         defaultValues: {
             email: "",
             password: "",

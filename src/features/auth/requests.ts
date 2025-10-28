@@ -1,4 +1,5 @@
-import type { Credentials, User } from "@/features/auth/validation"
+import type { User } from "@/features/auth/types"
+import type { Credentials } from "@/features/auth/validation"
 import { axiosInstance } from "@/lib/axios"
 
 export async function registerRequest(data: Credentials) {

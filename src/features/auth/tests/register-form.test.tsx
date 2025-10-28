@@ -24,15 +24,14 @@ vi.mock("react-router-dom", async () => {
     }
 })
 
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+    },
+})
 // Test wrapper with all providers
 function TestWrapper({ children }: { children: React.ReactNode }) {
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: { retry: false },
-            mutations: { retry: false },
-        },
-    })
-
     return (
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>

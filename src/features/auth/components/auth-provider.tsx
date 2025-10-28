@@ -8,7 +8,7 @@ import {
 import { AuthContext } from "@/features/auth/auth-context"
 import { logoutRequest } from "@/features/auth/requests"
 import { fetchMe } from "@/features/profile/requests"
-import type { User } from "@/features/auth/validation"
+import type { User } from "@/features/auth/types"
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
