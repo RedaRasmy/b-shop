@@ -2,10 +2,11 @@ import type { OrderFormData } from "@/features/order/validation"
 import { axiosInstance } from "@/lib/axios"
 import type { Prettify } from "@/types/global-types"
 import type { CartItem } from "@/redux/slices/cart"
+import type { SuccessfulOrder } from "@/features/order/types"
 
-type Order = Prettify<OrderFormData & { items: CartItem[] }>
-
-export async function placeOrder(order: Order) {
+export async function placeOrder(
+    order: Prettify<OrderFormData & { items: CartItem[] }>
+) {
     const res = await axiosInstance.post("/orders", order)
 
     return res.data.orderToken as string
@@ -14,5 +15,5 @@ export async function placeOrder(order: Order) {
 export async function getOrder(token: string) {
     const res = await axiosInstance.get("/orders/" + token)
 
-    return res.data as { total: string; id: number }
+    return res.data as SuccessfulOrder
 }

@@ -1,3 +1,4 @@
+import type { Order } from "@/features/order/types"
 import type { Address, IAddress, Profile } from "@/features/profile/validation"
 import { axiosInstance } from "@/lib/axios"
 
@@ -47,21 +48,8 @@ export async function deleteAddress(id: string) {
 
 /// Orders
 
-type Orders = {
-    items: {
-        productName: string
-        productId: string
-        quantity: number
-        priceAtPurchase: string
-    }[]
-    id: number
-    status: "pending" | "processing" | "shipped" | "completed" | "canceled"
-    createdAt: Date
-    total: string
-}[]
-
 export default async function getOrders() {
     const res = await axiosInstance.get("/me/orders")
 
-    return res.data as Orders
+    return res.data as Order[]
 }
