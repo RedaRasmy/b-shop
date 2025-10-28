@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { getCategories } from "@/features/admin/requests"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import FilterControls, {
     type FilterOptions,
@@ -14,6 +13,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useMemo } from "react"
 import { categoryKeys } from "@/features/categories/query-keys"
+import { getAdminCategories } from "@/features/categories/requests"
 
 const sortOptions = [
     { label: "Name", value: "name" },
@@ -28,7 +28,7 @@ export default function AdminProductsPage() {
     // get categories
     const { data: categories = [] } = useQuery({
         queryKey: categoryKeys.admin(),
-        queryFn: () => getCategories(),
+        queryFn: () => getAdminCategories(),
     })
 
     const filterOptions = useMemo<FilterOptions>(

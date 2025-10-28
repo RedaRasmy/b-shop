@@ -1,9 +1,3 @@
-import {
-    addCategory,
-    deleteCategory,
-    getCategories,
-    updateCategory,
-} from "@/features/admin/requests"
 import type { CategoryFormData } from "@/features/admin/categories/validation"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -12,6 +6,12 @@ import {
     categoryKeys,
     type CategoriesQuery,
 } from "@/features/categories/query-keys"
+import {
+    addCategory,
+    deleteCategory,
+    getAdminCategories,
+    updateCategory,
+} from "@/features/categories/requests"
 
 export function useAdminCategories({
     queryParams,
@@ -28,7 +28,7 @@ export function useAdminCategories({
 
     const { data: categories = [], isLoading } = useQuery({
         queryKey: categoryKeys.admin(queryParams),
-        queryFn: () => getCategories(queryParams),
+        queryFn: () => getAdminCategories(queryParams),
     })
 
     const selectedCategory = categories.find((c) => c.id === selectedId)
