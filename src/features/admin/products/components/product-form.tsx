@@ -27,16 +27,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import {
-    ProductFormSchema,
-    type ProductFormData,
-} from "@/features/admin/products/validation"
 import ImagesInput from "@/features/admin/products/components/images-input"
 import type { ChangeEvent, ReactNode } from "react"
 import axios from "axios"
 import type { Prettify } from "@/types/global-types"
 import { createSlug } from "@/lib/slugify"
 import type { AdminCategory } from "@/features/categories/types"
+import {
+    ProductFormSchema,
+    type ProductFormData,
+} from "@/features/products/validation"
 
 type ProductImage = ProductFormData["images"][number]
 

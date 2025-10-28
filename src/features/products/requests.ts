@@ -1,9 +1,12 @@
-import type { AdminProduct } from "@/features/admin/products/types"
 import type {
     AdminProductsQuery,
     ProductsQuery,
 } from "@/features/products/query-keys"
-import type { Product, ProductSummary } from "@/features/products/types"
+import type {
+    AdminProduct,
+    Product,
+    ProductSummary,
+} from "@/features/products/types"
 import { axiosInstance } from "@/lib/axios"
 import type { PaginationResponse } from "@/types/global-types"
 
