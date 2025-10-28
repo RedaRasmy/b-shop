@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import FilterDropdown from "@/features/admin/components/filter-controls/filter-dropdown"
 import AdminSearchInput from "@/features/admin/components/filter-controls/search-input"
 import SortDropdown from "@/features/admin/components/filter-controls/sort-dropdown"
+import type { SortOrder } from "@/types/global-types"
 import { X } from "lucide-react"
 import { useState } from "react"
 
@@ -23,8 +24,8 @@ type Props = {
     onFilterChange: (key: string, value: string) => void
     onClearFilters: () => void
     sortBy: string
-    sortOrder: "asc" | "desc"
-    onSortChange: (field: string, order: "asc" | "desc") => void
+    sortOrder: SortOrder
+    onSortChange: (field: string, order: SortOrder) => void
     sortOptions: SortOptions
 }
 
@@ -79,7 +80,9 @@ export default function FilterControls({
                 <div className="flex flex-wrap gap-2">
                     {Object.entries(activeFilters).map(([key, value]) => {
                         if (!value) return null
-                        const filter = filterOptions.find((f) => f.value === key)
+                        const filter = filterOptions.find(
+                            (f) => f.value === key
+                        )
                         return (
                             <Badge
                                 key={key}

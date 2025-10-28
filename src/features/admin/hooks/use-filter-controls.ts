@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom"
-import type { Order } from "@/types/global-types"
+import type { SortOrder } from "@/types/global-types"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import type {
     FilterOptions,
@@ -32,7 +32,7 @@ export function useFilterControls(options: Params) {
     const urlSearchTerm = searchParams.get("search") || ""
     const sort = searchParams.get("sort") || defaultSort
 
-    const [sortBy, sortOrder] = sort.split(":") as [string, Order]
+    const [sortBy, sortOrder] = sort.split(":") as [string, SortOrder]
 
     // Debounce search term for API calls only
     const [searchTerm, setSearchTermState] = useState(urlSearchTerm)
@@ -126,7 +126,7 @@ export function useFilterControls(options: Params) {
     }, [setSearchParams, setPage])
 
     const setSort = useCallback(
-        (field: string, order: Order) => {
+        (field: string, order: SortOrder) => {
             const sort = `${field}:${order}`
             updateParams({ sort })
             setPage(1)

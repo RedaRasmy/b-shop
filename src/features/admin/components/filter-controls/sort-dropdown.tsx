@@ -5,7 +5,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { Order } from "@/types/global-types"
+import type { SortOrder } from "@/types/global-types";
 import { SortAsc, SortDesc } from "lucide-react"
 
 type Option = { label: string; value: string }
@@ -54,7 +54,7 @@ export default function SortDropdown({
             value={`${sortBy}-${order}`}
             onValueChange={(value) => {
                 const [field, order] = value.split("-")
-                onChange(field, order as Order)
+                onChange(field, order as SortOrder)
             }}
         >
             <SelectTrigger className="w-full">
