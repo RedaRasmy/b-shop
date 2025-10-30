@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import CategoryList from "@/features/admin/categories/components/category-list"
-import { useCategoriesManager } from "@/features/admin/categories/hooks/use-admin-categories"
+import { useCategoriesManager } from "@/features/admin/categories/hooks/use-categories-manager"
 import FilterControls from "@/features/admin/components/filter-controls"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import AdminPageHeader from "@/features/admin/components/page-header"

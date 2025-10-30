@@ -8,7 +8,7 @@ import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
 import ProductForm from "@/features/admin/products/components/product-form"
 import ProductsPagination from "@/features/admin/products/components/products-pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
-import useAdminProducts from "@/features/admin/products/use-admin-products"
+import useProductsManager from "@/features/admin/products/use-products-manager"
 import { Plus } from "lucide-react"
 import { useMemo } from "react"
 import { useAdminCategories } from "@/features/categories/api/queries"
@@ -65,7 +65,7 @@ export default function AdminProductsPage() {
         triggers,
         total,
         totalPages,
-    } = useAdminProducts({
+    } = useProductsManager({
         queryParams,
         categories,
     })

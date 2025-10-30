@@ -13,7 +13,7 @@ import {
 } from "@/features/products/api/requests"
 import type { AdminCategory } from "@/features/categories/types"
 
-export default function useAdminProducts({
+export default function useProductsManager({
     queryParams = {},
     categories,
 }: {
