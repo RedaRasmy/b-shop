@@ -1,17 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { useRef, useState } from "react"
-import {
-    productKeys,
-    type AdminProductsQuery,
-} from "@/features/products/query-keys"
+import { type AdminProductsQuery } from "@/features/products/query-keys"
 import {
     createProduct,
     deleteProduct,
-    fetchAdminProducts,
     updateProduct,
 } from "@/features/products/api/requests"
 import type { AdminCategory } from "@/features/categories/types"
+import { useAdminProducts } from "@/features/products/api/queries"
 
 export default function useProductsManager({
     queryParams = {},
@@ -41,22 +38,13 @@ export default function useProductsManager({
     }
 
     // Get Products
-    const { data: products = [], isLoading } = useQuery({
-        queryKey: productKeys.admin(finalQueryParams),
-        queryFn: () => fetchAdminProducts(finalQueryParams),
-        select: (data) => {
-            const totalPages = data.totalPages
-            const total = data.total
-            if (totalPages) {
-                // set only on page 1 when totalPages exists
-                totalPagesRef.current = totalPages
-            }
-            if (total) {
-                totalRef.current = total
-            }
-            return data.data
-        },
-    })
+    const { data, isLoading } = useAdminProducts(finalQueryParams)
+
+    if (data?.total && data.totalPages) {
+        totalPagesRef.current = data.totalPages
+        totalRef.current = data.total
+    }
+    const products = data?.data || []
 
     // Selected Product : for update-form initial data
     const selectedProduct = products.find((p) => p.id === selectedId)
