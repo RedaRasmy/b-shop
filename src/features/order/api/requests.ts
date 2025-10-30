@@ -29,7 +29,7 @@ export default async function fetchOrders() {
 
 /// Admin
 
-export async function fetchAdminOrders(query: AdminOrdersQuery) {
+export async function fetchAdminOrders(query?: AdminOrdersQuery) {
     const res = await axiosInstance.get("/admin/orders", {
         params: query,
     })
