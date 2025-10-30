@@ -10,15 +10,13 @@ import Header from "@/features/order/components/header"
 import OrderSummary from "@/features/order/components/order-summary"
 import ContactInfos from "@/features/order/components/contact-infos"
 import ShippingAddress from "@/features/order/components/shipping-address"
-import { fetchMe } from "@/features/profile/api/requests"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { profileKeys } from "@/features/profile/query-keys"
 import { cartKeys } from "@/features/cart/query-keys"
-import { useAddresses } from "@/features/profile/api/queries"
+import { useAddresses, useProfile } from "@/features/profile/api/queries"
 
 export default function OrderPage() {
     const { isAuthenticated } = useAuth()
@@ -27,10 +25,7 @@ export default function OrderPage() {
     const navigate = useNavigate()
 
     // get defaults
-    const { data: profile } = useQuery({
-        queryKey: profileKeys.me(),
-        queryFn: fetchMe,
-    })
+    const { data: profile } = useProfile()
     const { data: addresses } = useAddresses()
 
     const defaultAddress = addresses?.find((ad) => ad.isDefault)
