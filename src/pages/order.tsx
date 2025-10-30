@@ -1,7 +1,7 @@
 import { Form } from "@/components/ui/form"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
-import { placeOrder } from "@/features/order/requests"
+import { placeOrder } from "@/features/order/api/requests"
 import {
     OrderFormSchema,
     type OrderFormData,
