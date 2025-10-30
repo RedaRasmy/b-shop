@@ -6,9 +6,9 @@ import {
     type AdminProductsQuery,
 } from "@/features/products/query-keys"
 import {
-    addProduct,
+    createProduct,
     deleteProduct,
-    getAdminProducts,
+    fetchAdminProducts,
     updateProduct,
 } from "@/features/products/requests"
 import type { AdminCategory } from "@/features/categories/types"
@@ -43,7 +43,7 @@ export default function useAdminProducts({
     // Get Products
     const { data: products = [], isLoading } = useQuery({
         queryKey: productKeys.admin(finalQueryParams),
-        queryFn: () => getAdminProducts(finalQueryParams),
+        queryFn: () => fetchAdminProducts(finalQueryParams),
         select: (data) => {
             const totalPages = data.totalPages
             const total = data.total
@@ -74,7 +74,7 @@ export default function useAdminProducts({
 
     // ADD
     const { mutateAsync: addMutation, isPending: isAdding } = useMutation({
-        mutationFn: (data: FormData) => addProduct(data),
+        mutationFn: (data: FormData) => createProduct(data),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["products"],

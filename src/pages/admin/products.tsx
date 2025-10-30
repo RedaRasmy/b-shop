@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useMemo } from "react"
 import { categoryKeys } from "@/features/categories/query-keys"
-import { getAdminCategories } from "@/features/categories/requests"
+import { fetchAdminCategories } from "@/features/categories/requests"
 
 const sortOptions = [
     { label: "Name", value: "name" },
@@ -28,7 +28,7 @@ export default function AdminProductsPage() {
     // get categories
     const { data: categories = [] } = useQuery({
         queryKey: categoryKeys.admin(),
-        queryFn: () => getAdminCategories(),
+        queryFn: () => fetchAdminCategories(),
     })
 
     const filterOptions = useMemo<FilterOptions>(

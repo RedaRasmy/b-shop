@@ -12,19 +12,19 @@ import type { PaginatedResult } from "@/types/global-types"
 
 // Customer
 
-export async function getProducts(params: ProductsQuery = {}) {
+export async function fetchProducts(params: ProductsQuery = {}) {
     const res = await axiosInstance.get("/products", {
         params,
     })
     return res.data as PaginatedResult<ProductSummary[]>
 }
 
-export async function getProductsByIds(ids: string[]) {
+export async function fetchProductsByIds(ids: string[]) {
     const res = await axiosInstance.post("/products/bulk", ids)
     return res.data as ProductSummary[]
 }
 
-export async function getProduct(slug: string) {
+export async function fetchProduct(slug: string) {
     const res = await axiosInstance.get("/products/" + slug)
 
     return res.data as Product
@@ -32,11 +32,11 @@ export async function getProduct(slug: string) {
 
 // Admin
 
-export async function addProduct(formData: FormData) {
+export async function createProduct(formData: FormData) {
     return axiosInstance.post("/admin/products", formData)
 }
 
-export async function getAdminProducts(params: AdminProductsQuery = {}) {
+export async function fetchAdminProducts(params: AdminProductsQuery = {}) {
     const res = await axiosInstance.get("/admin/products", {
         params: {
             ...params,

@@ -12,9 +12,9 @@ import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-
 import { AddressFormDialog } from "@/features/profile/components/address-form-dialog"
 import { profileKeys } from "@/features/profile/query-keys"
 import {
-    addAddress,
+    createAddress,
     deleteAddress,
-    getAddresses,
+    fetchAddresses,
     updateAddress,
 } from "@/features/profile/requests"
 import type { AddressFormData } from "@/features/profile/validation"
@@ -34,11 +34,11 @@ export default function AddressesTab() {
 
     const { data: addresses } = useQuery({
         queryKey: addressKey,
-        queryFn: getAddresses,
+        queryFn: fetchAddresses,
     })
 
     const addMutation = useMutation({
-        mutationFn: addAddress,
+        mutationFn: createAddress,
         onSuccess: () => {
             setIsAddOpen(false)
             queryClient.invalidateQueries({

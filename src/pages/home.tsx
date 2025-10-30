@@ -3,7 +3,7 @@ import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
 import { productKeys } from "@/features/products/query-keys"
-import { getProducts } from "@/features/products/requests"
+import { fetchProducts } from "@/features/products/requests"
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Headphones, Shield, Star, Truck } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -35,7 +35,7 @@ export default function HomePage() {
     const { data: products = [] } = useQuery({
         queryKey: productKeys.customer(),
         queryFn: () =>
-            getProducts({
+            fetchProducts({
                 perPage: 4,
             }),
         select: (res) => {

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useQuery } from "@tanstack/react-query"
-import { getOrder } from "@/features/order/api/requests"
+import { fetchOrder } from "@/features/order/api/requests"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
 import { useAuth } from "@/features/auth/use-auth"
@@ -23,7 +23,7 @@ export default function OrderSuccessPage() {
 
     const { data: order, isError } = useQuery({
         queryKey: orderKeys.success(token),
-        queryFn: () => getOrder(token),
+        queryFn: () => fetchOrder(token),
         retry: false,
     })
 

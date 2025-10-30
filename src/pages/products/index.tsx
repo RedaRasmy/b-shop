@@ -2,14 +2,14 @@ import { Spinner } from "@/components/ui/spinner"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
 import { categoryKeys } from "@/features/categories/query-keys"
-import { getCategories } from "@/features/categories/requests"
+import { fetchCategories } from "@/features/categories/requests"
 import type { Category } from "@/features/categories/types"
 import FilterBar from "@/features/products/components/filter-bar"
 import { ProductCard } from "@/features/products/components/product-card"
 import SearchBar from "@/features/products/components/search-bar"
 import ShopHeader from "@/features/products/components/shop-header"
 import { productKeys, type ProductsQuery } from "@/features/products/query-keys"
-import { getProducts } from "@/features/products/requests"
+import { fetchProducts } from "@/features/products/requests"
 import LoadingPage from "@/pages/loading"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import {
@@ -31,7 +31,7 @@ export default function ProductsPage() {
 
     const { data: categories = [], isLoading } = useQuery({
         queryKey: categoryKeys.customer(),
-        queryFn: getCategories,
+        queryFn: fetchCategories,
         select: (res) => res.data as Category[],
     })
 
@@ -46,7 +46,7 @@ export default function ProductsPage() {
 
     const fetchProducts = useCallback(
         async ({ pageParam = 1 }) => {
-            const data = await getProducts({
+            const data = await fetchProducts({
                 categoryId: categoryId || undefined,
                 sort: sortBy,
                 search: search || undefined,

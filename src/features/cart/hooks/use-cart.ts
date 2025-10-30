@@ -1,14 +1,14 @@
 import { cartKeys } from "@/features/cart/query-keys"
 import {
-    addCartItem,
+    createCartItem,
     clearCartRequest,
     deleteCartItem,
-    getCart,
+    fetchCart,
     // mergeCartRequest,
     updateCartItem,
 } from "@/features/cart/requests"
 import type { CartProduct } from "@/features/cart/types"
-import { getProductsByIds } from "@/features/products/requests"
+import { fetchProductsByIds } from "@/features/products/requests"
 import type { ProductSummary } from "@/features/products/types"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"
@@ -32,7 +32,7 @@ export default function useCart(isAuthenticated: boolean) {
         error: authCartError,
     } = useQuery({
         queryKey: cartKeys.auth(),
-        queryFn: getCart,
+        queryFn: fetchCart,
         enabled: isAuthenticated,
         staleTime: 1000 * 60 * 5,
     })
@@ -54,7 +54,7 @@ export default function useCart(isAuthenticated: boolean) {
         error: guestCartError,
     } = useQuery({
         queryKey: cartKeys.guest(ids),
-        queryFn: () => getProductsByIds(ids),
+        queryFn: () => fetchProductsByIds(ids),
         enabled: !isAuthenticated && ids.length > 0,
         staleTime: 1000 * 60 * 5,
         select: selectGuestCart,
@@ -64,7 +64,7 @@ export default function useCart(isAuthenticated: boolean) {
     const addMutation = useMutation({
         mutationFn: async (item: CartItem) => {
             if (isAuthenticated) {
-                return await addCartItem(item)
+                return await createCartItem(item)
             } else {
                 dispatch(cartActions.addToCart(item))
                 return null

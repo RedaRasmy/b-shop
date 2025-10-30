@@ -1,4 +1,3 @@
-
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
@@ -7,9 +6,9 @@ import {
     type CategoriesQuery,
 } from "@/features/categories/query-keys"
 import {
-    addCategory,
+    createCategory,
     deleteCategory,
-    getAdminCategories,
+    fetchAdminCategories,
     updateCategory,
 } from "@/features/categories/requests"
 import type { CategoryFormData } from "@/features/categories/validation"
@@ -29,13 +28,13 @@ export function useAdminCategories({
 
     const { data: categories = [], isLoading } = useQuery({
         queryKey: categoryKeys.admin(queryParams),
-        queryFn: () => getAdminCategories(queryParams),
+        queryFn: () => fetchAdminCategories(queryParams),
     })
 
     const selectedCategory = categories.find((c) => c.id === selectedId)
 
     const { mutateAsync: addMutation, isPending: isAdding } = useMutation({
-        mutationFn: addCategory,
+        mutationFn: createCategory,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["categories"],

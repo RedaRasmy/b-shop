@@ -7,7 +7,7 @@ import type { AdminOrdersQuery } from "@/features/order/query-keys"
 
 // Customer
 
-export async function placeOrder(
+export async function createOrder(
     order: Prettify<OrderFormData & { items: CartItem[] }>
 ) {
     const res = await axiosInstance.post("/orders", order)
@@ -15,13 +15,13 @@ export async function placeOrder(
     return res.data.orderToken as string
 }
 
-export async function getOrder(token: string) {
+export async function fetchOrder(token: string) {
     const res = await axiosInstance.get("/orders/" + token)
 
     return res.data as SuccessfulOrder
 }
 
-export default async function getOrders() {
+export default async function fetchOrders() {
     const res = await axiosInstance.get("/me/orders")
 
     return res.data as Order[]
@@ -29,7 +29,7 @@ export default async function getOrders() {
 
 /// Admin
 
-export async function getAdminOrders(query: AdminOrdersQuery) {
+export async function fetchAdminOrders(query: AdminOrdersQuery) {
     const res = await axiosInstance.get("/admin/orders", {
         params: query,
     })

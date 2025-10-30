@@ -2,12 +2,12 @@ import type { CartProduct } from "@/features/cart/types"
 import { axiosInstance } from "@/lib/axios"
 import type { CartItem } from "@/redux/slices/cart"
 
-export const getCart = async function () {
+export const fetchCart = async function () {
     const res = await axiosInstance.get("/me/cart")
     return res.data as CartProduct[]
 }
 
-export const addCartItem = async function (cartItem: {
+export const createCartItem = async function (cartItem: {
     productId: string
     quantity: number
 }) {

@@ -5,17 +5,17 @@ import { axiosInstance } from "@/lib/axios"
 
 // Customer
 
-export const getCategories = () => {
+export const fetchCategories = () => {
     return axiosInstance.get("/categories")
 }
 
 // Admin
 
-export async function addCategory(data: CategoryFormData) {
+export async function createCategory(data: CategoryFormData) {
     return axiosInstance.post("/admin/categories", data)
 }
 
-export async function getAdminCategories(params: AdminCategoriesQuery = {}) {
+export async function fetchAdminCategories(params: AdminCategoriesQuery = {}) {
     const res = await axiosInstance.get("/admin/categories", {
         params,
     })

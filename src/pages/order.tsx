@@ -1,7 +1,7 @@
 import { Form } from "@/components/ui/form"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
-import { placeOrder } from "@/features/order/api/requests"
+import { createOrder } from "@/features/order/api/requests"
 import {
     OrderFormSchema,
     type OrderFormData,
@@ -10,7 +10,7 @@ import Header from "@/features/order/components/header"
 import OrderSummary from "@/features/order/components/order-summary"
 import ContactInfos from "@/features/order/components/contact-infos"
 import ShippingAddress from "@/features/order/components/shipping-address"
-import { fetchMe, getAddresses } from "@/features/profile/requests"
+import { fetchMe, fetchAddresses } from "@/features/profile/requests"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
@@ -32,7 +32,7 @@ export default function OrderPage() {
     })
     const { data: addresses } = useQuery({
         queryKey: profileKeys.addresses(),
-        queryFn: getAddresses,
+        queryFn: fetchAddresses,
     })
 
     const defaultAddress = addresses?.find((ad) => ad.isDefault)
@@ -65,7 +65,7 @@ export default function OrderPage() {
     }, [profile, defaultAddress, form])
 
     const { mutateAsync, isPending, isError } = useMutation({
-        mutationFn: placeOrder,
+        mutationFn: createOrder,
         onSuccess: (token) => {
             queryClient.invalidateQueries({
                 queryKey: cartKeys.base,

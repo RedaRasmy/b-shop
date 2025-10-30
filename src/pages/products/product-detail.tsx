@@ -4,7 +4,7 @@ import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
 import { productKeys } from "@/features/products/query-keys"
-import { getProduct, getProducts } from "@/features/products/requests"
+import { fetchProduct, fetchProducts } from "@/features/products/requests"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
 import { useQuery } from "@tanstack/react-query"
@@ -25,13 +25,13 @@ export default function ProductDetailPage() {
         isLoading,
     } = useQuery({
         queryKey: productKeys.detail(slug),
-        queryFn: () => getProduct(slug),
+        queryFn: () => fetchProduct(slug),
     })
 
     const { data: sameCategoryProducts } = useQuery({
         queryKey: productKeys.related(product?.categoryId),
         queryFn: () =>
-            getProducts({
+            fetchProducts({
                 categoryId: product?.categoryId,
             }),
         enabled: !!product,

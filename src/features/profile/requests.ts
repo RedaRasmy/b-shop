@@ -23,12 +23,12 @@ export async function updatePassword(data: {
 
 /// Addresses
 
-export async function getAddresses() {
+export async function fetchAddresses() {
     const res = await axiosInstance.get("/me/addresses")
     return res.data as Address[]
 }
 
-export async function addAddress(data: AddressFormData) {
+export async function createAddress(data: AddressFormData) {
     return axiosInstance.post("/me/addresses", data)
 }
 
