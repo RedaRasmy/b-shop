@@ -1,4 +1,3 @@
-import type { Order } from "@/features/order/types"
 import type { Address, Profile } from "@/features/profile/types"
 import type { AddressFormData } from "@/features/profile/validation"
 import { axiosInstance } from "@/lib/axios"
@@ -45,12 +44,4 @@ export async function updateAddress({
 
 export async function deleteAddress(id: string) {
     return axiosInstance.delete("/me/addresses/" + id)
-}
-
-/// Orders
-
-export default async function getOrders() {
-    const res = await axiosInstance.get("/me/orders")
-
-    return res.data as Order[]
 }

@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { orderKeys } from "@/features/order/query-keys"
-import getOrders from "@/features/profile/requests"
+import getOrders from "@/features/order/requests"
 import { useQuery } from "@tanstack/react-query"
 import { Package } from "lucide-react"
 
