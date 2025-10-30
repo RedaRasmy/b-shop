@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useMemo } from "react"
 import { categoryKeys } from "@/features/categories/query-keys"
-import { fetchAdminCategories } from "@/features/categories/requests"
+import { fetchAdminCategories } from "@/features/categories/api/requests"
 
 const sortOptions = [
     { label: "Name", value: "name" },

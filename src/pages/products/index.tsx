@@ -1,9 +1,6 @@
 import { Spinner } from "@/components/ui/spinner"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
-import { categoryKeys } from "@/features/categories/query-keys"
-import { fetchCategories } from "@/features/categories/requests"
-import type { Category } from "@/features/categories/types"
 import FilterBar from "@/features/products/components/filter-bar"
 import { ProductCard } from "@/features/products/components/product-card"
 import SearchBar from "@/features/products/components/search-bar"
@@ -11,7 +8,7 @@ import ShopHeader from "@/features/products/components/shop-header"
 import { productKeys, type ProductsQuery } from "@/features/products/query-keys"
 import { fetchProducts } from "@/features/products/api/requests"
 import LoadingPage from "@/pages/loading"
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import {
     Fragment,
     useCallback,
@@ -21,6 +18,7 @@ import {
     useState,
 } from "react"
 import { useInView } from "react-intersection-observer"
+import { useCategories } from "@/features/categories/api/queries"
 
 export default function ProductsPage() {
     const { ref, inView } = useInView()
@@ -29,11 +27,7 @@ export default function ProductsPage() {
     const [search, setSearch] = useState("")
     const [sortBy, setSortBy] = useState("createdAt:desc")
 
-    const { data: categories = [], isLoading } = useQuery({
-        queryKey: categoryKeys.customer(),
-        queryFn: fetchCategories,
-        select: (res) => res.data as Category[],
-    })
+    const { data: categories = [], isLoading } = useCategories()
 
     const queryParams: ProductsQuery = useMemo(
         () => ({

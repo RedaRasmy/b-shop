@@ -1,12 +1,13 @@
 import type { AdminCategoriesQuery } from "@/features/categories/query-keys"
-import type { AdminCategory } from "@/features/categories/types"
+import type { AdminCategory, Category } from "@/features/categories/types"
 import type { CategoryFormData } from "@/features/categories/validation"
 import { axiosInstance } from "@/lib/axios"
 
 // Customer
 
-export const fetchCategories = () => {
-    return axiosInstance.get("/categories")
+export async function fetchCategories() {
+    const res = await axiosInstance.get("/categories")
+    return res.data as Category[]
 }
 
 // Admin

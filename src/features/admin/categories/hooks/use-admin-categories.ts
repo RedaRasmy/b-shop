@@ -10,7 +10,7 @@ import {
     deleteCategory,
     fetchAdminCategories,
     updateCategory,
-} from "@/features/categories/requests"
+} from "@/features/categories/api/requests"
 import type { CategoryFormData } from "@/features/categories/validation"
 
 export function useAdminCategories({
