@@ -14,13 +14,13 @@ import { profileKeys } from "@/features/profile/query-keys"
 import {
     createAddress,
     deleteAddress,
-    fetchAddresses,
     updateAddress,
-} from "@/features/profile/requests"
+} from "@/features/profile/api/requests"
 import type { AddressFormData } from "@/features/profile/validation"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { MapPin } from "lucide-react"
 import { useState } from "react"
+import { useAddresses } from "@/features/profile/api/queries"
 
 export default function AddressesTab() {
     const [id, setId] = useState<string | null>(null) // addressID to update/delete
@@ -32,10 +32,7 @@ export default function AddressesTab() {
 
     const queryClient = useQueryClient()
 
-    const { data: addresses } = useQuery({
-        queryKey: addressKey,
-        queryFn: fetchAddresses,
-    })
+    const { data: addresses } = useAddresses() 
 
     const addMutation = useMutation({
         mutationFn: createAddress,

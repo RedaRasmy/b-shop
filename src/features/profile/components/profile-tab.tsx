@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { profileKeys } from "@/features/profile/query-keys"
-import { fetchMe, updateProfile } from "@/features/profile/requests"
+import { fetchMe, updateProfile } from "@/features/profile/api/requests"
 import { ProfileInfosSchema } from "@/features/profile/validation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"

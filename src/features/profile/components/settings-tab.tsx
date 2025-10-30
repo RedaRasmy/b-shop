@@ -16,7 +16,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { updatePassword } from "@/features/profile/requests"
+import { updatePassword } from "@/features/profile/api/requests"
 import { useMutation } from "@tanstack/react-query"
 import type { AxiosError } from "axios"
 import { useState } from "react"

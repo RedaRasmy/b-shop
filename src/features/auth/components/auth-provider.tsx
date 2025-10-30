@@ -7,7 +7,7 @@ import {
 } from "react"
 import { AuthContext } from "@/features/auth/auth-context"
 import { logoutRequest } from "@/features/auth/requests"
-import { fetchMe } from "@/features/profile/requests"
+import { fetchMe } from "@/features/profile/api/requests"
 import type { User } from "@/features/auth/types"
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
