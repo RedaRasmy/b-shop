@@ -3,14 +3,14 @@ import useCart from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
-import { productKeys } from "@/features/products/query-keys"
-import { fetchProducts } from "@/features/products/api/requests"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
-import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { useParams } from "react-router-dom"
-import { useProduct } from "@/features/products/api/queries"
+import {
+    useProduct,
+    useProducts,
+} from "@/features/products/api/queries"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
@@ -22,21 +22,13 @@ export default function ProductDetailPage() {
 
     const { data: product, isError, isLoading } = useProduct(slug)
 
-    const { data: sameCategoryProducts } = useQuery({
-        queryKey: productKeys.related(product?.categoryId),
-        queryFn: () =>
-            fetchProducts({
-                categoryId: product?.categoryId,
-            }),
-        enabled: !!product,
-        select: (data) => {
-            return data.data
-        },
+    const { data } = useProducts({
+        categoryId: product?.categoryId,
     })
 
     const relatedProducts = useMemo(() => {
-        return sameCategoryProducts?.filter((p) => p.id !== product?.id) || []
-    }, [sameCategoryProducts, product?.id])
+        return data?.filter((p) => p.id !== product?.id) || []
+    }, [data, product?.id])
 
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
     const { addItem } = useCart(isAuthenticated)

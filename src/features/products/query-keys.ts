@@ -29,5 +29,4 @@ export const productKeys = {
     admin: (query: AdminProductsQuery = {}) =>
         [...productKeys.base, "admin", query] as const,
     detail: (id?: string) => [...productKeys.base, "detail", id] as const,
-    related: (id?: string) => [...productKeys.base, "related", id] as const,
 }
