@@ -9,8 +9,10 @@ export type PaginatedResult<T> = {
     data: T
     page: number
     perPage: number
-    total: number | null
-    totalPages: number | null
+    total: number
+    totalPages: number
+    prevPage: number | null
+    nextPage: number | null
 }
 
 export type BasicQuery = {
