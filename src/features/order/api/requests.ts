@@ -1,8 +1,11 @@
 import type { OrderFormData } from "@/features/order/validation"
 import { axiosInstance } from "@/lib/axios"
-import type { Prettify } from "@/types/global-types"
+import type { PaginationResponse, Prettify } from "@/types/global-types"
 import type { CartItem } from "@/redux/slices/cart"
-import type { Order, SuccessfulOrder } from "@/features/order/types"
+import type { AdminOrder, Order, SuccessfulOrder } from "@/features/order/types"
+import type { AdminOrdersQuery } from "@/features/order/query-keys"
+
+// Customer
 
 export async function placeOrder(
     order: Prettify<OrderFormData & { items: CartItem[] }>
@@ -24,10 +27,11 @@ export default async function getOrders() {
     return res.data as Order[]
 }
 
-// export async function getAdminOrders(query) {
-//     const res = await axiosInstance.get('/admin/orders',{
-//         params : query
-//     })
+/// Admin
 
-//     return res.data as
-// }
+export async function getAdminOrders(query: AdminOrdersQuery) {
+    const res = await axiosInstance.get("/admin/orders", {
+        params: query,
+    })
+    return res.data as PaginationResponse<AdminOrder>
+}
