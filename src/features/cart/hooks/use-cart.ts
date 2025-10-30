@@ -8,7 +8,7 @@ import {
     updateCartItem,
 } from "@/features/cart/requests"
 import type { CartProduct } from "@/features/cart/types"
-import { fetchProductsByIds } from "@/features/products/requests"
+import { fetchProductsByIds } from "@/features/products/api/requests"
 import type { ProductSummary } from "@/features/products/types"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"

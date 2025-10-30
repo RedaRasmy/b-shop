@@ -4,12 +4,13 @@ import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
 import { productKeys } from "@/features/products/query-keys"
-import { fetchProduct, fetchProducts } from "@/features/products/requests"
+import { fetchProducts } from "@/features/products/api/requests"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { useParams } from "react-router-dom"
+import { useProduct } from "@/features/products/api/queries"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
@@ -19,14 +20,7 @@ export default function ProductDetailPage() {
             "ProductDetailPage should be in a dynamic route with :slug"
         )
 
-    const {
-        data: product,
-        isError,
-        isLoading,
-    } = useQuery({
-        queryKey: productKeys.detail(slug),
-        queryFn: () => fetchProduct(slug),
-    })
+    const { data: product, isError, isLoading } = useProduct(slug)
 
     const { data: sameCategoryProducts } = useQuery({
         queryKey: productKeys.related(product?.categoryId),

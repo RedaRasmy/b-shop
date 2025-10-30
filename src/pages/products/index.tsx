@@ -9,7 +9,7 @@ import { ProductCard } from "@/features/products/components/product-card"
 import SearchBar from "@/features/products/components/search-bar"
 import ShopHeader from "@/features/products/components/shop-header"
 import { productKeys, type ProductsQuery } from "@/features/products/query-keys"
-import { fetchProducts } from "@/features/products/requests"
+import { fetchProducts } from "@/features/products/api/requests"
 import LoadingPage from "@/pages/loading"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import {
@@ -44,7 +44,7 @@ export default function ProductsPage() {
         [categoryId, search, sortBy]
     )
 
-    const fetchProducts = useCallback(
+    const handleFetchProducts = useCallback(
         async ({ pageParam = 1 }) => {
             const data = await fetchProducts({
                 categoryId: categoryId || undefined,
@@ -63,7 +63,7 @@ export default function ProductsPage() {
     const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
         useInfiniteQuery({
             queryKey: productKeys.infinite(queryParams),
-            queryFn: fetchProducts,
+            queryFn: handleFetchProducts,
             initialPageParam: 1,
             getPreviousPageParam: (data) => data.page - 1,
             getNextPageParam: (data) =>
