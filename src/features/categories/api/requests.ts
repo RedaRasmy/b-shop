@@ -16,9 +16,9 @@ export async function createCategory(data: CategoryFormData) {
     return axiosInstance.post("/admin/categories", data)
 }
 
-export async function fetchAdminCategories(params: AdminCategoriesQuery = {}) {
+export async function fetchAdminCategories(query: AdminCategoriesQuery = {}) {
     const res = await axiosInstance.get("/admin/categories", {
-        params,
+        params: query,
     })
     return res.data as AdminCategory[]
 }

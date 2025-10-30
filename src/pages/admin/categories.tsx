@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import CategoryList from "@/features/admin/categories/components/category-list"
-import { useAdminCategories } from "@/features/admin/categories/hooks/use-admin-categories"
+import { useCategoriesManager } from "@/features/admin/categories/hooks/use-admin-categories"
 import FilterControls from "@/features/admin/components/filter-controls"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import AdminPageHeader from "@/features/admin/components/page-header"
@@ -33,7 +33,7 @@ export default function AdminCategoriesPage() {
     })
 
     const { categories, category, addForm, updateForm, confirm, triggers } =
-        useAdminCategories({ queryParams })
+        useCategoriesManager({ queryParams })
 
     return (
         <div className="space-y-6 h-full flex flex-col">

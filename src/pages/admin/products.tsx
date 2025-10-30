@@ -9,11 +9,9 @@ import ProductForm from "@/features/admin/products/components/product-form"
 import ProductsPagination from "@/features/admin/products/components/products-pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
 import useAdminProducts from "@/features/admin/products/use-admin-products"
-import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useMemo } from "react"
-import { categoryKeys } from "@/features/categories/query-keys"
-import { fetchAdminCategories } from "@/features/categories/api/requests"
+import { useAdminCategories } from "@/features/categories/api/queries"
 
 const sortOptions = [
     { label: "Name", value: "name" },
@@ -26,10 +24,7 @@ const sortOptions = [
 
 export default function AdminProductsPage() {
     // get categories
-    const { data: categories = [] } = useQuery({
-        queryKey: categoryKeys.admin(),
-        queryFn: () => fetchAdminCategories(),
-    })
+    const { data: categories = [] } = useAdminCategories()
 
     const filterOptions = useMemo<FilterOptions>(
         () => [
