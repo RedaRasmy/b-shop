@@ -5,7 +5,7 @@ export type Prettify<T> = {
     [K in keyof T]: T[K]
 } & {}
 
-export type PaginationResponse<T> = {
+export type PaginatedResult<T> = {
     data: T
     page: number
     perPage: number

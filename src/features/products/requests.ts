@@ -8,7 +8,7 @@ import type {
     ProductSummary,
 } from "@/features/products/types"
 import { axiosInstance } from "@/lib/axios"
-import type { PaginationResponse } from "@/types/global-types"
+import type { PaginatedResult } from "@/types/global-types"
 
 // Customer
 
@@ -16,7 +16,7 @@ export async function getProducts(params: ProductsQuery = {}) {
     const res = await axiosInstance.get("/products", {
         params,
     })
-    return res.data as PaginationResponse<ProductSummary[]>
+    return res.data as PaginatedResult<ProductSummary[]>
 }
 
 export async function getProductsByIds(ids: string[]) {
@@ -43,7 +43,7 @@ export async function getAdminProducts(params: AdminProductsQuery = {}) {
             perPage: 15,
         },
     })
-    return res.data as PaginationResponse<AdminProduct[]>
+    return res.data as PaginatedResult<AdminProduct[]>
 }
 
 export async function updateProduct(id: string, formData: FormData) {

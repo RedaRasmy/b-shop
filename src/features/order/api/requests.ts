@@ -1,6 +1,6 @@
 import type { OrderFormData } from "@/features/order/validation"
 import { axiosInstance } from "@/lib/axios"
-import type { PaginationResponse, Prettify } from "@/types/global-types"
+import type { PaginatedResult, Prettify } from "@/types/global-types"
 import type { CartItem } from "@/redux/slices/cart"
 import type { AdminOrder, Order, SuccessfulOrder } from "@/features/order/types"
 import type { AdminOrdersQuery } from "@/features/order/query-keys"
@@ -33,5 +33,5 @@ export async function getAdminOrders(query: AdminOrdersQuery) {
     const res = await axiosInstance.get("/admin/orders", {
         params: query,
     })
-    return res.data as PaginationResponse<AdminOrder>
+    return res.data as PaginatedResult<AdminOrder>
 }
