@@ -1,6 +1,6 @@
 import { Spinner } from "@/components/ui/spinner"
 import { useAuth } from "@/features/auth/use-auth"
-import useCart from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart"
 import FilterBar from "@/features/products/components/filter-bar"
 import { ProductCard } from "@/features/products/components/product-card"
 import SearchBar from "@/features/products/components/search-bar"
@@ -39,7 +39,7 @@ export default function ProductsPage() {
     }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
-    const { addItem } = useCart(isAuthenticated)
+    const { addItem } = useCartManager(isAuthenticated)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 

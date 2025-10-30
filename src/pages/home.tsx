@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/features/auth/use-auth"
-import useCart from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
 import { ArrowRight, Headphones, Shield, Star, Truck } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -35,7 +35,7 @@ export default function HomePage() {
     })
 
     const { isAuthenticated } = useAuth()
-    const { addItem } = useCart(isAuthenticated)
+    const { addItem } = useCartManager(isAuthenticated)
 
     return (
         <div className="space-y-16">

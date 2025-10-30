@@ -1,6 +1,6 @@
 import { Form } from "@/components/ui/form"
 import { useAuth } from "@/features/auth/use-auth"
-import useCart from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart"
 import { createOrder } from "@/features/order/api/requests"
 import {
     OrderFormSchema,
@@ -20,7 +20,7 @@ import { useAddresses, useProfile } from "@/features/profile/api/queries"
 
 export default function OrderPage() {
     const { isAuthenticated } = useAuth()
-    const { subtotal, items } = useCart(isAuthenticated)
+    const { subtotal, items } = useCartManager(isAuthenticated)
     const queryClient = useQueryClient()
     const navigate = useNavigate()
 

@@ -3,7 +3,7 @@ import { CartHeader } from "@/features/cart/components/cart-header"
 import { CartItems } from "@/features/cart/components/cart-items"
 import { EmptyCart } from "@/features/cart/components/empty-cart"
 import OrderSummary from "@/features/cart/components/order-summary"
-import useCart from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart"
 import LoadingPage from "@/pages/loading"
 
 export default function CartPage() {
@@ -16,7 +16,7 @@ export default function CartPage() {
         removeItem,
         subtotal,
         itemCount,
-    } = useCart(isAuthenticated)
+    } = useCartManager(isAuthenticated)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 

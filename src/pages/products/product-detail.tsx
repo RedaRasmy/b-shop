@@ -1,5 +1,5 @@
 import { useAuth } from "@/features/auth/use-auth"
-import useCart from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
@@ -7,10 +7,7 @@ import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
 import { useMemo } from "react"
 import { useParams } from "react-router-dom"
-import {
-    useProduct,
-    useProducts,
-} from "@/features/products/api/queries"
+import { useProduct, useProducts } from "@/features/products/api/queries"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
@@ -31,7 +28,7 @@ export default function ProductDetailPage() {
     }, [data, product?.id])
 
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
-    const { addItem } = useCart(isAuthenticated)
+    const { addItem } = useCartManager(isAuthenticated)
 
     if (isAuthLoading || isLoading) return <LoadingPage />
 
