@@ -35,3 +35,15 @@ export async function fetchAdminOrders(query?: AdminOrdersQuery) {
     })
     return res.data as PaginatedResult<AdminOrder>
 }
+
+export async function updateOrder({
+    id,
+    status,
+}: {
+    id: number
+    status: Order["status"]
+}) {
+    return axiosInstance.patch("/admin/orders/" + id, {
+        status,
+    })
+}
