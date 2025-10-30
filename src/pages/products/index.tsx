@@ -5,24 +5,15 @@ import FilterBar from "@/features/products/components/filter-bar"
 import { ProductCard } from "@/features/products/components/product-card"
 import SearchBar from "@/features/products/components/search-bar"
 import ShopHeader from "@/features/products/components/shop-header"
-import { productKeys, type ProductsQuery } from "@/features/products/query-keys"
-import { fetchProducts } from "@/features/products/api/requests"
+import { type ProductsQuery } from "@/features/products/query-keys"
 import LoadingPage from "@/pages/loading"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import {
-    Fragment,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useCategories } from "@/features/categories/api/queries"
+import { useInfiniteProducts } from "@/features/products/api/queries"
 
 export default function ProductsPage() {
     const { ref, inView } = useInView()
-    const totalPagesRef = useRef(1)
     const [categoryId, setCategoryId] = useState<string | null>(null)
     const [search, setSearch] = useState("")
     const [sortBy, setSortBy] = useState("createdAt:desc")
@@ -38,31 +29,8 @@ export default function ProductsPage() {
         [categoryId, search, sortBy]
     )
 
-    const handleFetchProducts = useCallback(
-        async ({ pageParam = 1 }) => {
-            const data = await fetchProducts({
-                categoryId: categoryId || undefined,
-                sort: sortBy,
-                search: search || undefined,
-                page: pageParam,
-            })
-            if (data.totalPages) {
-                totalPagesRef.current = data.totalPages
-            }
-            return data
-        },
-        [categoryId, sortBy, search]
-    )
-
     const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
-        useInfiniteQuery({
-            queryKey: productKeys.infinite(queryParams),
-            queryFn: handleFetchProducts,
-            initialPageParam: 1,
-            getPreviousPageParam: (data) => data.page - 1,
-            getNextPageParam: (data) =>
-                totalPagesRef.current <= data.page ? undefined : data.page + 1,
-        })
+        useInfiniteProducts(queryParams)
 
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {

@@ -2,11 +2,9 @@ import { Button } from "@/components/ui/button"
 import { useAuth } from "@/features/auth/use-auth"
 import useCart from "@/features/cart/hooks/use-cart"
 import { ProductCard } from "@/features/products/components/product-card"
-import { productKeys } from "@/features/products/query-keys"
-import { fetchProducts } from "@/features/products/api/requests"
-import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Headphones, Shield, Star, Truck } from "lucide-react"
 import { Link } from "react-router-dom"
+import { useProducts } from "@/features/products/api/queries"
 
 const features = [
     {
@@ -32,15 +30,8 @@ const features = [
 ]
 
 export default function HomePage() {
-    const { data: products = [] } = useQuery({
-        queryKey: productKeys.customer(),
-        queryFn: () =>
-            fetchProducts({
-                perPage: 4,
-            }),
-        select: (res) => {
-            return res.data
-        },
+    const { data: products = [] } = useProducts({
+        perPage: 4,
     })
 
     const { isAuthenticated } = useAuth()
