@@ -5,16 +5,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { SortOrder } from "@/types/global-types";
+import type { SortOptions } from "@/features/admin/components/filter-controls"
+import type { SortOrder } from "@/types/global-types"
 import { SortAsc, SortDesc } from "lucide-react"
-
-type Option = { label: string; value: string }
 
 type Props = {
     sortBy: string
     order: "asc" | "desc"
     onChange: (field: string, order: "asc" | "desc") => void
-    sortOptions: Option[]
+    sortOptions: SortOptions
 }
 
 export default function SortDropdown({

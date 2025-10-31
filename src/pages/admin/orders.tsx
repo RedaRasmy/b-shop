@@ -11,7 +11,8 @@ const sortOptions = [
     { label: "Status", value: "status" },
     { label: "Total", value: "total" },
     { label: "Date", value: "createdAt" },
-]
+] as const
+
 const filterOptions = [
     {
         label: "Status",
@@ -24,7 +25,7 @@ const filterOptions = [
             { label: "Canceled", value: "canceled" },
         ],
     },
-]
+] as const
 
 export default function AdminOrdersPage() {
     // Filter controls

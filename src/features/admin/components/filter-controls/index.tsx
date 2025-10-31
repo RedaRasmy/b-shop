@@ -7,14 +7,19 @@ import type { SortOrder } from "@/types/global-types"
 import { X } from "lucide-react"
 import { useState } from "react"
 
-export type FilterOptions = {
+export type Option = {
+    readonly label: string
+    readonly value: string
+}
+
+export type FilterOptions = readonly Readonly<{
     label: string
     value: string
-    options: { label: string; value: string }[]
+    options: readonly Option[]
     nullable?: boolean
-}[]
+}>[]
 
-export type SortOptions = { label: string; value: string }[]
+export type SortOptions = readonly Option[]
 
 type Props = {
     searchTerm: string
