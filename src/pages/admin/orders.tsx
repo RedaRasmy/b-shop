@@ -1,7 +1,9 @@
 import OrdersTable from "@/features/admin/categories/orders/components/orders-table"
 import FilterControls from "@/features/admin/components/filter-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
+import PaginationControl from "@/features/admin/components/pagination"
 import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
+import { useUpdateOrder } from "@/features/order/api/mutations"
 import { useAdminOrders } from "@/features/order/api/queries"
 
 const sortOptions = [
@@ -26,26 +28,33 @@ const filterOptions = [
 
 export default function AdminOrdersPage() {
     // Filter controls
-    const { controls, queryParams } = useFilterControls({
+    const { controls, queryParams, page, setPage } = useFilterControls({
         filterOptions,
         sortOptions,
         pagination: true,
     })
 
-    const { data } = useAdminOrders(queryParams)
+    const { data } = useAdminOrders({ ...queryParams, perPage: 5 })
 
     const orders = data?.data
 
-    console.log('orders : ',orders)
+    const { mutate } = useUpdateOrder()
+
+    const totalText = data?.total ? `(${data.total} orders)` : ""
 
     return (
         <div className="space-y-6 h-full flex flex-col">
             <AdminPageHeader
                 title="Orders"
-                description={`Manage customer orders and fulfillment (${0} orders)`}
+                description={`Manage customer orders and fulfillment ${totalText}`}
             />
             <FilterControls {...controls} />
-            <OrdersTable orders={orders} onUpdate={() => {}} />
+            <OrdersTable orders={orders} onUpdate={mutate} />
+            <PaginationControl
+                page={page}
+                setPage={setPage}
+                totalPages={data?.totalPages ?? 0}
+            />
         </div>
     )
 }

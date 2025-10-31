@@ -10,28 +10,34 @@ import type { AdminOrder } from "@/features/order/types"
 
 type Props = {
     orders?: AdminOrder[]
-    onUpdate: (id: number, status: AdminOrder["status"]) => void
+    onUpdate: ({
+        id,
+        status,
+    }: {
+        id: number
+        status: AdminOrder["status"]
+    }) => void
 }
 
 export default function OrdersTable({ orders = [], onUpdate }: Props) {
     return (
-        <div className="grid gap-4">
+        <div className="flex flex-col gap-3 overflow-auto">
             {orders.map((order) => (
                 <Card key={order.id} className="">
-                    <CardContent className="p-6">
+                    <CardContent className="px-6">
                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                             <div className="flex-1 min-w-0">
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
+                                <div className="flex items-center gap-3 mb-3">
                                     <h3 className="font-semibold text-foreground">
                                         #{order.id}
                                     </h3>
                                     <Select
                                         value={order.status}
                                         onValueChange={(value) =>
-                                            onUpdate(
-                                                order.id,
-                                                value as AdminOrder["status"]
-                                            )
+                                            onUpdate({
+                                                id: order.id,
+                                                status: value as AdminOrder["status"],
+                                            })
                                         }
                                     >
                                         <SelectTrigger className="w-[140px] h-7">
@@ -93,38 +99,6 @@ export default function OrdersTable({ orders = [], onUpdate }: Props) {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="flex items-center gap-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-8"
-                                >
-                                    <Eye className="h-4 w-4 mr-2" />
-                                    View
-                                </Button>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-8"
-                                        >
-                                            <MoreHorizontal className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem>
-                                            Update Status
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Send Email
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Print Invoice
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div> */}
                         </div>
                     </CardContent>
                 </Card>

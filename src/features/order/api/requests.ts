@@ -41,7 +41,7 @@ export async function updateOrder({
     status,
 }: {
     id: number
-    status: Order["status"]
+    status: AdminOrder["status"]
 }) {
     return axiosInstance.patch("/admin/orders/" + id, {
         status,
