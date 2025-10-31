@@ -14,7 +14,7 @@ export default function useProductsManager({
     queryParams = {},
     categories,
 }: {
-    queryParams?: AdminProductsQuery
+    queryParams?: Omit<AdminProductsQuery, "categoryId"> & { category?: string }
     categories: AdminCategory[]
 }) {
     const queryClient = useQueryClient()
@@ -27,14 +27,14 @@ export default function useProductsManager({
     const totalRef = useRef(0)
     const totalPagesRef = useRef(1)
 
-    const { categoryId, ...params } = queryParams
+    const { category, ...params } = queryParams
 
     const finalQueryParams = {
         ...params,
         categoryId:
-            categoryId === "__NULL__"
+            category === "__NULL__"
                 ? "null" // for deleted categories
-                : categories.find((c) => c.name === categoryId)?.id,
+                : categories.find((c) => c.name === category)?.id,
     }
 
     // Get Products
