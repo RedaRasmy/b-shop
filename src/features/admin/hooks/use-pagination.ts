@@ -7,9 +7,21 @@ export function usePagination() {
         setPage(1)
     }
 
+    function nextPage() {
+        setPage((prev) => prev + 1)
+    }
+
+    function prevPage() {
+        if (page > 1) {
+            setPage((prev) => prev - 1)
+        }
+    }
+
     return {
         page,
         setPage,
         resetPage,
+        nextPage,
+        prevPage,
     }
 }
