@@ -14,7 +14,7 @@ type Props = {
     totalPages: number
 }
 
-export default function ProductsPagination({
+export default function PaginationControl({
     page,
     setPage,
     totalPages,

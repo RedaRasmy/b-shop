@@ -33,7 +33,7 @@ export async function fetchAdminOrders(query?: AdminOrdersQuery) {
     const res = await axiosInstance.get("/admin/orders", {
         params: query,
     })
-    return res.data as PaginatedResult<AdminOrder>
+    return res.data as PaginatedResult<AdminOrder[]>
 }
 
 export async function updateOrder({

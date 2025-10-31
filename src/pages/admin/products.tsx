@@ -6,7 +6,7 @@ import FilterControls, {
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
 import ProductForm from "@/features/admin/products/components/product-form"
-import ProductsPagination from "@/features/admin/products/components/products-pagination"
+import ProductsPagination from "@/features/admin/components/pagination"
 import ProductsTable from "@/features/admin/products/components/products-table"
 import useProductsManager from "@/features/admin/products/use-products-manager"
 import { Plus } from "lucide-react"
