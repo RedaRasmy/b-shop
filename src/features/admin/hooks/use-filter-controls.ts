@@ -13,7 +13,11 @@ interface Params {
     filterOptions: FilterOptions
     sortOptions: SortOptions
     pagination?: boolean
+    perPage?: number
 }
+
+// this hook use url query params : search , sort , ...
+// provide values and setters of those params + queryParams object ready to use in requests
 
 export function useFilterControls(options: Params) {
     const {
@@ -21,10 +25,11 @@ export function useFilterControls(options: Params) {
         filterOptions,
         sortOptions,
         pagination = false,
+        perPage,
     } = options
 
     /// Pagination
-    const { page, setPage } = usePagination()
+    const { page, setPage, resetPage } = usePagination()
 
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -65,10 +70,10 @@ export function useFilterControls(options: Params) {
         (debouncedValue: string) => {
             if (urlSearchTerm !== debouncedValue) {
                 updateParams({ search: debouncedValue })
-                setPage(1)
+                resetPage()
             }
         },
-        [urlSearchTerm, updateParams, setPage]
+        [urlSearchTerm, updateParams, resetPage]
     )
 
     const debouncedSearchTerm = useDebounce({
@@ -96,17 +101,17 @@ export function useFilterControls(options: Params) {
     const setFilter = useCallback(
         (key: string, value: string) => {
             updateParams({ [key]: value })
-            setPage(1)
+            resetPage()
         },
-        [updateParams, setPage]
+        [updateParams, resetPage]
     )
 
     const setFilters = useCallback(
         (newFilters: Record<string, string>) => {
             updateParams(newFilters)
-            setPage(1)
+            resetPage()
         },
-        [updateParams, setPage]
+        [updateParams, resetPage]
     )
 
     const clearFilters = useCallback(() => {
@@ -129,9 +134,9 @@ export function useFilterControls(options: Params) {
         (field: string, order: SortOrder) => {
             const sort = `${field}:${order}`
             updateParams({ sort })
-            setPage(1)
+            resetPage()
         },
-        [updateParams, setPage]
+        [updateParams, resetPage]
     )
 
     // Build query params object for API calls
@@ -151,11 +156,12 @@ export function useFilterControls(options: Params) {
             return {
                 ...params,
                 page,
+                perPage,
             } as Record<string, number | string | undefined>
         }
 
         return params
-    }, [debouncedSearchTerm, sort, filters, page, pagination])
+    }, [debouncedSearchTerm, sort, filters, page, pagination, perPage])
 
     return {
         // Current values

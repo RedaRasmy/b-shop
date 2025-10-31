@@ -32,9 +32,10 @@ export default function AdminOrdersPage() {
         filterOptions,
         sortOptions,
         pagination: true,
+        perPage: 5,
     })
 
-    const { data } = useAdminOrders({ ...queryParams, perPage: 5 })
+    const { data } = useAdminOrders(queryParams)
 
     const orders = data?.data
 
