@@ -26,3 +26,7 @@ export type PaginationQuery = {
 }
 
 export type Id = string | number
+
+export type RequiredButUndefined<T> = {
+    [K in keyof Required<T>]: T[K] | undefined
+}
