@@ -1,6 +1,9 @@
 import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 import AdminPageHeader from "@/features/admin/components/page-header"
+import { useCustomers } from "@/features/profile/api/queries"
+import CustomersTable from "@/features/profile/components/customers-table"
 import type { CustomersQuery } from "@/features/profile/query-keys"
+import { useDebounce } from "@/hooks/use-debounce"
 import { useQueryParams } from "@/hooks/use-query-params"
 import type { SortOrder } from "@/types/global-types"
 
@@ -14,7 +17,7 @@ export default function AdminCustomersPage() {
     const [query, setQuery] = useQueryParams<
         Omit<CustomersQuery, "page" | "perPage">
     >({
-        search: "",
+        search: undefined,
         sort: "createdAt:desc",
     })
 
@@ -22,12 +25,19 @@ export default function AdminCustomersPage() {
         ? (query.sort.split(":") as [string, SortOrder])
         : (["createdAt", "desc"] as [string, SortOrder])
 
-    // const totalText = data?.total ? `(${data.total} orders)` : ""
+    const debouncedQuery = useDebounce({
+        state: query,
+    })
+
+    const { data } = useCustomers(debouncedQuery)
+
+    const totalText = data?.total ? `(${data.total} customers)` : ""
+
     return (
         <div className="space-y-6 h-full flex flex-col">
             <AdminPageHeader
                 title="Customers"
-                description={`Manage your customer relationships ${0}`}
+                description={`Manage your customer relationships ${totalText}`}
             />
             <FilterControls2
                 options={{ sort: sortOptions }}
@@ -45,7 +55,8 @@ export default function AdminCustomersPage() {
                     })
                 }
             />
-            {/* <CustomersTable customers={customers} />
+            <CustomersTable customers={data?.data ?? []} />
+            {/* 
             <PaginationControl
                 page={page}
                 setPage={setPage}
