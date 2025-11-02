@@ -19,3 +19,13 @@ export type Address = {
     // addressLine2: string | null
     isDefault: boolean
 }
+
+export type Customer = {
+    id: string
+    name: string | null
+    email: string
+    phone: string | null
+    joinedAt: Date
+    totalSpent: number
+    orderCount: number
+}
