@@ -1,5 +1,9 @@
-import { fetchAddresses, fetchMe } from "@/features/profile/api/requests"
-import { profileKeys } from "@/features/profile/query-keys"
+import {
+    fetchAddresses,
+    fetchCustomers,
+    fetchMe,
+} from "@/features/profile/api/requests"
+import { profileKeys, type CustomersQuery } from "@/features/profile/query-keys"
 import { useQuery } from "@tanstack/react-query"
 
 export function useProfile() {
@@ -13,5 +17,12 @@ export function useAddresses() {
     return useQuery({
         queryKey: profileKeys.addresses(),
         queryFn: fetchAddresses,
+    })
+}
+
+export function useCustomers(query?: CustomersQuery) {
+    return useQuery({
+        queryKey: profileKeys.customers(query),
+        queryFn: () => fetchCustomers(query),
     })
 }

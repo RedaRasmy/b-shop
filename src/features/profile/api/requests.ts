@@ -1,6 +1,8 @@
-import type { Address, Profile } from "@/features/profile/types"
+import type { CustomersQuery } from "@/features/profile/query-keys"
+import type { Address, Customer, Profile } from "@/features/profile/types"
 import type { AddressFormData } from "@/features/profile/validation"
 import { axiosInstance } from "@/lib/axios"
+import type { PaginatedResult } from "@/types/global-types"
 
 export async function fetchMe() {
     const res = await axiosInstance.get("/me")
@@ -44,4 +46,14 @@ export async function updateAddress({
 
 export async function deleteAddress(id: string) {
     return axiosInstance.delete("/me/addresses/" + id)
+}
+
+/// Admin : Customers
+
+export async function fetchCustomers(query?: CustomersQuery) {
+    const res = await axiosInstance.get("/admin/customers", {
+        params: query,
+    })
+
+    return res.data as PaginatedResult<Customer[]>
 }
