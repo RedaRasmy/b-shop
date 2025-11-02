@@ -80,11 +80,7 @@ export default function FilterControls2({
 
                     {/* Sort */}
                     <SortDropdown
-                        onChange={(sort) => {
-                            const [field, order] = sort.split(":") as [
-                                string,
-                                SortOrder
-                            ]
+                        onChange={(field, order) => {
                             setQuery({
                                 sort: {
                                     field,
