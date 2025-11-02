@@ -1,5 +1,7 @@
 import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 import AdminPageHeader from "@/features/admin/components/page-header"
+import PaginationControl from "@/features/admin/components/pagination"
+import { usePagination } from "@/features/admin/hooks/use-pagination"
 import { useCustomers } from "@/features/profile/api/queries"
 import CustomersTable from "@/features/profile/components/customers-table"
 import type { CustomersQuery } from "@/features/profile/query-keys"
@@ -28,8 +30,9 @@ export default function AdminCustomersPage() {
     const debouncedQuery = useDebounce({
         state: query,
     })
+    const { page, setPage } = usePagination()
 
-    const { data } = useCustomers(debouncedQuery)
+    const { data } = useCustomers({ ...debouncedQuery, page, perPage: 6 })
 
     const totalText = data?.total ? `(${data.total} customers)` : ""
 
@@ -56,12 +59,14 @@ export default function AdminCustomersPage() {
                 }
             />
             <CustomersTable customers={data?.data ?? []} />
-            {/* 
-            <PaginationControl
-                page={page}
-                setPage={setPage}
-                totalPages={data?.totalPages ?? 0}
-            /> */}
+
+            {data && (
+                <PaginationControl
+                    page={page}
+                    setPage={setPage}
+                    totalPages={data?.totalPages ?? 0}
+                />
+            )}
         </div>
     )
 }
