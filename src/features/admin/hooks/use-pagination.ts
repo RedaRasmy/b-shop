@@ -1,7 +1,13 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 
-export function usePagination() {
+export function usePagination({
+    totalPages = 1,
+}: {
+    totalPages?: number
+} = {}) {
     const [page, setPage] = useState(1)
+
+    const totalPagesRef = useRef(totalPages)
 
     function resetPage() {
         setPage(1)
@@ -23,5 +29,6 @@ export function usePagination() {
         resetPage,
         nextPage,
         prevPage,
+        totalPages: totalPagesRef.current,
     }
 }
