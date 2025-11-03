@@ -4,7 +4,7 @@ import {
     fetchMe,
 } from "@/features/profile/api/requests"
 import { profileKeys, type CustomersQuery } from "@/features/profile/query-keys"
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
 export function useProfile() {
     return useQuery({
@@ -24,5 +24,6 @@ export function useCustomers(query?: CustomersQuery) {
     return useQuery({
         queryKey: profileKeys.customers(query),
         queryFn: () => fetchCustomers(query),
+        placeholderData: keepPreviousData,
     })
 }

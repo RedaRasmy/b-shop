@@ -8,7 +8,6 @@ import type { CustomersQuery } from "@/features/profile/query-keys"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useQueryParams } from "@/hooks/use-query-params"
 import type { SortOrder } from "@/types/global-types"
-import { useEffect, useRef } from "react"
 
 const sortOptions = [
     { label: "Orders", value: "orders" },
@@ -35,15 +34,6 @@ export default function AdminCustomersPage() {
     const { page, setPage } = usePagination()
 
     const { data } = useCustomers({ ...debouncedQuery, page, perPage: 6 })
-
-    const ref = useRef(1)
-
-    useEffect(() => {
-        if (data) {
-            ref.current = data.totalPages
-        }
-        return () => {}
-    }, [data])
 
     const totalText = data?.total ? `(${data.total} customers)` : ""
 
@@ -74,7 +64,7 @@ export default function AdminCustomersPage() {
             <PaginationControl
                 page={page}
                 setPage={setPage}
-                totalPages={ref.current}
+                totalPages={data?.totalPages ?? 1}
             />
         </div>
     )
