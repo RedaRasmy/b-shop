@@ -7,16 +7,23 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import type { Customer } from "@/features/profile/types"
+import { cn } from "@/lib/utils"
 import { Mail, MoreHorizontal, Phone } from "lucide-react"
 import { Link } from "react-router-dom"
 
 export default function CustomersTable({
     customers,
+    isUpdating,
 }: {
     customers: Customer[]
+    isUpdating: boolean
 }) {
     return (
-        <div className="overflow-auto grid gap-4">
+        <div
+            className={cn("overflow-auto grid gap-4", {
+                "opacity-50": isUpdating,
+            })}
+        >
             {customers.map((customer) => (
                 <Card
                     key={customer.id}

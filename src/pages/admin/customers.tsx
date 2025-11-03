@@ -1,13 +1,13 @@
 import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
-import { usePagination } from "@/features/admin/hooks/use-pagination"
 import { useCustomers } from "@/features/profile/api/queries"
 import CustomersTable from "@/features/profile/components/customers-table"
 import type { CustomersQuery } from "@/features/profile/query-keys"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useQueryParams } from "@/hooks/use-query-params"
 import type { SortOrder } from "@/types/global-types"
+import { useState } from "react"
 
 const sortOptions = [
     { label: "Orders", value: "orders" },
@@ -31,9 +31,13 @@ export default function AdminCustomersPage() {
         state: query,
     })
 
-    const { page, setPage } = usePagination()
+    const [page, setPage] = useState(1)
 
-    const { data } = useCustomers({ ...debouncedQuery, page, perPage: 6 })
+    const { data, isPlaceholderData } = useCustomers({
+        ...debouncedQuery,
+        page,
+        perPage: 6,
+    })
 
     const totalText = data?.total ? `(${data.total} customers)` : ""
 
@@ -59,7 +63,10 @@ export default function AdminCustomersPage() {
                     })
                 }
             />
-            <CustomersTable customers={data?.data ?? []} />
+            <CustomersTable
+                customers={data?.data ?? []}
+                isUpdating={isPlaceholderData}
+            />
 
             <PaginationControl
                 page={page}
