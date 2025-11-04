@@ -30,3 +30,11 @@ export type Id = string | number
 export type RequiredButUndefined<T> = {
     [K in keyof Required<T>]: T[K] | undefined
 }
+
+export type Mutable<T> = {
+    -readonly [P in keyof T]: T[P]
+}
+
+export type DeepMutable<T> = T extends object
+    ? { -readonly [K in keyof T]: DeepMutable<T[K]> }
+    : T
