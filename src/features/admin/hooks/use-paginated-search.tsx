@@ -3,7 +3,7 @@ import type {
     SortOptions,
 } from "@/features/admin/components/filter-controls"
 import { useDebounce } from "@/hooks/use-debounce"
-import { useQueryParams } from "@/hooks/use-query-params"
+import { useQueryParams2 } from "@/hooks/use-query-params"
 import type {
     BasicQuery,
     PaginationQuery,
@@ -80,21 +80,14 @@ export default function usePaginatedSearch<
 
     const filters = options.filter
         ? options.filter.reduce((acc, filter) => {
-              acc[filter.value] = undefined
+              acc[filter.value] = { type: "string" }
               return acc
-          }, {} as Record<string, string | undefined>)
+          }, {} as Record<string, { type: "string" }>)
         : {}
 
-    const [query, setQuery] = useQueryParams<
-        Prettify<
-            {
-                search?: string
-                sort?: string
-            } & typeof filters
-        >
-    >({
-        search: undefined,
-        sort: undefined,
+    const [query, setQuery] = useQueryParams2({
+        search: { type: "string" },
+        sort: { type: "string", default: defaults?.sort },
         ...filters,
     })
 
