@@ -12,29 +12,22 @@ import type {
 } from "@/types/global-types"
 import { useCallback, useMemo, useState } from "react"
 
+// Helper Types
 
-
-type FiltersToRecord<
-    T extends FilterOptions,
-    N extends string | null = string
-> = {
+type FiltersToRecord<T extends FilterOptions> = Prettify<{
     [K in T[number] as K["value"]]?: K extends { nullable: true }
-        ? K["options"][number]["value"] | (N extends string ? "__NULL__" : null)
+        ? K["options"][number]["value"] | "__NULL__"
         : K["options"][number]["value"]
-}
+}>
 
-type PaginatedQuery<
-    F extends FilterOptions | undefined,
-    N extends string | null = string
-> = Prettify<
+type PaginatedQuery<F extends FilterOptions | undefined> = Prettify<
     BasicQuery &
         PaginationQuery &
-        (F extends FilterOptions
-            ? FiltersToRecord<F, N>
-            : Record<string, unknown>)
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+        (F extends FilterOptions ? FiltersToRecord<F> : {})
 >
 
-type InternalQuery<F extends FilterOptions> = Prettify<
+type InternalQuery<F extends FilterOptions | undefined> = Prettify<
     Omit<PaginatedQuery<F>, "sort"> & {
         sort: {
             field?: string
@@ -46,7 +39,7 @@ type InternalQuery<F extends FilterOptions> = Prettify<
 ////
 
 type Return<F extends FilterOptions, S extends SortOptions> = {
-    query: PaginatedQuery<F, null>
+    query: PaginatedQuery<F>
     controls: {
         query: InternalQuery<F>
         setQuery: (query: {
@@ -58,7 +51,7 @@ type Return<F extends FilterOptions, S extends SortOptions> = {
             }
         }) => void
         options: {
-            filter?: F
+            filter?: Readonly<F>
             sort: S
         }
     }
@@ -142,34 +135,17 @@ export default function usePaginatedSearch<
     const finalQuery = useMemo(() => {
         const perPage = pageSize ? { perPage: pageSize } : {}
 
-        // Change __NULL__ to null
-        let parsedQuery: PaginatedQuery<F, null> | typeof debouncedQuery
-
-        if (options.filter) {
-            const entries = Object.entries(debouncedQuery).map(
-                ([key, value]) => {
-                    if (key === "search" || key === "sort") return [key, value]
-                    if (value === "__NULL__") return [key, null]
-                    return [key, value]
-                }
-            )
-            parsedQuery = Object.fromEntries(entries) as PaginatedQuery<F, null>
-        } else {
-            parsedQuery = debouncedQuery
-        }
-
-        // --- Now construct the final query ---
         const result = {
-            ...parsedQuery,
+            ...debouncedQuery,
             page,
             ...perPage,
-        } as PaginatedQuery<F, null>
+        } as PaginatedQuery<typeof options.filter>
 
         return result
     }, [debouncedQuery, pageSize, page, options])
 
     return {
-        query: finalQuery,
+        query: finalQuery as PaginatedQuery<F>,
         controls: {
             query: {
                 ...query,
@@ -183,7 +159,7 @@ export default function usePaginatedSearch<
     }
 }
 
-//// TEST
+// TEST
 
 // const filters = [
 //     {
@@ -192,7 +168,7 @@ export default function usePaginatedSearch<
 //         options: [
 //             { label: "Active", value: "active" },
 //             { label: "Inactive", value: "inactive" },
-//         ] as const,
+//         ],
 //     },
 //     {
 //         label: "Category",
@@ -200,16 +176,34 @@ export default function usePaginatedSearch<
 //         options: [
 //             { label: "Tech", value: "tech" },
 //             { label: "Fashion", value: "fashion" },
-//         ] as const,
+//         ],
 //         nullable: true,
 //     },
 // ] as const
 
+// const sortOptions = [
+//     { label: "Name", value: "name" },
+//     { label: "Status", value: "status" },
+//     { label: "Price", value: "price" },
+//     { label: "Stock", value: "stock" },
+//     { label: "Created Date", value: "createdAt" },
+//     { label: "Updated Date", value: "updatedAt" },
+// ] as const
+
 // function Compo() {
-//     const { query ,controls : {query,options,setQuery} , page,setPage } = usePaginatedSearch({
+//     const {
+//         query: q,
+//         controls: { query, options, setQuery },
+//         page,
+//         setPage,
+//     } = usePaginatedSearch({
 //         options: {
-//             sort: [{ label: "Date", value: "date" }],
+//             sort: sortOptions,
 //             filter: filters,
+//         },
+//         pageSize: 4,
+//         defaults: {
+//             sort: "price:asc",
 //         },
 //     })
 // }
