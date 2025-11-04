@@ -33,7 +33,7 @@ export default function useProductsManager({
         ...params,
         categoryId:
             category === "__NULL__"
-                ? "null" // for deleted categories
+                ? "__NULL__" // for deleted categories
                 : categories.find((c) => c.name === category)?.id,
     }
 
