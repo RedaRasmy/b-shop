@@ -4,7 +4,7 @@ import type {
 } from "@/features/admin/components/filter-controls"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useQueryParams2 } from "@/hooks/use-query-params"
-import type { BasicQuery, Prettify, SortOrder } from "@/types/global-types"
+import type { Prettify, SortOrder } from "@/types/global-types"
 import { useCallback, useMemo, useState } from "react"
 
 // Helper Types
@@ -18,46 +18,49 @@ type FiltersToRecord<T extends FilterOptions | undefined> =
         : // eslint-disable-next-line @typescript-eslint/no-empty-object-type
           {}
 
+// type Query<F extends FilterOptions | undefined> = Prettify<
+//     {
+//         search?: string
+//         sort: string
+//     } & FiltersToRecord<F>
+// >
+
 type PaginatedQuery<
     F extends FilterOptions | undefined,
     P extends number | undefined
 > = Prettify<
-    Pick<BasicQuery, "search"> & { sort: string } & {
+    {
+        search?: string
+        sort: string
         page: number
         perPage: P extends number ? number : number | undefined
     } & FiltersToRecord<F>
 >
 
-type InternalQuery<
-    F extends FilterOptions | undefined,
-    P extends number | undefined
-> = Prettify<
-    Omit<PaginatedQuery<F, P>, "sort"> & {
-        sort: {
-            field: string
-            order: SortOrder
-        }
+type InternalQuery<F extends FilterOptions | undefined> = {
+    search?: string
+    sort: {
+        field: string
+        order: SortOrder
     }
->
+    filters?: FiltersToRecord<F>
+}
+
+type SetQuery<F extends FilterOptions | undefined> = (
+    query: Partial<InternalQuery<F>>
+) => void
 
 ////
 
 type Return<
-    F extends FilterOptions,
+    F extends FilterOptions | undefined,
     S extends SortOptions,
     P extends number | undefined
 > = {
     query: PaginatedQuery<F, P>
     controls: {
-        query: InternalQuery<F, P>
-        setQuery: (query: {
-            search?: string
-            filters?: Record<string, string>
-            sort?: {
-                field: string
-                order: SortOrder
-            }
-        }) => void
+        query: InternalQuery<F>
+        setQuery: SetQuery<F>
         options: {
             filter?: Readonly<F>
             sort: S
@@ -68,9 +71,8 @@ type Return<
 }
 
 export default function usePaginatedSearch<
-    F extends FilterOptions,
+    F extends FilterOptions | undefined,
     S extends SortOptions,
-    // DS extends ,
     P extends number | undefined
 >({
     pageSize,
@@ -86,80 +88,77 @@ export default function usePaginatedSearch<
 }): Return<F, S, P> {
     // search , sort , ...filters
 
-    const filters = options.filter
-        ? options.filter.reduce((acc, filter) => {
-              acc[filter.value] = { type: "string" }
-              return acc
-          }, {} as Record<string, { type: "string" }>)
-        : {}
+    console.log("runs")
 
-    const [query, setQuery] = useQueryParams2({
-        search: { type: "string" },
-        sort: { type: "string", default: defaultSort },
-        ...filters,
-    })
+    const queryParamsConfig = useMemo(
+        () =>
+            ({
+                search: { type: "string" },
+                sort: { type: "string", default: defaultSort },
+                ...(options.filter
+                    ? options.filter.reduce((acc, filter) => {
+                          acc[filter.value] = { type: "string" }
+                          return acc
+                      }, {} as Record<string, { type: "string" }>)
+                    : {}),
+            } as const),
+        [defaultSort, options.filter]
+    )
+
+    const [query, setQuery] = useQueryParams2(queryParamsConfig)
 
     const debouncedQuery = useDebounce({
         state: query,
     })
 
-    const [field, order] = query.sort
-        ? (query.sort.split(":") as [string, SortOrder])
-        : defaultSort
-        ? (defaultSort.split(":") as [string, SortOrder])
-        : []
+    /// Build Internal Query
 
-    const sort =
-        field && order
-            ? {
-                  sort: { field, order },
-              }
-            : {}
+    const internalQuery = useMemo(() => {
+        const { search, sort, ...queryFilters } = query
+
+        const [field, order] = sort
+            ? (query.sort.split(":") as [string, SortOrder])
+            : (defaultSort.split(":") as [string, SortOrder])
+
+        return {
+            search,
+            sort: { field, order },
+            filters: queryFilters,
+        } as InternalQuery<F>
+    }, [query, defaultSort])
+
+    ///
 
     const [page, setPage] = useState(1)
 
     const handleSetQuery = useCallback(
-        ({
-            search,
-            sort,
-            filters,
-        }: {
-            search?: string
-            filters?: Record<string, string>
-            sort?: {
-                field: string
-                order: SortOrder
-            }
-        }) => {
+        ({ search, sort, filters }: Partial<InternalQuery<F>>) => {
             setPage(1)
             setQuery({
-                search,
-                sort: sort ? sort.field + ":" + sort.order : undefined,
+                ...query,
+                search: search === undefined ? query.search : search,
+                sort: sort ? sort.field + ":" + sort.order : query.sort,
                 ...filters,
             })
         },
-        [setQuery]
+        [setQuery, query]
     )
 
     const finalQuery = useMemo(() => {
-        const perPage = pageSize ? { perPage: pageSize } : {}
-
         const result = {
             ...debouncedQuery,
+            search: debouncedQuery.search || undefined, // "" -> undefined
             page,
-            ...perPage,
-        } as PaginatedQuery<typeof options.filter, typeof pageSize>
+            perPage: pageSize,
+        } as PaginatedQuery<F, P>
 
         return result
-    }, [debouncedQuery, pageSize, page, options])
+    }, [debouncedQuery, pageSize, page])
 
     return {
-        query: finalQuery as PaginatedQuery<F, P>,
+        query: finalQuery,
         controls: {
-            query: {
-                ...query,
-                ...sort,
-            } as InternalQuery<F, P>,
+            query: internalQuery,
             setQuery: handleSetQuery,
             options,
         },
@@ -208,7 +207,7 @@ export default function usePaginatedSearch<
 //     } = usePaginatedSearch({
 //         options: {
 //             sort: sortOptions,
-//             // filter: filters,
+//             filter: filters,
 //         },
 //         pageSize: 4,
 //         defaultSort: "createdAt:asc",

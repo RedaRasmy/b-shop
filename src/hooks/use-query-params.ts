@@ -1,5 +1,5 @@
 import type { Prettify, RequiredButUndefined } from "@/types/global-types"
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 
 type Primitive = string | number | boolean | undefined
@@ -99,7 +99,7 @@ type Query<P extends Params> = {
 export function useQueryParams2<P extends Params>(params: P) {
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const query = useMemo(() => {
+    const [localQuery, setLocalQuery] = useState(() => {
         const entries = Object.entries(params).map(([key, value]) => {
             const urlValue = searchParams.get(key)
             if (urlValue) {
@@ -116,7 +116,7 @@ export function useQueryParams2<P extends Params>(params: P) {
                             : value.default
                     return [key, parsed]
                 } else {
-                    return [key, urlValue]
+                    return [key, urlValue || undefined]
                 }
             } else {
                 return [key, value.default]
@@ -124,10 +124,11 @@ export function useQueryParams2<P extends Params>(params: P) {
         })
 
         return Object.fromEntries(entries) as Prettify<Query<P>>
-    }, [searchParams, params])
+    })
 
     const setQuery = useCallback(
         (updates: Prettify<Partial<Query<P>>>) => {
+            setLocalQuery((prev) => ({ ...prev, ...updates }))
             const next = new URLSearchParams(searchParams)
             for (const [key, val] of Object.entries(updates)) {
                 if (val === undefined || val === "") {
@@ -141,7 +142,7 @@ export function useQueryParams2<P extends Params>(params: P) {
         [searchParams, setSearchParams]
     )
 
-    return [query, setQuery] as const
+    return [localQuery, setQuery] as const
 }
 
 // test
