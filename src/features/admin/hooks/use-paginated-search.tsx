@@ -4,51 +4,40 @@ import type {
 } from "@/features/admin/components/filter-controls"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useQueryParams2 } from "@/hooks/use-query-params"
-import type {
-    BasicQuery,
-    PaginationQuery,
-    Prettify,
-    SortOrder,
-} from "@/types/global-types"
+import type { BasicQuery, Prettify, SortOrder } from "@/types/global-types"
 import { useCallback, useMemo, useState } from "react"
 
 // Helper Types
-
-type FiltersToRecord<T extends FilterOptions> = Prettify<{
-    [K in T[number] as K["value"]]?: K extends { nullable: true }
-        ? K["options"][number]["value"] | "__NULL__"
-        : K["options"][number]["value"]
-}>
+type FiltersToRecord<T extends FilterOptions | undefined> =
+    T extends FilterOptions
+        ? {
+              [K in T[number] as K["value"]]?: K extends { nullable: true }
+                  ? K["options"][number]["value"] | "__NULL__"
+                  : K["options"][number]["value"]
+          }
+        : // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+          {}
 
 type PaginatedQuery<
     F extends FilterOptions | undefined,
-    DS extends string | undefined
+    P extends number | undefined
 > = Prettify<
-    Pick<BasicQuery, "search"> &
-        (DS extends string ? { sort: string } : { sort?: string }) &
-        PaginationQuery &
-        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-        (F extends FilterOptions ? FiltersToRecord<F> : {})
+    Pick<BasicQuery, "search"> & { sort: string } & {
+        page: number
+        perPage: P extends number ? number : number | undefined
+    } & FiltersToRecord<F>
 >
 
 type InternalQuery<
     F extends FilterOptions | undefined,
-    DS extends string | undefined
+    P extends number | undefined
 > = Prettify<
-    Omit<PaginatedQuery<F, DS>, "sort"> &
-        (DS extends undefined
-            ? {
-                  sort?: {
-                      field: string
-                      order: SortOrder
-                  }
-              }
-            : {
-                  sort: {
-                      field: string
-                      order: SortOrder
-                  }
-              })
+    Omit<PaginatedQuery<F, P>, "sort"> & {
+        sort: {
+            field: string
+            order: SortOrder
+        }
+    }
 >
 
 ////
@@ -56,11 +45,11 @@ type InternalQuery<
 type Return<
     F extends FilterOptions,
     S extends SortOptions,
-    DS extends string | undefined
+    P extends number | undefined
 > = {
-    query: PaginatedQuery<F, DS>
+    query: PaginatedQuery<F, P>
     controls: {
-        query: InternalQuery<F, DS>
+        query: InternalQuery<F, P>
         setQuery: (query: {
             search?: string
             filters?: Record<string, string>
@@ -81,19 +70,20 @@ type Return<
 export default function usePaginatedSearch<
     F extends FilterOptions,
     S extends SortOptions,
-    DS extends `${S[number]["value"]}:${SortOrder}` | undefined
+    // DS extends ,
+    P extends number | undefined
 >({
     pageSize,
     options,
     defaultSort,
 }: {
-    pageSize?: number
+    pageSize?: P
     options: {
         filter?: F
         sort: S
     }
-    defaultSort?: DS
-}): Return<F, S, DS> {
+    defaultSort: `${S[number]["value"]}:${SortOrder}`
+}): Return<F, S, P> {
     // search , sort , ...filters
 
     const filters = options.filter
@@ -158,18 +148,18 @@ export default function usePaginatedSearch<
             ...debouncedQuery,
             page,
             ...perPage,
-        } as PaginatedQuery<typeof options.filter, typeof defaultSort>
+        } as PaginatedQuery<typeof options.filter, typeof pageSize>
 
         return result
     }, [debouncedQuery, pageSize, page, options])
 
     return {
-        query: finalQuery as PaginatedQuery<F, DS>,
+        query: finalQuery as PaginatedQuery<F, P>,
         controls: {
             query: {
                 ...query,
                 ...sort,
-            } as InternalQuery<F, DS>,
+            } as InternalQuery<F, P>,
             setQuery: handleSetQuery,
             options,
         },
@@ -218,11 +208,9 @@ export default function usePaginatedSearch<
 //     } = usePaginatedSearch({
 //         options: {
 //             sort: sortOptions,
-//             filter: filters,
+//             // filter: filters,
 //         },
 //         pageSize: 4,
-//         defaults: {
-//             sort: "price:asc",
-//         },
+//         defaultSort: "createdAt:asc",
 //     })
 // }
