@@ -1,43 +1,26 @@
 import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
+import usePaginatedSearch from "@/features/admin/hooks/use-paginated-search"
 import { useCustomers } from "@/features/profile/api/queries"
 import CustomersTable from "@/features/profile/components/customers-table"
-import type { CustomersQuery } from "@/features/profile/query-keys"
-import { useDebounce } from "@/hooks/use-debounce"
-import { useQueryParams } from "@/hooks/use-query-params"
-import type { SortOrder } from "@/types/global-types"
-import { useState } from "react"
 
 const sortOptions = [
     { label: "Orders", value: "orders" },
     { label: "Total Spent", value: "total" },
     { label: "Join Date", value: "createdAt" },
-]
+] as const
 
 export default function AdminCustomersPage() {
-    const [query, setQuery] = useQueryParams<
-        Omit<CustomersQuery, "page" | "perPage">
-    >({
-        search: undefined,
-        sort: "createdAt:desc",
+    const { query, controls, page, setPage } = usePaginatedSearch({
+        options: {
+            sort: sortOptions,
+        },
+        pageSize: 6,
+        defaultSort: "createdAt:desc",
     })
 
-    const [field, order] = query.sort
-        ? (query.sort.split(":") as [string, SortOrder])
-        : (["createdAt", "desc"] as [string, SortOrder])
-
-    const debouncedQuery = useDebounce({
-        state: query,
-    })
-
-    const [page, setPage] = useState(1)
-
-    const { data, isPlaceholderData } = useCustomers({
-        ...debouncedQuery,
-        page,
-        perPage: 6,
-    })
+    const { data, isPlaceholderData } = useCustomers(query)
 
     const totalText = data?.total ? `(${data.total} customers)` : ""
 
@@ -47,22 +30,7 @@ export default function AdminCustomersPage() {
                 title="Customers"
                 description={`Manage your customer relationships ${totalText}`}
             />
-            <FilterControls2
-                options={{ sort: sortOptions }}
-                query={{
-                    search: query.search,
-                    sort: {
-                        field,
-                        order,
-                    },
-                }}
-                setQuery={({ search, sort }) =>
-                    setQuery({
-                        search,
-                        sort: sort ? sort.field + ":" + sort.order : undefined,
-                    })
-                }
-            />
+            <FilterControls2 {...controls} />
             <CustomersTable
                 customers={data?.data ?? []}
                 isUpdating={isPlaceholderData}
