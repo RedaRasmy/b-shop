@@ -20,7 +20,7 @@ type Props = {
     onOpenChange: (open: boolean) => void
     onFilterChange: (key: string, value: string) => void
     options?: FilterOptions
-    activeFilters: Record<string, string>
+    activeFilters: Record<string, string | undefined>
     onClear: () => void
     nullable?: boolean
 }
@@ -76,9 +76,9 @@ export default function FilterDropdown({
                                         value={
                                             activeFilters[filter.value] || ""
                                         }
-                                        onValueChange={(value) =>
+                                        onValueChange={(value) => {
                                             onFilterChange(filter.value, value)
-                                        }
+                                        }}
                                     >
                                         <SelectTrigger className="w-full">
                                             <SelectValue
@@ -90,7 +90,7 @@ export default function FilterDropdown({
                                                 <SelectItem
                                                     className="text-destructive font-semibold"
                                                     key={"__NULL__"}
-                                                    value='__NULL__'
+                                                    value="__NULL__"
                                                 >
                                                     No Category (Deleted)
                                                 </SelectItem>

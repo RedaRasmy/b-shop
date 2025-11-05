@@ -23,7 +23,7 @@ export type SortOptions = readonly Option[]
 
 type Query = {
     search?: string
-    filters?: Record<string, string>
+    filters?: Record<string, string | undefined>
     sort: {
         field: string
         order: SortOrder
@@ -68,9 +68,11 @@ export default function FilterControls2({
                             activeFilters={filters}
                             options={options.filter}
                             onClear={() => setQuery({ filters: {} })}
-                            onFilterChange={([key, value]) =>
+                            onFilterChange={(key, value) =>
                                 setQuery({
-                                    [key]: value,
+                                    filters: {
+                                        [key]: value,
+                                    },
                                 })
                             }
                             onOpenChange={setFiltersOpen}
