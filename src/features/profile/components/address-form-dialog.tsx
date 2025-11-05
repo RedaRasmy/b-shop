@@ -68,7 +68,6 @@ export function AddressFormDialog({
 
     async function handleSubmit(data: AddressFormData) {
         try {
-            console.log("handle submit runs")
             await onSubmit(data)
             form.reset()
         } catch (err) {

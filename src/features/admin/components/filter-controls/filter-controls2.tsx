@@ -39,6 +39,12 @@ type Props = {
     setQuery: (query: Partial<Query>) => void
 }
 
+function undefinedObj(
+    obj: Record<string, string | undefined>
+): Record<string, undefined> {
+    return Object.fromEntries(Object.keys(obj).map((key) => [key, undefined]))
+}
+
 export default function FilterControls2({
     options,
     query: { search = "", filters = {}, sort },
@@ -67,7 +73,9 @@ export default function FilterControls2({
                         <FilterDropdown
                             activeFilters={filters}
                             options={options.filter}
-                            onClear={() => setQuery({ filters: {} })}
+                            onClear={() =>
+                                setQuery({ filters: undefinedObj(filters) })
+                            }
                             onFilterChange={(key, value) =>
                                 setQuery({
                                     filters: {
@@ -118,7 +126,7 @@ export default function FilterControls2({
                                     className="h-auto p-0 ml-1"
                                     onClick={() =>
                                         setQuery({
-                                            filters: { [key]: "" },
+                                            filters: { [key]: undefined },
                                         })
                                     }
                                 >

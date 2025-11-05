@@ -1,6 +1,6 @@
 import fetchOrders, { fetchAdminOrders } from "@/features/order/api/requests"
 import { orderKeys, type AdminOrdersQuery } from "@/features/order/query-keys"
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
 export function useOrders() {
     return useQuery({
@@ -13,5 +13,6 @@ export function useAdminOrders(query?: AdminOrdersQuery) {
     return useQuery({
         queryKey: orderKeys.admin(query),
         queryFn: () => fetchAdminOrders(query),
+        placeholderData : keepPreviousData
     })
 }

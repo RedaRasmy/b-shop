@@ -7,6 +7,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import type { AdminOrder } from "@/features/order/types"
+import { cn } from "@/lib/utils"
 
 type Props = {
     orders?: AdminOrder[]
@@ -17,11 +18,20 @@ type Props = {
         id: number
         status: AdminOrder["status"]
     }) => void
+    isUpdating: boolean
 }
 
-export default function OrdersTable({ orders = [], onUpdate }: Props) {
+export default function OrdersTable({
+    orders = [],
+    onUpdate,
+    isUpdating,
+}: Props) {
     return (
-        <div className="flex flex-col gap-3 overflow-auto">
+        <div
+            className={cn("flex flex-col gap-3 overflow-auto", {
+                "opacity-50": isUpdating,
+            })}
+        >
             {orders.map((order) => (
                 <Card key={order.id} className="">
                     <CardContent className="px-6">

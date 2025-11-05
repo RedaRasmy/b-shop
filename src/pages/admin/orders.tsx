@@ -1,8 +1,8 @@
 import OrdersTable from "@/features/admin/categories/orders/components/orders-table"
-import FilterControls from "@/features/admin/components/filter-controls"
+import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
-import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
+import usePaginatedSearch from "@/features/admin/hooks/use-paginated-search"
 import { useUpdateOrder } from "@/features/order/api/mutations"
 import { useAdminOrders } from "@/features/order/api/queries"
 
@@ -28,15 +28,16 @@ const filterOptions = [
 ] as const
 
 export default function AdminOrdersPage() {
-    // Filter controls
-    const { controls, queryParams, page, setPage } = useFilterControls({
-        filterOptions,
-        sortOptions,
-        pagination: true,
-        perPage: 5,
+    const { query, controls, page, setPage } = usePaginatedSearch({
+        options: {
+            filter: filterOptions,
+            sort: sortOptions,
+        },
+        defaultSort: "createdAt:desc",
+        pageSize: 5,
     })
 
-    const { data } = useAdminOrders(queryParams)
+    const { data, isPlaceholderData } = useAdminOrders(query)
 
     const orders = data?.data
 
@@ -50,12 +51,16 @@ export default function AdminOrdersPage() {
                 title="Orders"
                 description={`Manage customer orders and fulfillment ${totalText}`}
             />
-            <FilterControls {...controls} />
-            <OrdersTable orders={orders} onUpdate={mutate} />
+            <FilterControls2 {...controls} />
+            <OrdersTable
+                orders={orders}
+                onUpdate={mutate}
+                isUpdating={isPlaceholderData}
+            />
             <PaginationControl
                 page={page}
                 setPage={setPage}
-                totalPages={data?.totalPages ?? 0}
+                totalPages={data?.totalPages ?? 1}
             />
         </div>
     )
