@@ -1,8 +1,8 @@
-import type { BasicQuery, Prettify, Status } from "@/types/global-types"
+import type { BasicQuery, Prettify } from "@/types/global-types"
 
 export type AdminCategoriesQuery = Prettify<
     BasicQuery & {
-        status?: Status
+        status?: string
     }
 >
 

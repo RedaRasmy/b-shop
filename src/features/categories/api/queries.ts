@@ -6,7 +6,7 @@ import {
     categoryKeys,
     type AdminCategoriesQuery,
 } from "@/features/categories/query-keys"
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
 export function useCategories() {
     return useQuery({
@@ -19,5 +19,6 @@ export function useAdminCategories(query?: AdminCategoriesQuery) {
     return useQuery({
         queryKey: categoryKeys.admin(query),
         queryFn: () => fetchAdminCategories(query),
+        placeholderData : keepPreviousData
     })
 }

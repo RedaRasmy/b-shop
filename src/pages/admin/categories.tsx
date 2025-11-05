@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button"
 import { CategoryForm } from "@/features/admin/categories/components/category-form"
 import CategoryList from "@/features/admin/categories/components/category-list"
 import { useCategoriesManager } from "@/features/admin/categories/hooks/use-categories-manager"
-import FilterControls from "@/features/admin/components/filter-controls"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import AdminPageHeader from "@/features/admin/components/page-header"
-import { useFilterControls } from "@/features/admin/hooks/use-filter-controls"
 import { Plus } from "lucide-react"
+import useFilters from "@/features/admin/hooks/use-filters"
+import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 
 const filterOptions = [
     {
@@ -17,23 +17,31 @@ const filterOptions = [
             { label: "Inactive", value: "inactive" },
         ],
     },
-]
+] as const
 
 const sortOptions = [
     { label: "Name", value: "name" },
     { label: "Status", value: "status" },
     { label: "Created Date", value: "createdAt" },
     { label: "Updated Date", value: "updatedAt" },
-]
+] as const
 
 export default function AdminCategoriesPage() {
-    const { queryParams, controls } = useFilterControls({
-        filterOptions,
+    const { query, controls } = useFilters({
         sortOptions,
+        filterOptions,
+        defaultSort: "createdAt:desc",
     })
 
-    const { categories, category, addForm, updateForm, confirm, triggers } =
-        useCategoriesManager({ queryParams })
+    const {
+        categories,
+        category,
+        addForm,
+        updateForm,
+        confirm,
+        triggers,
+        isPlaceholderData,
+    } = useCategoriesManager({ queryParams: query })
 
     return (
         <div className="space-y-6 h-full flex flex-col">
@@ -60,8 +68,12 @@ export default function AdminCategoriesPage() {
                     </Button>
                 </CategoryForm>
             </AdminPageHeader>
-            <FilterControls {...controls} />
-            <CategoryList categories={categories} {...triggers} />
+            <FilterControls2 {...controls} />
+            <CategoryList
+                categories={categories}
+                {...triggers}
+                isUpdating={isPlaceholderData}
+            />
         </div>
     )
 }

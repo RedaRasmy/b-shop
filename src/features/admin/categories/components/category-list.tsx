@@ -8,6 +8,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import type { AdminCategory } from "@/features/categories/types"
+import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { Edit, MoreHorizontal, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -16,16 +17,23 @@ type Props = {
     categories: AdminCategory[]
     onUpdate: (id: string) => void
     onDelete: (id: string) => void
+    isUpdating: boolean
 }
 
 export default function CategoryList({
     categories,
     onDelete,
     onUpdate,
+    isUpdating,
 }: Props) {
     return (
         <div
-            className="grid overflow-y-auto gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+            className={cn(
+                "grid overflow-y-auto gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+                {
+                    "opacity-50": isUpdating,
+                }
+            )}
             data-testid="category-list"
         >
             {categories.map(

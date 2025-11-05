@@ -23,7 +23,7 @@ export function useCategoriesManager({
 
     const [selectedId, setSelectedId] = useState<string | null>(null)
 
-    const { data: categories = [], isLoading } = useAdminCategories(queryParams)
+    const { data: categories = [], isLoading ,isPlaceholderData } = useAdminCategories(queryParams)
 
     const selectedCategory = categories.find((c) => c.id === selectedId)
 
@@ -86,6 +86,7 @@ export function useCategoriesManager({
         isAdding,
         isUpdating,
         isDeleting,
+        isPlaceholderData,
         // dialogs
         isAddOpen,
         isUpdateOpen,
