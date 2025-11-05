@@ -44,13 +44,12 @@ export default function useFilters<
     F extends FilterOptions | undefined,
     S extends SortOptions
 >({
-    options,
+    filterOptions,
+    sortOptions,
     defaultSort,
 }: {
-    options: {
-        filter?: F
-        sort: S
-    }
+    filterOptions?: F
+    sortOptions: S
     defaultSort: `${S[number]["value"]}:${SortOrder}`
 }): UseSearchReturn<F, S> {
     // search , sort , ...filters
@@ -62,12 +61,12 @@ export default function useFilters<
             search: { type: "string" },
             sort: { type: "string", default: defaultSort },
         }
-        options.filter?.forEach((filter) => {
+        filterOptions?.forEach((filter) => {
             config[filter.value] = { type: "string" }
         })
 
         return config
-    }, [defaultSort, options.filter])
+    }, [defaultSort, filterOptions])
 
     const [query, setQuery] = useQueryParams2(queryParamsConfig)
 
@@ -113,7 +112,10 @@ export default function useFilters<
         controls: {
             query: internalQuery,
             setQuery: handleSetQuery,
-            options,
+            options: {
+                filter: filterOptions,
+                sort: sortOptions,
+            },
         },
     }
 }
