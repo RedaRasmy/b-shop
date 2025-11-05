@@ -1,7 +1,7 @@
 import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
-import usePaginatedSearch from "@/features/admin/hooks/use-paginated-search"
+import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
 import { useCustomers } from "@/features/profile/api/queries"
 import CustomersTable from "@/features/profile/components/customers-table"
 
@@ -12,7 +12,7 @@ const sortOptions = [
 ] as const
 
 export default function AdminCustomersPage() {
-    const { query, controls, page, setPage } = usePaginatedSearch({
+    const { query, controls, page, setPage } = usePaginatedFilters({
         options: {
             sort: sortOptions,
         },

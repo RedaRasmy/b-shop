@@ -2,7 +2,7 @@ import OrdersTable from "@/features/admin/categories/orders/components/orders-ta
 import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
-import usePaginatedSearch from "@/features/admin/hooks/use-paginated-search"
+import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
 import { useUpdateOrder } from "@/features/order/api/mutations"
 import { useAdminOrders } from "@/features/order/api/queries"
 
@@ -28,7 +28,7 @@ const filterOptions = [
 ] as const
 
 export default function AdminOrdersPage() {
-    const { query, controls, page, setPage } = usePaginatedSearch({
+    const { query, controls, page, setPage } = usePaginatedFilters({
         options: {
             filter: filterOptions,
             sort: sortOptions,

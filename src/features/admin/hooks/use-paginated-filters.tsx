@@ -70,7 +70,7 @@ type Return<
     setPage: (page: number) => void
 }
 
-export default function usePaginatedSearch<
+export default function usePaginatedFilters<
     F extends FilterOptions | undefined,
     S extends SortOptions,
     P extends number | undefined
