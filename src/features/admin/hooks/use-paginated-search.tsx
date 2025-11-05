@@ -209,7 +209,7 @@ export default function usePaginatedSearch<
 //             sort: sortOptions,
 //             filter: filters,
 //         },
-//         pageSize: 4,
+//         pageSize: 5,
 //         defaultSort: "createdAt:asc",
 //     })
 // }
