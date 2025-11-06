@@ -21,71 +21,96 @@ export type FilterOptions = readonly Readonly<{
 
 export type SortOptions = readonly Option[]
 
-type Props = {
-    searchTerm: string
-    onSearchChange: (value: string) => void
-    filterOptions?: FilterOptions
-    activeFilters: Record<string, string>
-    onFilterChange: (key: string, value: string) => void
-    onClearFilters: () => void
-    sortBy: string
-    sortOrder: SortOrder
-    onSortChange: (field: string, order: SortOrder) => void
-    sortOptions: SortOptions
+type Query = {
+    search?: string
+    filters?: Record<string, string | undefined>
+    sort: {
+        field: string
+        order: SortOrder
+    }
 }
 
-export default function FilterControls({
-    activeFilters,
-    onClearFilters,
-    onFilterChange,
-    onSearchChange,
-    onSortChange,
-    searchTerm,
-    sortBy,
-    sortOptions,
-    sortOrder,
-    filterOptions = [],
+type Props = {
+    options: {
+        filter?: FilterOptions
+        sort: SortOptions
+    }
+    query: Query
+    setQuery: (query: Partial<Query>) => void
+}
+
+function undefinedObj(
+    obj: Record<string, string | undefined>
+): Record<string, undefined> {
+    return Object.fromEntries(Object.keys(obj).map((key) => [key, undefined]))
+}
+
+export default function Filters({
+    options,
+    query: { search = "", filters = {}, sort },
+    setQuery,
 }: Props) {
     const [filtersOpen, setFiltersOpen] = useState(false)
 
-    const activeFilterCount =
-        Object.values(activeFilters).filter(Boolean).length
+    const activeFilterCount = Object.values(filters).filter(Boolean).length
 
     return (
         <div className="space-y-4">
-            {/* Search and Filter Controls */}
             <div className="flex flex-col sm:flex-row gap-4">
+                {/* Search */}
                 <AdminSearchInput
-                    onChange={onSearchChange}
-                    value={searchTerm}
+                    onChange={(search) =>
+                        setQuery({
+                            search,
+                        })
+                    }
+                    value={search}
                 />
 
                 <div className="flex gap-2">
-                    <FilterDropdown
-                        activeFilters={activeFilters}
-                        options={filterOptions}
-                        onClear={onClearFilters}
-                        onFilterChange={onFilterChange}
-                        onOpenChange={setFiltersOpen}
-                        open={filtersOpen}
-                    />
+                    {/* Filter */}
+                    {options.filter && (
+                        <FilterDropdown
+                            activeFilters={filters}
+                            options={options.filter}
+                            onClear={() =>
+                                setQuery({ filters: undefinedObj(filters) })
+                            }
+                            onFilterChange={(key, value) =>
+                                setQuery({
+                                    filters: {
+                                        [key]: value,
+                                    },
+                                })
+                            }
+                            onOpenChange={setFiltersOpen}
+                            open={filtersOpen}
+                        />
+                    )}
 
                     {/* Sort */}
                     <SortDropdown
-                        onChange={onSortChange}
-                        sortBy={sortBy}
-                        order={sortOrder}
-                        sortOptions={sortOptions}
+                        onChange={(field, order) => {
+                            setQuery({
+                                sort: {
+                                    field,
+                                    order,
+                                },
+                            })
+                        }}
+                        sortBy={sort.field}
+                        order={sort.order}
+                        sortOptions={options.sort}
                     />
                 </div>
             </div>
 
             {/* Active Filters */}
-            {activeFilterCount > 0 && (
+            {activeFilterCount > 0 && options.filter && (
                 <div className="flex flex-wrap gap-2">
-                    {Object.entries(activeFilters).map(([key, value]) => {
+                    {Object.entries(filters).map(([key, value]) => {
                         if (!value) return null
-                        const filter = filterOptions.find(
+                        const filter = options.filter?.find(
                             (f) => f.value === key
                         )
                         return (
@@ -99,7 +124,11 @@ export default function FilterControls({
                                     variant="ghost"
                                     size="sm"
                                     className="h-auto p-0 ml-1"
-                                    onClick={() => onFilterChange(key, "")}
+                                    onClick={() =>
+                                        setQuery({
+                                            filters: { [key]: undefined },
+                                        })
+                                    }
                                 >
                                     <X className="h-3 w-3" />
                                 </Button>

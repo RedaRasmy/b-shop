@@ -1,4 +1,4 @@
-import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
+import Filters from "@/features/admin/components/filter-controls"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
 import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
@@ -28,7 +28,7 @@ export default function AdminCustomersPage() {
                 title="Customers"
                 description={`Manage your customer relationships ${totalText}`}
             />
-            <FilterControls2 {...controls} />
+            <Filters {...controls} />
             <CustomersTable
                 customers={data?.data ?? []}
                 isUpdating={isPlaceholderData}

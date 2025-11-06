@@ -6,7 +6,7 @@ import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-
 import AdminPageHeader from "@/features/admin/components/page-header"
 import { Plus } from "lucide-react"
 import useFilters from "@/features/admin/hooks/use-filters"
-import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
+import Filters from "@/features/admin/components/filter-controls"
 
 const filterOptions = [
     {
@@ -68,7 +68,7 @@ export default function AdminCategoriesPage() {
                     </Button>
                 </CategoryForm>
             </AdminPageHeader>
-            <FilterControls2 {...controls} />
+            <Filters {...controls} />
             <CategoryList
                 categories={categories}
                 {...triggers}

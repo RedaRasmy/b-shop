@@ -9,7 +9,7 @@ import { Plus } from "lucide-react"
 import { useMemo } from "react"
 import { useAdminCategories } from "@/features/categories/api/queries"
 import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
-import FilterControls2 from "@/features/admin/components/filter-controls/filter-controls2"
+import Filters from "@/features/admin/components/filter-controls"
 
 const sortOptions = [
     { label: "Name", value: "name" },
@@ -89,7 +89,7 @@ export default function AdminProductsPage() {
                     </Button>
                 </ProductForm>
             </AdminPageHeader>
-            <FilterControls2 {...controls} />
+            <Filters {...controls} />
             <ProductsTable
                 products={products}
                 {...triggers}
