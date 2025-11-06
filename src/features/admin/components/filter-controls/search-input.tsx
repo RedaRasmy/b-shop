@@ -8,6 +8,7 @@ type Props = {
 }
 
 export default function AdminSearchInput({ value, onChange }: Props) {
+    // TODO : better solution
     const [text, setText] = useState(value)
 
     useEffect(() => {
