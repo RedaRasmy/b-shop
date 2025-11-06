@@ -26,6 +26,12 @@ export function useDialogs() {
         openDelete: (id: string) => setDeletingId(id),
         closeDelete: () => setDeletingId(null),
 
+        reset: () => {
+            setAddingNew(false)
+            setEditingId(null)
+            setDeletingId(null)
+        },
+
         // setters:
         setAddingNew,
         setEditingId,
