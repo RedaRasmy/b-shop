@@ -3,7 +3,7 @@ import type {
     SortOptions,
 } from "@/features/admin/components/filter-controls"
 import { useDebounce } from "@/hooks/use-debounce"
-import { useQueryParams2 } from "@/hooks/use-query-params"
+import { useQueryParams } from "@/hooks/use-query-params"
 import type { Prettify, SortOrder } from "@/types/global-types"
 import { useCallback, useMemo, useState } from "react"
 
@@ -86,7 +86,7 @@ export default function usePaginatedFilters<
         [defaultSort, filterOptions]
     )
 
-    const [query, setQuery] = useQueryParams2(queryParamsConfig)
+    const [query, setQuery] = useQueryParams(queryParamsConfig)
 
     const debouncedQuery = useDebounce({
         state: query,
