@@ -38,7 +38,7 @@ export default function useProductsManager({
     }
 
     // Get Products
-    const { data, isLoading } = useAdminProducts(finalQueryParams)
+    const { data, isLoading , isPlaceholderData } = useAdminProducts(finalQueryParams)
 
     if (data?.total && data.totalPages) {
         totalPagesRef.current = data.totalPages
@@ -153,5 +153,6 @@ export default function useProductsManager({
         id: selectedId,
         total: totalRef.current,
         totalPages: totalPagesRef.current,
+        isPlaceholderData
     }
 }

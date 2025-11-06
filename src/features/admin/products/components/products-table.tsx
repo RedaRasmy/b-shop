@@ -15,6 +15,7 @@ import {
     TableCell,
 } from "@/components/ui/table"
 import type { AdminProduct } from "@/features/products/types"
+import { cn } from "@/lib/utils"
 import type { Prettify } from "@/types/global-types"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -25,9 +26,15 @@ type Props = {
     products: TableProduct[]
     onUpdate: (id: string) => void
     onDelete: (id: string) => void
+    isUpdating: boolean
 }
 
-export default function ProductsTable({ products, onUpdate, onDelete }: Props) {
+export default function ProductsTable({
+    products,
+    onUpdate,
+    onDelete,
+    isUpdating,
+}: Props) {
     //// Columns per screen :
     // +xl : 7 (all)
     // +lg : 6 (stock-status removed)
@@ -36,7 +43,11 @@ export default function ProductsTable({ products, onUpdate, onDelete }: Props) {
     // else (in phone) : name , price , actions
 
     return (
-        <Table className="">
+        <Table
+            className={cn({
+                "opacity-50": isUpdating,
+            })}
+        >
             <TableHeader>
                 <TableRow>
                     <TableHead>Name</TableHead>

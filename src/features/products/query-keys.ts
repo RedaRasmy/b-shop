@@ -1,5 +1,4 @@
 import type {
-    Status,
     Prettify,
     BasicQuery,
     PaginationQuery,
@@ -8,8 +7,8 @@ import type {
 export type AdminProductsQuery = Prettify<
     BasicQuery &
         PaginationQuery & {
-            categoryId?: string 
-            status?: Status
+            categoryId?: string
+            status?: string
         }
 >
 

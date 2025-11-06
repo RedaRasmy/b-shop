@@ -8,7 +8,11 @@ import {
     type AdminProductsQuery,
     type ProductsQuery,
 } from "@/features/products/query-keys"
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import {
+    keepPreviousData,
+    useInfiniteQuery,
+    useQuery,
+} from "@tanstack/react-query"
 
 // Customer
 
@@ -46,5 +50,6 @@ export function useAdminProducts(query?: AdminProductsQuery) {
     return useQuery({
         queryKey: productKeys.admin(query),
         queryFn: () => fetchAdminProducts(query),
+        placeholderData: keepPreviousData,
     })
 }
