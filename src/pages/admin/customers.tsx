@@ -13,9 +13,7 @@ const sortOptions = [
 
 export default function AdminCustomersPage() {
     const { query, controls, page, setPage } = usePaginatedFilters({
-        options: {
-            sort: sortOptions,
-        },
+        sortOptions,
         pageSize: 6,
         defaultSort: "createdAt:desc",
     })

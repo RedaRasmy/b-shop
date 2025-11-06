@@ -8,22 +8,10 @@ import type { Prettify, SortOrder } from "@/types/global-types"
 import { useCallback, useMemo, useState } from "react"
 
 // Helper Types
-type FiltersToRecord<T extends FilterOptions | undefined> =
-    T extends FilterOptions
-        ? {
-              [K in T[number] as K["value"]]?: K extends { nullable: true }
-                  ? K["options"][number]["value"] | "__NULL__"
-                  : K["options"][number]["value"]
-          }
-        : // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-          {}
 
-// type Query<F extends FilterOptions | undefined> = Prettify<
-//     {
-//         search?: string
-//         sort: string
-//     } & FiltersToRecord<F>
-// >
+type FilterQuery<F extends FilterOptions | undefined> = F extends FilterOptions
+    ? { [K in F[number]["value"]]?: string }
+    : Record<never, never>
 
 type PaginatedQuery<
     F extends FilterOptions | undefined,
@@ -33,8 +21,8 @@ type PaginatedQuery<
         search?: string
         sort: string
         page: number
-        perPage: P extends number ? number : number | undefined
-    } & FiltersToRecord<F>
+        perPage: P extends number ? number : undefined
+    } & FilterQuery<F>
 >
 
 type InternalQuery<F extends FilterOptions | undefined> = {
@@ -43,14 +31,8 @@ type InternalQuery<F extends FilterOptions | undefined> = {
         field: string
         order: SortOrder
     }
-    filters?: FiltersToRecord<F>
+    filters?: FilterQuery<F>
 }
-
-type SetQuery<F extends FilterOptions | undefined> = (
-    query: Partial<InternalQuery<F>>
-) => void
-
-////
 
 type Return<
     F extends FilterOptions | undefined,
@@ -60,7 +42,7 @@ type Return<
     query: PaginatedQuery<F, P>
     controls: {
         query: InternalQuery<F>
-        setQuery: SetQuery<F>
+        setQuery: (query: Partial<InternalQuery<F>>) => void
         options: {
             filter?: Readonly<F>
             sort: S
@@ -76,14 +58,13 @@ export default function usePaginatedFilters<
     P extends number | undefined
 >({
     pageSize,
-    options,
+    filterOptions,
+    sortOptions,
     defaultSort,
 }: {
     pageSize?: P
-    options: {
-        filter?: F
-        sort: S
-    }
+    filterOptions?: F
+    sortOptions: S
     defaultSort: `${S[number]["value"]}:${SortOrder}`
 }): Return<F, S, P> {
     // search , sort , ...filters
@@ -95,14 +76,14 @@ export default function usePaginatedFilters<
             ({
                 search: { type: "string" },
                 sort: { type: "string", default: defaultSort },
-                ...(options.filter
-                    ? options.filter.reduce((acc, filter) => {
+                ...(filterOptions
+                    ? filterOptions.reduce((acc, filter) => {
                           acc[filter.value] = { type: "string" }
                           return acc
                       }, {} as Record<string, { type: "string" }>)
                     : {}),
             } as const),
-        [defaultSort, options.filter]
+        [defaultSort, filterOptions]
     )
 
     const [query, setQuery] = useQueryParams2(queryParamsConfig)
@@ -160,16 +141,19 @@ export default function usePaginatedFilters<
         controls: {
             query: internalQuery,
             setQuery: handleSetQuery,
-            options,
+            options: {
+                filter: filterOptions,
+                sort: sortOptions,
+            },
         },
         page,
         setPage,
     }
 }
 
-// TEST
+// // TEST
 
-// const filters = [
+// const filterOptions = [
 //     {
 //         label: "Status",
 //         value: "status",
@@ -204,11 +188,9 @@ export default function usePaginatedFilters<
 //         controls: { query, options, setQuery },
 //         page,
 //         setPage,
-//     } = usePaginatedSearch({
-//         options: {
-//             sort: sortOptions,
-//             filter: filters,
-//         },
+//     } = usePaginatedFilters({
+//         filterOptions,
+//         sortOptions,
 //         pageSize: 5,
 //         defaultSort: "createdAt:asc",
 //     })

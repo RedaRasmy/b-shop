@@ -29,10 +29,8 @@ const filterOptions = [
 
 export default function AdminOrdersPage() {
     const { query, controls, page, setPage } = usePaginatedFilters({
-        options: {
-            filter: filterOptions,
-            sort: sortOptions,
-        },
+        filterOptions,
+        sortOptions,
         defaultSort: "createdAt:desc",
         pageSize: 5,
     })
