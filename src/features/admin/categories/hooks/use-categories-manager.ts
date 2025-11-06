@@ -1,80 +1,64 @@
-import { useQueryClient } from "@tanstack/react-query"
-import { useMutation } from "@tanstack/react-query"
-import { useState } from "react"
 import { type AdminCategoriesQuery } from "@/features/categories/query-keys"
-import {
-    createCategory,
-    deleteCategory,
-    updateCategory,
-} from "@/features/categories/api/requests"
 import type { CategoryFormData } from "@/features/categories/validation"
 import { useAdminCategories } from "@/features/categories/api/queries"
+import { useDialogs } from "@/features/admin/hooks/use-dialogs"
+import {
+    useCreateCategory,
+    useDeleteCategory,
+    useUpdateCategory,
+} from "@/features/categories/api/mutations"
 
 export function useCategoriesManager({
     queryParams,
 }: {
     queryParams?: AdminCategoriesQuery
 }) {
-    const queryClient = useQueryClient()
+    const dialogs = useDialogs()
 
-    const [isAddOpen, setIsAddOpen] = useState(false)
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-    const [isUpdateOpen, setIsUpdateOpen] = useState(false)
+    const {
+        data: categories = [],
+        isLoading,
+        isPlaceholderData,
+    } = useAdminCategories(queryParams)
 
-    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const selectedCategory = categories.find(
+        (c) => c.id === (dialogs.editingId || dialogs.deletingId)
+    )
 
-    const { data: categories = [], isLoading ,isPlaceholderData } = useAdminCategories(queryParams)
+    /// CREATE
 
-    const selectedCategory = categories.find((c) => c.id === selectedId)
+    const { mutateAsync: addMutation, isPending: isAdding } =
+        useCreateCategory()
 
-    const { mutateAsync: addMutation, isPending: isAdding } = useMutation({
-        mutationFn: createCategory,
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["categories"],
-            })
-            setIsAddOpen(false)
-            setSelectedId(null)
-        },
-    })
-
-    const handleAdd = async (data: CategoryFormData) => await addMutation(data)
-
-    const { mutateAsync: deleteMutation, isPending: isDeleting } = useMutation({
-        mutationFn: deleteCategory,
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["categories"],
-            })
-            setIsDeleteOpen(false)
-            setSelectedId(null)
-        },
-    })
-
-    async function handleDelete() {
-        await deleteMutation(selectedId!)
+    const handleAdd = async (data: CategoryFormData) => {
+        await addMutation(data)
+        dialogs.reset()
     }
 
-    const { mutateAsync: updateMutation, isPending: isUpdating } = useMutation({
-        mutationFn: ({ id, data }: { id: string; data: CategoryFormData }) =>
-            updateCategory(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["categories"],
-            })
-            setIsUpdateOpen(false)
-            setSelectedId(null)
-        },
-    })
+    /// UPDATE
 
-    const handleUpdate = async (data: CategoryFormData) =>
+    const { mutateAsync: updateMutation, isPending: isUpdating } =
+        useUpdateCategory()
+
+    const handleUpdate = async (data: CategoryFormData) => {
         await updateMutation({
-            id: selectedId!,
+            id: dialogs.editingId!,
             data,
         })
+        dialogs.reset()
+    }
+
+    /// DELETE
+
+    const { mutateAsync: deleteMutation, isPending: isDeleting } =
+        useDeleteCategory()
+
+    async function handleDelete() {
+        await deleteMutation(dialogs.deletingId!)
+        dialogs.reset()
+    }
 
     return {
-        select: setSelectedId,
         category: selectedCategory,
         // actions
         categories,
@@ -88,12 +72,12 @@ export function useCategoriesManager({
         isDeleting,
         isPlaceholderData,
         // dialogs
-        isAddOpen,
-        isUpdateOpen,
-        isDeleteOpen,
+        isAddOpen: dialogs.isAddOpen,
+        isUpdateOpen: dialogs.isEditOpen,
+        isDeleteOpen: dialogs.isDeleteOpen,
         updateForm: {
-            open: isUpdateOpen,
-            onOpenChange: setIsUpdateOpen,
+            open: dialogs.isEditOpen,
+            onOpenChange: dialogs.closeEdit,
             title: "Edit Category",
             description: "Update category information.",
             buttonText: "Update Category",
@@ -103,8 +87,8 @@ export function useCategoriesManager({
             initialData: selectedCategory,
         },
         addForm: {
-            open: isAddOpen,
-            onOpenChange: setIsAddOpen,
+            open: dialogs.isAddOpen,
+            onOpenChange: dialogs.setAddingNew,
             title: "Add Category",
             description:
                 "Add a new product category to organize your inventory.",
@@ -118,17 +102,15 @@ export function useCategoriesManager({
             description: `Are you sure you want to delete "${selectedCategory?.name}"? This action cannot be undone.`,
             onConfirm: handleDelete,
             isLoading: isDeleting,
-            open: isDeleteOpen,
-            onOpenChange: setIsDeleteOpen,
+            open: dialogs.isDeleteOpen,
+            onOpenChange: dialogs.closeDelete,
         },
         triggers: {
-            onDelete: (id: string) => {
-                setSelectedId(id)
-                setIsDeleteOpen(true)
-            },
             onUpdate: (id: string) => {
-                setSelectedId(id)
-                setIsUpdateOpen(true)
+                dialogs.setEditingId(id)
+            },
+            onDelete: (id: string) => {
+                dialogs.setDeletingId(id)
             },
         },
     }
