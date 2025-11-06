@@ -1,5 +1,5 @@
 import type { Prettify } from "@/types/global-types"
-import { useCallback, useState } from "react"
+import { useCallback, useMemo } from "react"
 import { useSearchParams } from "react-router-dom"
 
 type ParamType = "string" | "number" | "boolean"
@@ -29,7 +29,7 @@ type Query<P extends Params> = {
 export function useQueryParams<P extends Params>(params: P) {
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const [localQuery, setLocalQuery] = useState(() => {
+    const query = useMemo(() => {
         const entries = Object.entries(params).map(([key, value]) => {
             const urlValue = searchParams.get(key)
             if (urlValue) {
@@ -54,25 +54,26 @@ export function useQueryParams<P extends Params>(params: P) {
         })
 
         return Object.fromEntries(entries) as Prettify<Query<P>>
-    })
+    }, [searchParams, params])
 
     const setQuery = useCallback(
         (updates: Prettify<Partial<Query<P>>>) => {
-            setLocalQuery((prev) => ({ ...prev, ...updates }))
-            const next = new URLSearchParams(searchParams)
-            for (const [key, val] of Object.entries(updates)) {
-                if (val === undefined || val === "") {
-                    next.delete(key)
-                } else {
-                    next.set(key, String(val))
+            setSearchParams((prev) => {
+                const next = new URLSearchParams(prev)
+                for (const [key, val] of Object.entries(updates)) {
+                    if (val === undefined || val === "") {
+                        next.delete(key)
+                    } else {
+                        next.set(key, String(val))
+                    }
                 }
-            }
-            setSearchParams(next)
+                return next
+            })
         },
-        [searchParams, setSearchParams]
+        [setSearchParams]
     )
 
-    return [localQuery, setQuery] as const
+    return [query, setQuery] as const
 }
 
 // test
