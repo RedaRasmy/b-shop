@@ -53,6 +53,7 @@ export default function AdminProductsPage() {
         filterOptions,
         sortOptions,
         defaultSort: "createdAt:desc",
+        pageSize: 15,
     })
 
     const {

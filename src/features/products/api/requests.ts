@@ -38,10 +38,7 @@ export async function createProduct(formData: FormData) {
 
 export async function fetchAdminProducts(params: AdminProductsQuery = {}) {
     const res = await axiosInstance.get("/admin/products", {
-        params: {
-            ...params,
-            perPage: 15,
-        },
+        params,
     })
     return res.data as PaginatedResult<AdminProduct[]>
 }
