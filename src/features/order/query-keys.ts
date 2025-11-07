@@ -2,7 +2,7 @@ export type AdminOrdersQuery = {
     page?: number
     perPage?: number
     search?: string
-    status?: string
+    status?: string | null
     sort?: string
 }
 

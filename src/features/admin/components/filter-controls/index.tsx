@@ -23,7 +23,7 @@ export type SortOptions = readonly Option[]
 
 type Query = {
     search?: string
-    filters?: Record<string, string | undefined>
+    filters?: Record<string, string | null | undefined>
     sort: {
         field: string
         order: SortOrder
@@ -39,10 +39,8 @@ type Props = {
     setQuery: (query: Partial<Query>) => void
 }
 
-function undefinedObj(
-    obj: Record<string, string | undefined>
-): Record<string, undefined> {
-    return Object.fromEntries(Object.keys(obj).map((key) => [key, undefined]))
+function nullObj(obj: Record<string, string | null | undefined>): Record<string, null> {
+    return Object.fromEntries(Object.keys(obj).map((key) => [key, null]))
 }
 
 export default function Filters({
@@ -74,7 +72,7 @@ export default function Filters({
                             activeFilters={filters}
                             options={options.filter}
                             onClear={() =>
-                                setQuery({ filters: undefinedObj(filters) })
+                                setQuery({ filters: nullObj(filters) })
                             }
                             onFilterChange={(key, value) =>
                                 setQuery({
@@ -126,7 +124,7 @@ export default function Filters({
                                     className="h-auto p-0 ml-1"
                                     onClick={() =>
                                         setQuery({
-                                            filters: { [key]: undefined },
+                                            filters: { [key]: null },
                                         })
                                     }
                                 >

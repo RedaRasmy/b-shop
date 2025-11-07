@@ -3,14 +3,14 @@ import type {
     SortOptions,
 } from "@/features/admin/components/filter-controls"
 import { useDebounce } from "@/hooks/use-debounce"
-import { useQueryParams } from "@/hooks/use-query-params"
 import type { Prettify, SortOrder } from "@/types/global-types"
+import { parseAsString, useQueryStates } from "nuqs"
 import { useCallback, useMemo, useState } from "react"
 
 // Helper Types
 
 type FilterQuery<F extends FilterOptions | undefined> = F extends FilterOptions
-    ? { [K in F[number]["value"]]?: string }
+    ? { [K in F[number]["value"]]?: string | null }
     : Record<never, never>
 
 type PaginatedQuery<
@@ -71,22 +71,26 @@ export default function usePaginatedFilters<
 
     console.log("runs")
 
-    const queryParamsConfig = useMemo(
-        () =>
-            ({
-                search: { type: "string" },
-                sort: { type: "string", default: defaultSort },
-                ...(filterOptions
-                    ? filterOptions.reduce((acc, filter) => {
-                          acc[filter.value] = { type: "string" }
-                          return acc
-                      }, {} as Record<string, { type: "string" }>)
-                    : {}),
-            } as const),
-        [defaultSort, filterOptions]
-    )
+    const filters = filterOptions ? filterOptions.map((f) => f.value) : []
 
-    const [query, setQuery] = useQueryParams(queryParamsConfig)
+    const filterParsers = filters.reduce((acc, key) => {
+        acc[key] = parseAsString
+        return acc
+    }, {} as Record<string, unknown>)
+
+    const [query, setQuery] = useQueryStates(
+        {
+            search: parseAsString,
+            sort: parseAsString.withDefault(defaultSort),
+            ...filterParsers,
+        },
+        {
+            limitUrlUpdates: {
+                method: "throttle",
+                timeMs: 300,
+            },
+        }
+    )
 
     const debouncedQuery = useDebounce({
         state: query,
@@ -95,35 +99,29 @@ export default function usePaginatedFilters<
     /// Build Internal Query
 
     const internalQuery = useMemo(() => {
-        const { search, sort, ...queryFilters } = query
-
-        const [field, order] = sort
-            ? (query.sort.split(":") as [string, SortOrder])
-            : (defaultSort.split(":") as [string, SortOrder])
-
+        const { search, sort, ...filters } = query
+        const [field, order] = sort.split(":") as [string, SortOrder]
         return {
-            search,
+            search: search ?? "",
             sort: { field, order },
-            filters: queryFilters,
+            filters: filters as FilterQuery<F>,
         } as InternalQuery<F>
-    }, [query, defaultSort])
+    }, [query])
+
+    const handleSetQuery = useCallback(
+        ({ search, sort, filters }: Partial<InternalQuery<F>>) => {
+            setQuery({
+                ...(search !== undefined && { search: search || null }),
+                ...(sort && { sort: `${sort.field}:${sort.order}` }),
+                ...filters,
+            })
+        },
+        [setQuery]
+    )
 
     ///
 
     const [page, setPage] = useState(1)
-
-    const handleSetQuery = useCallback(
-        ({ search, sort, filters }: Partial<InternalQuery<F>>) => {
-            setPage(1)
-            setQuery({
-                ...query,
-                search: search === undefined ? query.search : search,
-                sort: sort ? sort.field + ":" + sort.order : query.sort,
-                ...filters,
-            })
-        },
-        [setQuery, query]
-    )
 
     const finalQuery = useMemo(() => {
         const result = {

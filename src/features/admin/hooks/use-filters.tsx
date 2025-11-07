@@ -3,12 +3,12 @@ import type {
     SortOptions,
 } from "@/features/admin/components/filter-controls"
 import { useDebounce } from "@/hooks/use-debounce"
-import { useQueryParams } from "@/hooks/use-query-params"
 import type { Prettify, SortOrder } from "@/types/global-types"
 import { useCallback, useMemo } from "react"
+import { parseAsString, useQueryStates } from "nuqs"
 
 type FilterQuery<F extends FilterOptions | undefined> = F extends FilterOptions
-    ? { [K in F[number]["value"]]?: string }
+    ? { [K in F[number]["value"]]?: string | null }
     : Record<never, never>
 
 type QueryParams<F extends FilterOptions | undefined> = {
@@ -54,48 +54,50 @@ export default function useFilters<
 }): UseSearchReturn<F, S> {
     // search , sort , ...filters
 
-    console.log("runs")
+    const filters = filterOptions ? filterOptions.map((f) => f.value) : []
 
-    const queryParamsConfig = useMemo(() => {
-        const config: Record<string, { type: "string"; default?: string }> = {
-            search: { type: "string" },
-            sort: { type: "string", default: defaultSort },
+    const filterParsers = filters.reduce((acc, key) => {
+        acc[key] = parseAsString
+        return acc
+    }, {} as Record<string, unknown>)
+
+    const [query, setQuery] = useQueryStates(
+        {
+            search: parseAsString,
+            sort: parseAsString.withDefault(defaultSort),
+            ...filterParsers,
+        },
+        {
+            limitUrlUpdates: {
+                method: "throttle",
+                timeMs: 300,
+            },
         }
-        filterOptions?.forEach((filter) => {
-            config[filter.value] = { type: "string" }
-        })
-
-        return config
-    }, [defaultSort, filterOptions])
-
-    const [query, setQuery] = useQueryParams(queryParamsConfig)
+    )
 
     const debouncedQuery = useDebounce({
         state: query,
     })
 
-    const { search, sort, ...filters } = query
-    const sortString = sort || defaultSort
-    const [field, order] = sortString.split(":") as [string, SortOrder]
-
-    const internalQuery: InternalQuery<F> = {
-        search: search,
-        sort: { field, order },
-        filters: filters as FilterQuery<F>,
-    }
-
-    ///
+    const internalQuery = useMemo(() => {
+        const { search, sort, ...filters } = query
+        const [field, order] = sort.split(":") as [string, SortOrder]
+        return {
+            search: search ?? "",
+            sort: { field, order },
+            filters: filters as FilterQuery<F>,
+        } as InternalQuery<F>
+    }, [query])
 
     const handleSetQuery = useCallback(
         ({ search, sort, filters }: Partial<InternalQuery<F>>) => {
             setQuery({
-                ...query,
-                search: search === undefined ? query.search : search,
-                sort: sort ? `${sort.field}:${sort.order}` : query.sort,
+                ...(search !== undefined && { search: search || null }),
+                ...(sort && { sort: `${sort.field}:${sort.order}` }),
                 ...filters,
             })
         },
-        [setQuery, query]
+        [setQuery]
     )
 
     const finalQuery = useMemo(() => {
@@ -122,7 +124,7 @@ export default function useFilters<
 
 // // TEST
 
-// const filters = [
+// const filterOptions = [
 //     {
 //         label: "Status",
 //         value: "status",
@@ -156,10 +158,9 @@ export default function useFilters<
 //         query: q,
 //         controls: { query, options, setQuery },
 //     } = useFilters({
-//         options: {
-//             sort: sortOptions,
-//             filter: filters,
-//         },
+//         filterOptions,
+//         sortOptions,
 //         defaultSort: "status:asc",
 //     })
+
 // }

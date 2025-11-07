@@ -7,8 +7,8 @@ import type {
 export type AdminProductsQuery = Prettify<
     BasicQuery &
         PaginationQuery & {
-            categoryId?: string
-            status?: string
+            categoryId?: string | null
+            status?: string | null
         }
 >
 

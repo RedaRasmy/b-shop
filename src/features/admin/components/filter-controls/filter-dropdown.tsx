@@ -20,7 +20,7 @@ type Props = {
     onOpenChange: (open: boolean) => void
     onFilterChange: (key: string, value: string) => void
     options?: FilterOptions
-    activeFilters: Record<string, string | undefined>
+    activeFilters: Record<string, string | null | undefined>
     onClear: () => void
     nullable?: boolean
 }

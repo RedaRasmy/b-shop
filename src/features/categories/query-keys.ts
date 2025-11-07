@@ -2,7 +2,7 @@ import type { BasicQuery, Prettify } from "@/types/global-types"
 
 export type AdminCategoriesQuery = Prettify<
     BasicQuery & {
-        status?: string
+        status?: string | null
     }
 >
 
