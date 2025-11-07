@@ -25,7 +25,7 @@ export default function useProductsManager({
         categoryId:
             category === "__NULL__"
                 ? "__NULL__" // for deleted categories
-                : categories.find((c) => c.name === category)?.id,
+                : categories.find((c) => c.slug === category)?.id,
     }
 
     // Get Products
