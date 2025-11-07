@@ -78,6 +78,13 @@ export default function useProductsManager({
             ?.name,
     }))
 
+    const initialData = selectedProduct
+        ? {
+              ...selectedProduct,
+              price: Number(selectedProduct?.price),
+          }
+        : undefined
+
     return {
         triggers: {
             onUpdate: dialogs.setEditingId,
@@ -102,7 +109,7 @@ export default function useProductsManager({
             buttonText: "Update Product",
             onSubmit: handleUpdate,
             isSubmitting: isUpdating,
-            initialData: selectedProduct,
+            initialData,
         },
         confirm: {
             title: "Delete Product",
