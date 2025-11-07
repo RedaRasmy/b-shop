@@ -38,3 +38,11 @@ export type Mutable<T> = {
 export type DeepMutable<T> = T extends object
     ? { -readonly [K in keyof T]: DeepMutable<T[K]> }
     : T
+
+export type RenameKey<
+    T extends Record<string, unknown>,
+    Old extends keyof T,
+    New extends string
+> = Prettify<{
+    [K in keyof T as K extends Old ? New : K]: T[K]
+}>

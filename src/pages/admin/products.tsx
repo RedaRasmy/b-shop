@@ -61,7 +61,8 @@ export default function AdminProductsPage() {
         updateForm,
         confirm,
         products,
-        id,
+        updatingId,
+        deletingId,
         triggers,
         total,
         totalPages,
@@ -73,11 +74,8 @@ export default function AdminProductsPage() {
 
     return (
         <div className="space-y-6 h-full flex flex-col">
-            <ProductForm key={"update-form-dialog" + id} {...updateForm} />
-            <DeleteConfirmDialog
-                key={"delete-confirm-dialog" + id}
-                {...confirm}
-            />
+            <ProductForm key={updatingId ?? undefined} {...updateForm} />
+            <DeleteConfirmDialog key={deletingId ?? undefined} {...confirm} />
             <AdminPageHeader
                 title="Products"
                 description={`Manage your product inventory (${total} products) `}
@@ -98,7 +96,7 @@ export default function AdminProductsPage() {
             <ProductsPagination
                 page={page}
                 setPage={setPage}
-                totalPages={totalPages}
+                totalPages={totalPages ?? 1}
             />
         </div>
     )

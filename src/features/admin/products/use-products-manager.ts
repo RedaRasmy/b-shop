@@ -1,31 +1,22 @@
-import { useQueryClient } from "@tanstack/react-query"
-import { useMutation } from "@tanstack/react-query"
-import { useRef, useState } from "react"
 import { type AdminProductsQuery } from "@/features/products/query-keys"
-import {
-    createProduct,
-    deleteProduct,
-    updateProduct,
-} from "@/features/products/api/requests"
 import type { AdminCategory } from "@/features/categories/types"
 import { useAdminProducts } from "@/features/products/api/queries"
+import {
+    useCreateProduct,
+    useDeleteProduct,
+    useUpdateProduct,
+} from "@/features/products/api/mutations"
+import { useDialogs } from "@/features/admin/hooks/use-dialogs"
+import type { RenameKey } from "@/types/global-types"
 
 export default function useProductsManager({
     queryParams = {},
     categories,
 }: {
-    queryParams?: Omit<AdminProductsQuery, "categoryId"> & { category?: string }
+    queryParams?: RenameKey<AdminProductsQuery, "categoryId", "category">
     categories: AdminCategory[]
 }) {
-    const queryClient = useQueryClient()
-    /// States
-    const [isAddOpen, setIsAddOpen] = useState(false)
-    const [isEditOpen, setIsEditOpen] = useState(false)
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-    const [selectedId, setSelectedId] = useState<null | string>(null)
-
-    const totalRef = useRef(0)
-    const totalPagesRef = useRef(1)
+    const dialogs = useDialogs()
 
     const { category, ...params } = queryParams
 
@@ -38,73 +29,46 @@ export default function useProductsManager({
     }
 
     // Get Products
-    const { data, isLoading , isPlaceholderData } = useAdminProducts(finalQueryParams)
+    const { data, isLoading, isPlaceholderData } =
+        useAdminProducts(finalQueryParams)
 
-    if (data?.total && data.totalPages) {
-        totalPagesRef.current = data.totalPages
-        totalRef.current = data.total
-    }
     const products = data?.data || []
 
     // Selected Product : for update-form initial data
-    const selectedProduct = products.find((p) => p.id === selectedId)
+    const selectedProduct = products.find(
+        (p) => p.id === (dialogs.editingId || dialogs.deletingId)
+    )
 
-    // Triggers
-    function openEditDialog(id: string) {
-        setSelectedId(id)
-        setIsEditOpen(true)
-    }
-
-    function openDeleteDialog(id: string) {
-        setSelectedId(id)
-        setIsDeleteOpen(true)
-    }
-
-    // ADD
-    const { mutateAsync: addMutation, isPending: isAdding } = useMutation({
-        mutationFn: (data: FormData) => createProduct(data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["products"],
-            })
-            setIsAddOpen(false)
-        },
-    })
+    // CREATE
+    const { mutateAsync: addMutation, isPending: isAdding } = useCreateProduct()
 
     async function handleAdd(data: FormData) {
         await addMutation(data)
+        dialogs.reset()
     }
 
     // UPDATE
-    const { mutateAsync: updateMutation, isPending: isUpdating } = useMutation({
-        mutationFn: (data: FormData) => updateProduct(selectedId!, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["products"],
-            })
-            setIsEditOpen(false)
-            setSelectedId(null)
-        },
-    })
+    const { mutateAsync: updateMutation, isPending: isUpdating } =
+        useUpdateProduct()
 
     async function handleUpdate(data: FormData) {
-        await updateMutation(data)
+        if (!dialogs.editingId) return
+        await updateMutation({
+            id: dialogs.editingId,
+            data,
+        })
+        dialogs.reset()
     }
 
     /// DELETE
-    const { mutateAsync: deleteMutation, isPending: isDeleting } = useMutation({
-        mutationFn: () => deleteProduct(selectedId!),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["products"],
-            })
-            setIsDeleteOpen(false)
-            setSelectedId(null)
-        },
-    })
+    const { mutateAsync: deleteMutation, isPending: isDeleting } =
+        useDeleteProduct()
 
     async function handleDelete() {
-        await deleteMutation()
+        if (!dialogs.deletingId) return
+
+        await deleteMutation(dialogs.deletingId)
+        dialogs.reset()
     }
 
     /// Table Products
@@ -116,12 +80,12 @@ export default function useProductsManager({
 
     return {
         triggers: {
-            onUpdate: openEditDialog,
-            onDelete: openDeleteDialog,
+            onUpdate: dialogs.setEditingId,
+            onDelete: dialogs.setDeletingId,
         },
         addForm: {
-            open: isAddOpen,
-            onOpenChange: setIsAddOpen,
+            open: dialogs.isAddOpen,
+            onOpenChange: dialogs.setAddingNew,
             categories,
             title: "Add Product",
             description: "Add a new product to your inventory.",
@@ -130,8 +94,8 @@ export default function useProductsManager({
             isSubmitting: isAdding,
         },
         updateForm: {
-            open: isEditOpen,
-            onOpenChange: setIsEditOpen,
+            open: dialogs.isEditOpen,
+            onOpenChange: dialogs.closeEdit,
             categories,
             title: "Edit Product",
             description: "Update product information.",
@@ -145,14 +109,15 @@ export default function useProductsManager({
             description: `Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`,
             onConfirm: handleDelete,
             isLoading: isDeleting,
-            open: isDeleteOpen,
-            onOpenChange: setIsDeleteOpen,
+            open: dialogs.isDeleteOpen,
+            onOpenChange: dialogs.closeDelete,
         },
         isLoading,
         products: tableProducts,
-        id: selectedId,
-        total: totalRef.current,
-        totalPages: totalPagesRef.current,
-        isPlaceholderData
+        updatingId: dialogs.editingId,
+        deletingId: dialogs.deletingId,
+        total: data?.total,
+        totalPages: data?.totalPages,
+        isPlaceholderData,
     }
 }

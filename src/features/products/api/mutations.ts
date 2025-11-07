@@ -22,10 +22,11 @@ export function useCreateProduct() {
 
 // UPDATE
 
-export function useUpdateProduct(id: string) {
+export function useUpdateProduct() {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (data: FormData) => updateProduct(id, data),
+        mutationFn: ({ id, data }: { id: string; data: FormData }) =>
+            updateProduct(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: productKeys.base,
@@ -36,10 +37,10 @@ export function useUpdateProduct(id: string) {
 
 /// DELETE
 
-export function useDeleteProduct(id: string) {
+export function useDeleteProduct() {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: () => deleteProduct(id),
+        mutationFn: (id: string) => deleteProduct(id),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: productKeys.base,
