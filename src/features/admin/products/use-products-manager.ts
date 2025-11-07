@@ -71,13 +71,6 @@ export default function useProductsManager({
         dialogs.reset()
     }
 
-    /// Table Products
-    const tableProducts = products.map((product) => ({
-        ...product,
-        categoryName: categories.find((cat) => cat.id === product.categoryId)
-            ?.name,
-    }))
-
     const initialData = selectedProduct
         ? {
               ...selectedProduct,
@@ -120,7 +113,7 @@ export default function useProductsManager({
             onOpenChange: dialogs.closeDelete,
         },
         isLoading,
-        products: tableProducts,
+        products,
         updatingId: dialogs.editingId,
         deletingId: dialogs.deletingId,
         total: data?.total,

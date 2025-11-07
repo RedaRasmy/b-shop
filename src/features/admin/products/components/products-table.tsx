@@ -16,14 +16,11 @@ import {
 } from "@/components/ui/table"
 import type { AdminProduct } from "@/features/products/types"
 import { cn } from "@/lib/utils"
-import type { Prettify } from "@/types/global-types"
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
 
-type TableProduct = Prettify<AdminProduct & { categoryName?: string }>
-
 type Props = {
-    products: TableProduct[]
+    products: AdminProduct[]
     onUpdate: (id: string) => void
     onDelete: (id: string) => void
     isUpdating: boolean

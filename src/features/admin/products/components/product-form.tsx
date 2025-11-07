@@ -42,7 +42,7 @@ type ProductImage = ProductFormData["images"][number]
 
 // categoryId can be undefined if its category have been deleted
 type InitialData = Prettify<
-    Omit<ProductFormData, "categoryId"> & { categoryId?: string }
+    Omit<ProductFormData, "categoryId"> & { categoryId: string | null }
 >
 
 type Props = {

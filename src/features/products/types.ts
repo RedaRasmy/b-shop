@@ -46,24 +46,30 @@ export type ProductSummary = {
 // Admin
 
 export type AdminProduct = {
-    id: string
-    name: string
+    inventoryStatus: "Out of Stock" | "Low Stock" | "In Stock"
+    categoryName: string | null
     slug: string
-    price: string 
-    inventoryStatus: "In Stock" | "Low Stock" | "Out of Stock"
+    status: "active" | "inactive"
+    name: string
     description: string
+    price: string
+    stock: number
+    categoryId: string | null
+    id: string
+    createdAt: Date
+    updatedAt: Date
     images: {
+        format: string | null
         id: string
-        url: string
         alt: string
         isPrimary: boolean
-        width: number
-        height: number
-        size: number
+        url: string
+        createdAt: Date
+        updatedAt: Date
+        productId: string
+        publicId: string
+        width: number | null
+        height: number | null
+        size: number | null
     }[]
-    createdAt: string
-    updatedAt: string
-    status: "active" | "inactive"
-    stock: number
-    categoryId?: string | undefined
 }
