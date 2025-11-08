@@ -21,7 +21,6 @@ const AdminSettingsPage = lazy(() => import("./pages/admin/settings"))
 const AdminCategoriesPage = lazy(() => import("./pages/admin/categories"))
 const AdminCustomersPage = lazy(() => import("./pages/admin/customers"))
 const AdminAnalyticsPage = lazy(() => import("./pages/admin/analytics"))
-const AdminShippingPage = lazy(() => import("./pages/admin/shipping"))
 const CartPage = lazy(() => import("./pages/cart"))
 
 export const router = createBrowserRouter([
@@ -250,14 +249,6 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingPage />}>
                         <AdminAnalyticsPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: "shipping",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        <AdminShippingPage />
                     </Suspense>
                 ),
             },
