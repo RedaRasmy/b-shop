@@ -4,6 +4,7 @@ import type { PaginatedResult, Prettify } from "@/types/global-types"
 import type { CartItem } from "@/redux/slices/cart"
 import type { AdminOrder, Order, SuccessfulOrder } from "@/features/order/types"
 import type { AdminOrdersQuery } from "@/features/order/query-keys"
+import { parseApiDates } from "@/utils/parse-api-dates"
 
 // Customer
 
@@ -38,11 +39,9 @@ export async function fetchAdminOrders(params?: AdminOrdersQuery) {
     )
     return {
         ...data,
-        data: data.data.map((order) => ({
-            ...order,
-            createdAt: new Date(order.createdAt),
-            updatedAt: new Date(order.updatedAt),
-        })),
+        data: data.data.map((order) =>
+            parseApiDates(order, ["createdAt", "updatedAt"])
+        ),
     }
 }
 
