@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
     Select,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/select"
 import type { AdminOrder } from "@/features/order/types"
 import { cn } from "@/lib/utils"
+import { Eye } from "lucide-react"
 
 type Props = {
     orders?: AdminOrder[]
@@ -19,12 +21,14 @@ type Props = {
         status: AdminOrder["status"]
     }) => void
     isUpdating: boolean
+    onView: (id: number) => void
 }
 
 export default function OrdersTable({
     orders = [],
     onUpdate,
     isUpdating,
+    onView,
 }: Props) {
     return (
         <div
@@ -109,6 +113,13 @@ export default function OrdersTable({
                                     </div>
                                 </div>
                             </div>
+                            <Button
+                                variant={"outline"}
+                                onClick={() => onView(order.id)}
+                            >
+                                <Eye />
+                                View
+                            </Button>
                         </div>
                     </CardContent>
                 </Card>

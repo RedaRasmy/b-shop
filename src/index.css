@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --breakpoint-xs: 30rem;
-  --breakpoint-3xl: 120rem;
+    --breakpoint-xs: 30rem;
+    --breakpoint-3xl: 120rem;
 }
 
 @theme inline {
@@ -102,13 +102,27 @@
     --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(258, 90%, 66%), hsl(258, 100%, 76%));
-    --gradient-hero: linear-gradient(135deg, hsl(258, 90%, 66%), hsl(200, 100%, 70%));
-    --gradient-card: linear-gradient(145deg, hsl(0, 0%, 100%), hsl(210, 40%, 98%));
+    --gradient-primary: linear-gradient(
+        135deg,
+        hsl(258, 90%, 66%),
+        hsl(258, 100%, 76%)
+    );
+    --gradient-hero: linear-gradient(
+        135deg,
+        hsl(258, 90%, 66%),
+        hsl(200, 100%, 70%)
+    );
+    --gradient-card: linear-gradient(
+        145deg,
+        hsl(0, 0%, 100%),
+        hsl(210, 40%, 98%)
+    );
 
     /* Shadows */
-    --shadow-card: 0 4px 6px -1px hsla(258, 90%, 66%, 0.1), 0 2px 4px -1px hsla(258, 90%, 66%, 0.06);
-    --shadow-hover: 0 10px 25px -3px hsla(258, 90%, 66%, 0.15), 0 4px 6px -2px hsla(258, 90%, 66%, 0.05);
+    --shadow-card: 0 4px 6px -1px hsla(258, 90%, 66%, 0.1),
+        0 2px 4px -1px hsla(258, 90%, 66%, 0.06);
+    --shadow-hover: 0 10px 25px -3px hsla(258, 90%, 66%, 0.15),
+        0 4px 6px -2px hsla(258, 90%, 66%, 0.05);
     --shadow-glow: 0 0 40px hsla(258, 100%, 76%, 0.3);
 
     /* Animations */
@@ -170,9 +184,21 @@
     --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-hero: linear-gradient(135deg, hsl(258, 90%, 66%), hsl(200, 100%, 70%));
-    --gradient-card: linear-gradient(145deg, hsl(217.2, 32.6%, 17.5%), hsl(222.2, 84%, 4.9%));
+    --gradient-primary: linear-gradient(
+        135deg,
+        hsl(var(--primary)),
+        hsl(var(--primary-glow))
+    );
+    --gradient-hero: linear-gradient(
+        135deg,
+        hsl(258, 90%, 66%),
+        hsl(200, 100%, 70%)
+    );
+    --gradient-card: linear-gradient(
+        145deg,
+        hsl(217.2, 32.6%, 17.5%),
+        hsl(222.2, 84%, 4.9%)
+    );
     --sidebar: hsl(240 5.9% 10%);
 }
 
@@ -183,4 +209,8 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+
+button {
+    cursor: pointer;
 }

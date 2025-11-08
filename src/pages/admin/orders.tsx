@@ -54,6 +54,7 @@ export default function AdminOrdersPage() {
                 orders={orders}
                 onUpdate={mutate}
                 isUpdating={isPlaceholderData}
+                onView={() => {}}
             />
             <PaginationControl
                 page={page}
