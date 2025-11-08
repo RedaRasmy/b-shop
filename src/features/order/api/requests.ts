@@ -29,11 +29,21 @@ export default async function fetchOrders() {
 
 /// Admin
 
-export async function fetchAdminOrders(query?: AdminOrdersQuery) {
-    const res = await axiosInstance.get("/admin/orders", {
-        params: query,
-    })
-    return res.data as PaginatedResult<AdminOrder[]>
+export async function fetchAdminOrders(params?: AdminOrdersQuery) {
+    const { data } = await axiosInstance.get<PaginatedResult<AdminOrder[]>>(
+        "/admin/orders",
+        {
+            params,
+        }
+    )
+    return {
+        ...data,
+        data: data.data.map((order) => ({
+            ...order,
+            createdAt: new Date(order.createdAt),
+            updatedAt: new Date(order.updatedAt),
+        })),
+    }
 }
 
 export async function updateOrder({
