@@ -16,32 +16,27 @@ type Props = {
     sortOptions: SortOptions
 }
 
+type Type = "string" | "number" | "date"
+
 export default function SortDropdown({
     onChange,
     order,
     sortBy,
     sortOptions,
 }: Props) {
-    function isDate(str: string) {
-        return ["createdAt", "updatedAt"].includes(str)
-    }
-    function isNumber(str: string) {
-        return ["price", "stock"].includes(str)
-    }
-
-    function getOrderAsc(str: string) {
-        if (isDate(str)) {
+    function getOrderAsc(type?: Type) {
+        if (type === "date") {
             return "(older)"
-        } else if (isNumber(str)) {
+        } else if (type === "number") {
             return "(lower)"
         } else {
             return "(A-Z)"
         }
     }
-    function getOrderDesc(str: string) {
-        if (isDate(str)) {
+    function getOrderDesc(type?: Type) {
+        if (type === "date") {
             return "(newer)"
-        } else if (isNumber(str)) {
+        } else if (type === "number") {
             return "(higher)"
         } else {
             return "(Z-A)"
@@ -65,13 +60,13 @@ export default function SortDropdown({
                         <SelectItem value={`${option.value}-asc`}>
                             <div className="flex items-center">
                                 <SortAsc className="h-4 w-4 mr-2" />
-                                {option.label} {getOrderAsc(option.value)}
+                                {option.label} {getOrderAsc(option.type)}
                             </div>
                         </SelectItem>
                         <SelectItem value={`${option.value}-desc`}>
                             <div className="flex items-center">
                                 <SortDesc className="h-4 w-4 mr-2" />
-                                {option.label} {getOrderDesc(option.value)}
+                                {option.label} {getOrderDesc(option.type)}
                             </div>
                         </SelectItem>
                     </div>

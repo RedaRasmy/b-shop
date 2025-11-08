@@ -12,6 +12,12 @@ export type Option = {
     readonly value: string
 }
 
+export type SortOption = Readonly<{
+    label: string
+    value: string
+    type?: "string" | "number" | "date"
+}>
+
 export type FilterOptions = readonly Readonly<{
     label: string
     value: string
@@ -19,7 +25,7 @@ export type FilterOptions = readonly Readonly<{
     nullable?: boolean
 }>[]
 
-export type SortOptions = readonly Option[]
+export type SortOptions = readonly SortOption[]
 
 type Query = {
     search?: string
@@ -39,7 +45,9 @@ type Props = {
     setQuery: (query: Partial<Query>) => void
 }
 
-function nullObj(obj: Record<string, string | null | undefined>): Record<string, null> {
+function nullObj(
+    obj: Record<string, string | null | undefined>
+): Record<string, null> {
     return Object.fromEntries(Object.keys(obj).map((key) => [key, null]))
 }
 
