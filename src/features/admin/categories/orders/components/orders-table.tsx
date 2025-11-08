@@ -10,6 +10,7 @@ import {
 import type { AdminOrder } from "@/features/order/types"
 import { cn } from "@/lib/utils"
 import { Eye } from "lucide-react"
+import { Link } from "react-router-dom"
 
 type Props = {
     orders?: AdminOrder[]
@@ -21,14 +22,12 @@ type Props = {
         status: AdminOrder["status"]
     }) => void
     isUpdating: boolean
-    onView: (id: number) => void
 }
 
 export default function OrdersTable({
     orders = [],
     onUpdate,
     isUpdating,
-    onView,
 }: Props) {
     return (
         <div
@@ -113,12 +112,11 @@ export default function OrdersTable({
                                     </div>
                                 </div>
                             </div>
-                            <Button
-                                variant={"outline"}
-                                onClick={() => onView(order.id)}
-                            >
-                                <Eye />
-                                View
+                            <Button variant={"outline"} asChild>
+                                <Link to={"/admin/orders/" + order.id}>
+                                    <Eye />
+                                    View Details
+                                </Link>
                             </Button>
                         </div>
                     </CardContent>

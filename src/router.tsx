@@ -23,6 +23,7 @@ const AdminCategoriesPage = lazy(() => import("./pages/admin/categories"))
 const AdminCustomersPage = lazy(() => import("./pages/admin/customers"))
 const AdminAnalyticsPage = lazy(() => import("./pages/admin/analytics"))
 const CartPage = lazy(() => import("./pages/cart"))
+const OrderDetailsPage = lazy(() => import("./pages/admin/order-details"))
 
 export const router = createBrowserRouter([
     {
@@ -162,11 +163,24 @@ export const router = createBrowserRouter([
             },
             {
                 path: "orders",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        <AdminOrdersPage />
-                    </Suspense>
-                ),
+                children: [
+                    {
+                        index: true,
+                        element: (
+                            <Suspense fallback={<LoadingPage />}>
+                                <AdminOrdersPage />
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: ":id",
+                        element: (
+                            <Suspense fallback={<LoadingPage />}>
+                                <OrderDetailsPage />
+                            </Suspense>
+                        ),
+                    },
+                ],
             },
             {
                 path: "customers",
