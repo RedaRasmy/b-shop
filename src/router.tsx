@@ -5,6 +5,7 @@ import App from "./App"
 import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
 import OrderSuccessPage from "@/pages/order-success"
+import AdminDashboard from "@/pages/admin/dashboard"
 
 const NotFoundPage = lazy(() => import("./pages/not-found"))
 const OrderPage = lazy(() => import("./pages/order"))
@@ -147,8 +148,7 @@ export const router = createBrowserRouter([
                 index: true,
                 element: (
                     <Suspense fallback={<LoadingPage />}>
-                        {/* <AdminDashboard /> */}
-                        <>dashboard</>
+                        <AdminDashboard />
                     </Suspense>
                 ),
             },

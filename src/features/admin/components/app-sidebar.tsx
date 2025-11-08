@@ -16,11 +16,17 @@ import {
     Tag,
     ChartColumn,
     Settings,
+    LayoutDashboard,
 } from "lucide-react"
 import { NavLink } from "react-router-dom"
 import { useHotkeys } from "react-hotkeys-hook"
 
 const items = [
+    {
+        title: "Dashboard",
+        url: "/admin",
+        icon: LayoutDashboard,
+    },
     {
         title: "Products",
         url: "/admin/products",
