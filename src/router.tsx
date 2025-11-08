@@ -73,7 +73,6 @@ export const router = createBrowserRouter([
                     },
                 ],
             },
-            // Home & Discovery
             {
                 index: true,
                 element: (
@@ -82,16 +81,6 @@ export const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-            {
-                path: "contact",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <ContactPage /> */}
-                    </Suspense>
-                ),
-            },
-
-            // Product Routes
             {
                 path: "products",
                 children: [
@@ -113,55 +102,11 @@ export const router = createBrowserRouter([
                     },
                 ],
             },
-
-            // Shopping Routes
             {
                 path: "cart",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
                         <CartPage />
-                    </Suspense>
-                ),
-            },
-
-            // Legal Pages
-            {
-                path: "privacy-policy",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <PrivacyPolicyPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "terms-of-service",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <TermsPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "shipping-info",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <ShippingInfoPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "return-policy",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <ReturnPolicyPage /> */}
-                    </Suspense>
-                ),
-            },
-            {
-                path: "faq",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        {/* <FAQPage /> */}
                     </Suspense>
                 ),
             },
@@ -189,7 +134,7 @@ export const router = createBrowserRouter([
         ],
     },
 
-    // Admin Routes (Admin Only)
+    // Admin Routes
     {
         path: "/admin",
         element: (
@@ -217,24 +162,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "orders",
-                children: [
-                    {
-                        index: true,
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                <AdminOrdersPage />
-                            </Suspense>
-                        ),
-                    },
-                    {
-                        path: ":id",
-                        element: (
-                            <Suspense fallback={<LoadingPage />}>
-                                {/* <AdminOrderDetailPage /> */}
-                            </Suspense>
-                        ),
-                    },
-                ],
+                element: (
+                    <Suspense fallback={<LoadingPage />}>
+                        <AdminOrdersPage />
+                    </Suspense>
+                ),
             },
             {
                 path: "customers",
