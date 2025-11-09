@@ -10,48 +10,47 @@ import { useMemo } from "react"
 import { useAdminCategories } from "@/features/categories/api/queries"
 import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
 import Filters from "@/features/admin/components/filter-controls"
-
-const sortOptions = [
-    { label: "Name", value: "name" },
-    { label: "Status", value: "status" },
-    { label: "Price", value: "price" },
-    { label: "Stock", value: "stock" },
-    { label: "Created Date", value: "createdAt" },
-    { label: "Updated Date", value: "updatedAt" },
-] as const
+import { getOptions } from "@/features/admin/components/filter-controls/get-options"
 
 export default function AdminProductsPage() {
-    // get categories
     const { data: categories = [] } = useAdminCategories()
 
-    const filterOptions = useMemo(
+    const options = useMemo(
         () =>
-            [
-                {
-                    label: "Status",
-                    value: "status",
-                    options: [
-                        { label: "Active", value: "active" },
-                        { label: "Inactive", value: "inactive" },
-                    ],
-                },
-                {
-                    label: "Category",
-                    value: "category",
-                    options: categories.map((c) => ({
-                        label: c.name,
-                        value: c.name,
-                    })),
-                    nullable: true,
-                },
-            ] as const,
+            getOptions({
+                filter: [
+                    {
+                        label: "Status",
+                        value: "status",
+                        options: [
+                            { label: "Active", value: "active" },
+                            { label: "Inactive", value: "inactive" },
+                        ],
+                    },
+                    {
+                        label: "Category",
+                        value: "category",
+                        options: categories.map((c) => ({
+                            label: c.name,
+                            value: c.name,
+                        })),
+                        nullable: true,
+                    },
+                ],
+                sort: [
+                    { label: "Name", value: "name" },
+                    { label: "Status", value: "status" },
+                    { label: "Price", value: "price", type: "number" },
+                    { label: "Stock", value: "stock", type: "number" },
+                    { label: "Date", value: "createdAt", type: "date" },
+                ],
+            }),
         [categories]
     )
 
     // Filter controls
     const { query, controls, page, setPage } = usePaginatedFilters({
-        filterOptions,
-        sortOptions,
+        ...options,
         defaultSort: "createdAt:desc",
         pageSize: 15,
     })
