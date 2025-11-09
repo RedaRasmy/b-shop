@@ -45,6 +45,12 @@ export async function fetchAdminOrders(params?: AdminOrdersQuery) {
     }
 }
 
+export async function fetchAdminOrder(id: number) {
+    const { data } = await axiosInstance.get<AdminOrder>("/admin/orders/" + id)
+
+    return parseApiDates(data, ["createdAt", "updatedAt"])
+}
+
 export async function updateOrder({
     id,
     status,

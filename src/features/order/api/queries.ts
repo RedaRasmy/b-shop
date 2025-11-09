@@ -1,4 +1,7 @@
-import fetchOrders, { fetchAdminOrders } from "@/features/order/api/requests"
+import fetchOrders, {
+    fetchAdminOrder,
+    fetchAdminOrders,
+} from "@/features/order/api/requests"
 import { orderKeys, type AdminOrdersQuery } from "@/features/order/query-keys"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
@@ -11,8 +14,15 @@ export function useOrders() {
 
 export function useAdminOrders(query?: AdminOrdersQuery) {
     return useQuery({
-        queryKey: orderKeys.admin(query),
+        queryKey: orderKeys.admin.many(query),
         queryFn: () => fetchAdminOrders(query),
-        placeholderData : keepPreviousData
+        placeholderData: keepPreviousData,
+    })
+}
+
+export function useAdminOrder(id: number) {
+    return useQuery({
+        queryKey: orderKeys.admin.one(id),
+        queryFn: () => fetchAdminOrder(id),
     })
 }
