@@ -43,6 +43,7 @@ type Props = {
     }
     query: Query
     setQuery: (query: Partial<Query>) => void
+    searchPlaceholder?: string
 }
 
 function nullObj(
@@ -55,6 +56,7 @@ export default function Filters({
     options,
     query: { search = "", filters = {}, sort },
     setQuery,
+    searchPlaceholder,
 }: Props) {
     const [filtersOpen, setFiltersOpen] = useState(false)
 
@@ -71,6 +73,7 @@ export default function Filters({
                         })
                     }
                     value={search}
+                    placeholder={searchPlaceholder}
                 />
 
                 <div className="flex gap-2">
