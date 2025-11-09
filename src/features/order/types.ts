@@ -17,7 +17,7 @@ export type SuccessfulOrder = { total: string; id: number }
 
 /// Admin
 
-export type AdminOrder = {
+export type AdminOrderSummary = {
     status: "pending" | "processing" | "shipped" | "completed" | "canceled"
     name: string
     id: number
@@ -32,10 +32,30 @@ export type AdminOrder = {
     addressLine2: string | null
     orderToken: string
     total: string
+    itemCount: number
+}
+
+export type AdminOrder = {
     items: {
         id: string
         productId: string
-        quantity: number
         priceAtPurchase: string
+        quantity: number
+        name: string
+        thumbnailUrl: string
     }[]
+    status: "pending" | "processing" | "shipped" | "completed" | "canceled"
+    name: string
+    createdAt: Date
+    total: string
+    id: number
+    updatedAt: Date
+    email: string
+    phone: string
+    customerId: string | null
+    city: string
+    postalCode: string
+    addressLine1: string
+    addressLine2: string | null
+    orderToken: string
 }

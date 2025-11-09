@@ -2,7 +2,7 @@ import type { OrderFormData } from "@/features/order/validation"
 import { axiosInstance } from "@/lib/axios"
 import type { PaginatedResult, Prettify } from "@/types/global-types"
 import type { CartItem } from "@/redux/slices/cart"
-import type { AdminOrder, Order, SuccessfulOrder } from "@/features/order/types"
+import type { AdminOrder, AdminOrderSummary, Order, SuccessfulOrder } from "@/features/order/types"
 import type { AdminOrdersQuery } from "@/features/order/query-keys"
 import { parseApiDates } from "@/utils/parse-api-dates"
 
@@ -31,7 +31,7 @@ export default async function fetchOrders() {
 /// Admin
 
 export async function fetchAdminOrders(params?: AdminOrdersQuery) {
-    const { data } = await axiosInstance.get<PaginatedResult<AdminOrder[]>>(
+    const { data } = await axiosInstance.get<PaginatedResult<AdminOrderSummary[]>>(
         "/admin/orders",
         {
             params,

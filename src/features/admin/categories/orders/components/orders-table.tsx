@@ -7,19 +7,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import type { AdminOrder } from "@/features/order/types"
+import type { AdminOrderSummary } from "@/features/order/types"
 import { cn } from "@/lib/utils"
 import { Eye } from "lucide-react"
 import { Link } from "react-router-dom"
 
 type Props = {
-    orders?: AdminOrder[]
+    orders?: AdminOrderSummary[]
     onUpdate: ({
         id,
         status,
     }: {
         id: number
-        status: AdminOrder["status"]
+        status: AdminOrderSummary["status"]
     }) => void
     isUpdating: boolean
 }
@@ -49,7 +49,7 @@ export default function OrdersTable({
                                         onValueChange={(value) =>
                                             onUpdate({
                                                 id: order.id,
-                                                status: value as AdminOrder["status"],
+                                                status: value as AdminOrderSummary["status"],
                                             })
                                         }
                                     >
@@ -92,7 +92,7 @@ export default function OrdersTable({
                                         <div className="text-muted-foreground">
                                             Items:{" "}
                                             <span className="text-foreground font-medium">
-                                                {order.items.length}
+                                                {order.itemCount}
                                             </span>
                                         </div>
                                         <div className="text-muted-foreground">
