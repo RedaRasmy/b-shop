@@ -14,8 +14,8 @@ import {
     Package,
     Users,
     Tag,
-    ChartColumn,
-    Settings,
+    // ChartColumn,
+    // Settings,
     LayoutDashboard,
 } from "lucide-react"
 import { NavLink } from "react-router-dom"
@@ -47,16 +47,16 @@ const items = [
         url: "/admin/categories",
         icon: Tag,
     },
-    {
-        title: "Analytics",
-        url: "/admin/analytics",
-        icon: ChartColumn,
-    },
-    {
-        title: "Settings",
-        url: "/admin/settings",
-        icon: Settings,
-    },
+    // {
+    //     title: "Analytics",
+    //     url: "/admin/analytics",
+    //     icon: ChartColumn,
+    // },
+    // {
+    //     title: "Settings",
+    //     url: "/admin/settings",
+    //     icon: Settings,
+    // },
 ]
 
 export function AppSidebar() {
