@@ -7,29 +7,29 @@ import AdminPageHeader from "@/features/admin/components/page-header"
 import { Plus } from "lucide-react"
 import useFilters from "@/features/admin/hooks/use-filters"
 import Filters from "@/features/admin/components/filter-controls"
+import { getOptions } from "@/features/admin/components/filter-controls/get-options"
 
-const filterOptions = [
-    {
-        label: "Status",
-        value: "status",
-        options: [
-            { label: "Active", value: "active" },
-            { label: "Inactive", value: "inactive" },
-        ],
-    },
-] as const
-
-const sortOptions = [
-    { label: "Name", value: "name" },
-    { label: "Status", value: "status" },
-    { label: "Created Date", value: "createdAt" },
-    { label: "Updated Date", value: "updatedAt" },
-] as const
+const options = getOptions({
+    filter: [
+        {
+            label: "Status",
+            value: "status",
+            options: [
+                { label: "Active", value: "active" },
+                { label: "Inactive", value: "inactive" },
+            ],
+        },
+    ],
+    sort: [
+        { label: "Name", value: "name" },
+        { label: "Status", value: "status" },
+        { label: "Date", value: "createdAt", type: "date" },
+    ],
+})
 
 export default function AdminCategoriesPage() {
     const { query, controls } = useFilters({
-        sortOptions,
-        filterOptions,
+        ...options,
         defaultSort: "createdAt:desc",
     })
 
