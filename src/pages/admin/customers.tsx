@@ -31,7 +31,10 @@ export default function AdminCustomersPage() {
                 title="Customers"
                 description={`Manage your customer relationships ${totalText}`}
             />
-            <Filters {...controls} />
+            <Filters
+                {...controls}
+                searchPlaceholder="Search by customer name , email , phone number"
+            />
             <CustomersTable
                 customers={data?.data ?? []}
                 isUpdating={isPlaceholderData}

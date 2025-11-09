@@ -50,7 +50,10 @@ export default function AdminOrdersPage() {
                 title="Orders"
                 description={`Manage customer orders and fulfillment ${totalText}`}
             />
-            <Filters {...controls} />
+            <Filters
+                {...controls}
+                searchPlaceholder="Search by order number , customer name or email"
+            />
             <OrdersTable
                 orders={orders}
                 onUpdate={mutate}

@@ -68,7 +68,10 @@ export default function AdminCategoriesPage() {
                     </Button>
                 </CategoryForm>
             </AdminPageHeader>
-            <Filters {...controls} />
+            <Filters
+                {...controls}
+                searchPlaceholder="Search by category name"
+            />
             <CategoryList
                 categories={categories}
                 {...triggers}

@@ -86,7 +86,7 @@ export default function AdminProductsPage() {
                     </Button>
                 </ProductForm>
             </AdminPageHeader>
-            <Filters {...controls} />
+            <Filters {...controls} searchPlaceholder="Search by product name" />
             <ProductsTable
                 products={products}
                 {...triggers}
