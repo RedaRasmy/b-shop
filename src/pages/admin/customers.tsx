@@ -1,15 +1,18 @@
 import Filters from "@/features/admin/components/filter-controls"
+import { getOptions } from "@/features/admin/components/filter-controls/get-options"
 import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
 import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
 import { useCustomers } from "@/features/profile/api/queries"
 import CustomersTable from "@/features/profile/components/customers-table"
 
-const sortOptions = [
-    { label: "Orders", value: "orders" },
-    { label: "Total Spent", value: "total" },
-    { label: "Join Date", value: "createdAt" },
-] as const
+const { sortOptions } = getOptions({
+    sort: [
+        { label: "Orders", value: "orders", type: "number" },
+        { label: "Total Spent", value: "total", type: "number" },
+        { label: "Join Date", value: "createdAt", type: "date" },
+    ],
+})
 
 export default function AdminCustomersPage() {
     const { query, controls, page, setPage } = usePaginatedFilters({
