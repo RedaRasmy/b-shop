@@ -5,7 +5,6 @@ import App from "./App"
 import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
 import OrderSuccessPage from "@/pages/order-success"
-import AdminDashboard from "@/pages/admin/dashboard"
 
 const NotFoundPage = lazy(() => import("./pages/not-found"))
 const OrderPage = lazy(() => import("./pages/order"))
@@ -18,10 +17,8 @@ const AdminLayout = lazy(() => import("./pages/admin"))
 const ProfilePage = lazy(() => import("./pages/profile"))
 const AdminProductsPage = lazy(() => import("./pages/admin/products"))
 const AdminOrdersPage = lazy(() => import("./pages/admin/orders"))
-const AdminSettingsPage = lazy(() => import("./pages/admin/settings"))
 const AdminCategoriesPage = lazy(() => import("./pages/admin/categories"))
 const AdminCustomersPage = lazy(() => import("./pages/admin/customers"))
-const AdminAnalyticsPage = lazy(() => import("./pages/admin/analytics"))
 const CartPage = lazy(() => import("./pages/cart"))
 const OrderDetailsPage = lazy(() => import("./pages/admin/order-details"))
 
@@ -147,11 +144,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        <AdminDashboard />
-                    </Suspense>
-                ),
+                element: <Navigate to={"/admin/orders"} replace />,
             },
             {
                 path: "products",
@@ -191,26 +184,10 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "analytics",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        <AdminAnalyticsPage />
-                    </Suspense>
-                ),
-            },
-            {
                 path: "categories",
                 element: (
                     <Suspense fallback={<LoadingPage />}>
                         <AdminCategoriesPage />
-                    </Suspense>
-                ),
-            },
-            {
-                path: "settings",
-                element: (
-                    <Suspense fallback={<LoadingPage />}>
-                        <AdminSettingsPage />
                     </Suspense>
                 ),
             },

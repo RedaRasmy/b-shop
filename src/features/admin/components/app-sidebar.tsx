@@ -8,25 +8,11 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
-
-import {
-    ShoppingCart,
-    Package,
-    Users,
-    Tag,
-    // ChartColumn,
-    // Settings,
-    LayoutDashboard,
-} from "lucide-react"
+import { ShoppingCart, Package, Users, Tag } from "lucide-react"
 import { NavLink } from "react-router-dom"
 import { useHotkeys } from "react-hotkeys-hook"
 
 const items = [
-    {
-        title: "Dashboard",
-        url: "/admin",
-        icon: LayoutDashboard,
-    },
     {
         title: "Products",
         url: "/admin/products",
@@ -47,16 +33,6 @@ const items = [
         url: "/admin/categories",
         icon: Tag,
     },
-    // {
-    //     title: "Analytics",
-    //     url: "/admin/analytics",
-    //     icon: ChartColumn,
-    // },
-    // {
-    //     title: "Settings",
-    //     url: "/admin/settings",
-    //     icon: Settings,
-    // },
 ]
 
 export function AppSidebar() {
