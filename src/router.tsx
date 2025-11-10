@@ -5,6 +5,7 @@ import App from "./App"
 import { ProtectedRoute } from "./features/auth/components/protected-route"
 import { PublicRoute } from "./features/auth/components/public-route"
 import OrderSuccessPage from "@/pages/order-success"
+import { GlobalErrorPage } from "@/global-error"
 
 const NotFoundPage = lazy(() => import("./pages/not-found"))
 const OrderPage = lazy(() => import("./pages/order"))
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
+        errorElement: <GlobalErrorPage />,
         children: [
             {
                 path: "/auth",
@@ -141,6 +143,7 @@ export const router = createBrowserRouter([
                 <AdminLayout />
             </ProtectedRoute>
         ),
+        errorElement: <GlobalErrorPage />,
         children: [
             {
                 index: true,
