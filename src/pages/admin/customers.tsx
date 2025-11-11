@@ -4,7 +4,7 @@ import AdminPageHeader from "@/features/admin/components/page-header"
 import PaginationControl from "@/features/admin/components/pagination"
 import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
 import { useCustomers } from "@/features/profile/api/queries"
-import CustomersTable from "@/features/admin/components/customers/customers-table"
+import CustomersTable from "@/features/admin/components/tables/customers-table"
 
 const { sortOptions } = getOptions({
     sort: [

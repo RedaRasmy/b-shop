@@ -27,7 +27,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import ImagesInput from "@/features/admin/components/products/images-input"
+import ImagesInput from "@/features/admin/components/forms/images-input"
 import type { ChangeEvent, ReactNode } from "react"
 import axios from "axios"
 import type { Prettify } from "@/types/global-types"

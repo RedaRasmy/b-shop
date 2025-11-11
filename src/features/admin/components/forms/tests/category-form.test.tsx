@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest"
 import { setup } from "@/tests/test-utils"
-import { CategoryForm } from "@/features/admin/components/categories/category-form"
+import { CategoryForm } from "@/features/admin/components/forms/category-form"
 import {
     insertCategory,
     mockedCategories,
-} from "@/features/admin/components/categories/tests/handlers"
+} from "@/features/admin/components/tables/tests/handlers"
 
 describe("Category Form", () => {
     it("Should render", () => {

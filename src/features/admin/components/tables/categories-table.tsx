@@ -20,7 +20,7 @@ type Props = {
     isUpdating: boolean
 }
 
-export default function CategoryList({
+export default function CategoriesTable({
     categories,
     onDelete,
     onUpdate,

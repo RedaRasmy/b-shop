@@ -1,4 +1,4 @@
-import OrdersTable from "@/features/admin/components/orders/orders-table"
+import OrdersTable from "@/features/admin/components/tables/orders-table"
 import Filters from "@/features/admin/components/filter-controls"
 import { getOptions } from "@/features/admin/components/filter-controls/get-options"
 import AdminPageHeader from "@/features/admin/components/page-header"

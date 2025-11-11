@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { CategoryForm } from "@/features/admin/components/categories/category-form"
-import CategoryList from "@/features/admin/components/categories/category-list"
+import { CategoryForm } from "@/features/admin/components/forms/category-form"
+import CategoriesTable from "@/features/admin/components/tables/categories-table"
 import { useCategoriesManager } from "@/features/admin/hooks/use-categories-manager"
 import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import AdminPageHeader from "@/features/admin/components/page-header"
@@ -72,7 +72,7 @@ export default function AdminCategoriesPage() {
                 {...controls}
                 searchPlaceholder="Search by category name"
             />
-            <CategoryList
+            <CategoriesTable
                 categories={categories}
                 {...triggers}
                 isUpdating={isPlaceholderData}

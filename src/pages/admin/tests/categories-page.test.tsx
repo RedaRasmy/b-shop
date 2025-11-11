@@ -4,7 +4,7 @@ import {
     insertCategory,
     mockedCategories,
     resetMockedCategories,
-} from "@/features/admin/components/categories/tests/handlers"
+} from "@/features/admin/components/tables/tests/handlers"
 import AdminCategoriesPage from "@/pages/admin/categories"
 
 describe("Admin Categories Page", () => {
