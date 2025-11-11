@@ -11,7 +11,7 @@ const wrapper = ({ children }: { children: ReactNode }) => (
     <AuthProvider>{children}</AuthProvider>
 )
 
-const getAuthResult = () => renderHook(useAuth, { wrapper }).result
+const getAuthResult = () => renderHook(() => useAuth(), { wrapper }).result
 
 describe("AuthContext", () => {
     it("should start with no user then auto login", async () => {
@@ -22,10 +22,12 @@ describe("AuthContext", () => {
         expect(result.current.isLoading).toBe(true)
 
         await waitFor(() => {
-            expect(result.current.user).toStrictEqual(mockedCustomer)
-            expect(result.current.isAuthenticated).toBe(true)
             expect(result.current.isLoading).toBe(false)
         })
+
+        expect(result.current.user).toStrictEqual(mockedCustomer)
+        expect(result.current.isAuthenticated).toBe(true)
+        
     })
 
     it("should set user", async () => {
@@ -67,7 +69,7 @@ describe("AuthContext", () => {
 
     it("should handle refreshUser failure", async () => {
         server.use(
-            http.get("/api/auth/me", () =>
+            http.get("/api/me", () =>
                 HttpResponse.json({}, { status: 401 })
             )
         )

@@ -79,16 +79,15 @@ export const authHandlers = [
     // Refresh handler
     http.post("/api/auth/refresh", async () => {
         return HttpResponse.json(
-            { message: "Refresh token not provided" },
-            { status: 401 }
+            // { message: "Refresh token not provided" },
+            { status: 200 }
         )
     }),
 
     http.post("/api/auth/logout", async () => {}),
 
-    http.get("/api/auth/me", async () => {
-        return HttpResponse.json({
-            user: mockedCustomer,
-        })
+    http.get("/api/me", async () => {
+        console.log("GET /api/auth/me called")
+        return HttpResponse.json(mockedCustomer)
     }),
 ]
