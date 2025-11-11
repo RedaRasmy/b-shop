@@ -2,6 +2,7 @@ import z from "zod"
 
 export const PasswordSchema = z
     .string("Password is required")
+    .min(1,"Password is required")
     .min(8, "Password must be at least 8 characters long")
     .max(100, "Password is too long")
 

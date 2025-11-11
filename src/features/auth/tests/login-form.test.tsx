@@ -87,9 +87,9 @@ describe("RegisterForm", () => {
 
         // Check for validation messages (these come from your zod schema)
         await waitFor(() => {
-            expect(screen.getByText(/Email is required/i)).toBeInTheDocument()
+            expect(screen.getByText(/email is required/i)).toBeInTheDocument()
             expect(
-                screen.getByText(/Password is required/i)
+                screen.getByText(/password is required/i)
             ).toBeInTheDocument()
         })
     })

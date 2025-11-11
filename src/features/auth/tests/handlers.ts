@@ -17,10 +17,7 @@ export const authHandlers = [
             email === mockedCustomerCredentials.email &&
             password === mockedCustomerCredentials.password
         ) {
-            return HttpResponse.json({
-                user: mockedCustomer,
-                message: "User registered and logged in successfully",
-            })
+            return HttpResponse.json(mockedCustomer)
         }
 
         // Success case for admin user
@@ -28,10 +25,7 @@ export const authHandlers = [
             email === mockedAdminCredentials.email &&
             password === mockedAdminCredentials.password
         ) {
-            return HttpResponse.json({
-                user: mockedAdmin,
-                message: "User registered and logged in successfully",
-            })
+            return HttpResponse.json(mockedAdmin)
         }
 
         return HttpResponse.json(
@@ -50,10 +44,7 @@ export const authHandlers = [
             email === mockedCustomerCredentials.email &&
             password === mockedCustomerCredentials.password
         ) {
-            return HttpResponse.json({
-                user: mockedCustomer,
-                message: "User registered and logged in successfully",
-            })
+            return HttpResponse.json(mockedCustomer)
         }
 
         // Success case for admin user
@@ -61,10 +52,7 @@ export const authHandlers = [
             email === mockedAdminCredentials.email &&
             password === mockedAdminCredentials.password
         ) {
-            return HttpResponse.json({
-                user: mockedAdmin,
-                message: "User registered and logged in successfully",
-            })
+            return HttpResponse.json(mockedAdmin)
         }
 
         // Error case
@@ -87,7 +75,6 @@ export const authHandlers = [
     http.post("/api/auth/logout", async () => {}),
 
     http.get("/api/me", async () => {
-        console.log("GET /api/auth/me called")
         return HttpResponse.json(mockedCustomer)
     }),
 ]
