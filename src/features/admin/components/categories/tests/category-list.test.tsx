@@ -1,7 +1,7 @@
 import { it, describe, vi, expect } from "vitest"
 import { setup } from "@/tests/test-utils"
-import CategoryList from "@/features/admin/categories/components/category-list"
-import { mockedCategories } from "@/features/admin/categories/tests/handlers"
+import CategoryList from "@/features/admin/components/categories/category-list"
+import { mockedCategories } from "@/features/admin/components/categories/tests/handlers"
 
 describe("Category List", () => {
     it("should handle edit and delete events", async () => {
@@ -13,6 +13,7 @@ describe("Category List", () => {
                 categories={mockedCategories}
                 onUpdate={mockedUpdate}
                 onDelete={mockedDelete}
+                isUpdating={false}
             />
         )
 

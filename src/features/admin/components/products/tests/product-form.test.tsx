@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { setup } from "@/tests/test-utils"
-import ProductForm from "@/features/admin/products/components/product-form"
+import ProductForm from "@/features/admin/components/products/product-form"
 
 describe("Product Form", () => {
     it("Should render", () => {
