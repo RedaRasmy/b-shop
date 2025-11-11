@@ -91,7 +91,7 @@ test.describe("Sign-in Flow", () => {
 
         // Should still be authenticated
         await expect(page).toHaveURL(/.*profile.*/)
-        await expect(page.getByText(/log out/i)).toBeVisible()
+        await expect(page.getByText(/settings/i)).toBeVisible()
     })
     test("should persist admin authentication after page reload", async ({
         page,
@@ -120,7 +120,7 @@ test.describe("Sign-in Flow", () => {
 
         // Should still be authenticated
         await expect(page).toHaveURL(/.*admin.*/)
-        await expect(page.getByText(/log out/i)).toBeVisible()
+        await expect(page.getByText(/orders/i)).toBeVisible()
     })
     test("complete customer journey: login -> profile -> home -> profile -> logout", async ({
         page,
@@ -151,8 +151,11 @@ test.describe("Sign-in Flow", () => {
         await page.goto("/profile")
         await expect(page).toHaveURL(/.*profile.*/)
 
+        // Go to settings tab
+        await page.getByText(/settings/i).click()
+
         // Logout
-        await page.getByText(/log out/i).click()
+        await page.getByText(/logout/i).click()
 
         // Should redirect to login page
         await expect(page).toHaveURL(/.*login.*/)
