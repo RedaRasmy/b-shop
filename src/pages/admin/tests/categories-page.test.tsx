@@ -170,7 +170,7 @@ describe("Admin Categories Page", () => {
         })
 
         // Test Searching
-        const searchInput = screen.getByPlaceholderText("Search...")
+        const searchInput = screen.getByPlaceholderText("Search by category name")
         await user.type(searchInput, "Electronics")
 
         await waitFor(() => {
