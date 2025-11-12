@@ -9,7 +9,7 @@ export const insertCategory: CategoryFormData = {
     name: "Home & Living",
     description:
         "Explore our wide range of home and living essentials for every space.",
-    slug: "home-living",
+    slug: "home-and-living",
     status: "inactive",
 }
 
@@ -18,7 +18,7 @@ export const insertedCategory = {
     name: "Home & Living",
     description:
         "Explore our wide range of home and living essentials for every space.",
-    slug: "home-living",
+    slug: "home-and-living",
     status: "inactive",
     productsCount: 0,
     createdAt: "2025-10-07T12:34:56.789Z",
