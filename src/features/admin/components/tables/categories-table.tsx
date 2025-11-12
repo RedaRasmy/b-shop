@@ -47,6 +47,7 @@ export default function CategoriesTable({
                     slug,
                 }) => (
                     <Card
+                        aria-label="category-card"
                         key={id}
                         className="hover:shadow-hover transition-all duration-200"
                     >

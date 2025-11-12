@@ -28,5 +28,10 @@ function setup(jsx: React.ReactElement) {
     }
 }
 
+export const realAdminCredentials = {
+    email: process.env.TEST_ADMIN_EMAIL!,
+    password: process.env.TEST_ADMIN_PASSWORD!,
+}
+
 export * from "@testing-library/react"
 export { setup }

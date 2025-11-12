@@ -1,10 +1,19 @@
 import axios from "axios"
 
-const isProd = import.meta.env.MODE === "production"
+// const isProd = import.meta.env.MODE === "production"
 // const isTest = import.meta.env.MODE === "test"
 
+const getBaseURL = () => {
+    // Check if we're in a browser with Vite
+    if (typeof import.meta !== "undefined" && import.meta.env) {
+        return import.meta.env.VITE_BACKEND_API_URL || "/api"
+    }
+    // We're in Node.js (Playwright)
+    return process.env.VITE_BACKEND_API_URL || "/api"
+}
+
 export const axiosInstance = axios.create({
-    baseURL: isProd ? import.meta.env.VITE_BACKEND_API_URL : "/api",
+    baseURL: getBaseURL(),
     withCredentials: true,
     headers: {
         // "Content-Type": "application/json",

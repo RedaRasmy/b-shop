@@ -120,7 +120,7 @@ test.describe("Sign-in Flow", () => {
 
         // Should still be authenticated
         await expect(page).toHaveURL(/.*admin.*/)
-        await expect(page.getByText(/orders/i)).toBeVisible()
+        await expect(page.getByText(/log out/i)).toBeVisible()
     })
     test("complete customer journey: login -> profile -> home -> profile -> logout", async ({
         page,
