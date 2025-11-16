@@ -21,7 +21,7 @@ export const updateCartItem = async function ({
     id: string
     quantity: number
 }) {
-    return axiosInstance.put("/me/cart/" + id, {
+    return axiosInstance.patch("/me/cart/" + id, {
         quantity,
     })
 }

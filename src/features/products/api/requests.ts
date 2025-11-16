@@ -44,7 +44,7 @@ export async function fetchAdminProducts(params: AdminProductsQuery = {}) {
 }
 
 export async function updateProduct(id: string, formData: FormData) {
-    return axiosInstance.put("/admin/products/" + id, formData)
+    return axiosInstance.patch("/admin/products/" + id, formData)
 }
 
 export async function deleteProduct(id: string) {

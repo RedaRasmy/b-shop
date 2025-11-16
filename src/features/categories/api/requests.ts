@@ -24,7 +24,7 @@ export async function fetchAdminCategories(query: AdminCategoriesQuery = {}) {
 }
 
 export async function updateCategory(id: string, data: CategoryFormData) {
-    return axiosInstance.put(`/admin/categories/${id}`, data)
+    return axiosInstance.patch(`/admin/categories/${id}`, data)
 }
 
 export async function deleteCategory(id: string) {
