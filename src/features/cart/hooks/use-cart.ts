@@ -15,7 +15,6 @@ import { useCallback, useMemo } from "react"
 import { useCart } from "@/features/cart/api/queries"
 
 export default function useCartManager(isAuthenticated: boolean) {
-    console.log("useCart runs...")
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
     const localCart = useAppSelector(selectCart)

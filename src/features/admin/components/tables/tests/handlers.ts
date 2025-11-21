@@ -89,7 +89,6 @@ export const adminCategoriesHandlers = [
     /// ADD
     http.post("/api/admin/categories", async ({ request }) => {
         const categoryData = (await request.json()) as CategoryFormData
-        console.log("🔵 New category data:", categoryData)
 
         const newCategory: AdminCategory = {
             id: crypto.randomUUID(),
@@ -112,9 +111,6 @@ export const adminCategoriesHandlers = [
         // ✅ Extract query params
         const search = url.searchParams.get("search") || ""
         const status = url.searchParams.get("status") || ""
-        const sort = url.searchParams.get("sort") || ""
-
-        console.log("Query params:", { search, status, sort })
 
         let filteredCategories = [...mockedCategories]
 

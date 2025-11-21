@@ -69,8 +69,6 @@ export default function usePaginatedFilters<
 }): Return<F, S, P> {
     // search , sort , ...filters
 
-    console.log("runs")
-
     const filters = filterOptions ? filterOptions.map((f) => f.value) : []
 
     const filterParsers = filters.reduce((acc, key) => {
