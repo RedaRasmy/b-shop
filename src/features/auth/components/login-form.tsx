@@ -17,6 +17,9 @@ import { loginRequest } from "@/features/auth/requests"
 import { useAuth } from "@/features/auth/use-auth"
 import { useNavigate } from "react-router-dom"
 import { CredentialsSchema, type Credentials } from "@/features/auth/validation"
+import { useAppSelector } from "@/redux/hooks"
+import { selectCart } from "@/redux/slices/cart"
+import { mergeCartRequest } from "@/features/cart/api/requests"
 
 export function LoginForm() {
     const form = useForm({
@@ -28,13 +31,19 @@ export function LoginForm() {
     })
 
     const navigate = useNavigate()
+    const localCart = useAppSelector(selectCart)
 
     const { setUser } = useAuth()
 
     const mutation = useMutation({
         mutationFn: loginRequest,
-        onSuccess: (user) => {
+        onSuccess: async (user) => {
             setUser(user)
+            // Merge Carts
+            if (localCart.length !== 0) {
+                await mergeCartRequest(localCart)
+            }
+
             if (user.role === "admin") {
                 navigate("/admin")
             } else {
