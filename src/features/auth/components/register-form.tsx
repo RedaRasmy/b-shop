@@ -17,6 +17,9 @@ import { useMutation } from "@tanstack/react-query"
 import { registerRequest } from "@/features/auth/requests"
 import { useAuth } from "@/features/auth/use-auth"
 import { type Credentials, CredentialsSchema } from "@/features/auth/validation"
+import { useAppSelector } from "@/redux/hooks"
+import { selectCart } from "@/redux/slices/cart"
+import { mergeCartRequest } from "@/features/cart/api/requests"
 
 export function RegisterForm() {
     const form = useForm({
@@ -28,13 +31,17 @@ export function RegisterForm() {
     })
 
     const navigate = useNavigate()
+    const localCart = useAppSelector(selectCart)
 
     const { setUser } = useAuth()
 
     const mutation = useMutation({
         mutationFn: registerRequest,
-        onSuccess: (user) => {
+        onSuccess: async (user) => {
             setUser(user)
+            if (localCart.length !== 0) {
+                await mergeCartRequest(localCart)
+            }
             if (user.role === "admin") {
                 navigate("/admin")
             } else {
