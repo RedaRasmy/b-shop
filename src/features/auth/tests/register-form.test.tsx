@@ -13,6 +13,8 @@ import {
     mockedCustomerCredentials,
 } from "./mocked-users"
 import { server } from "@/tests/mocked-server"
+import { Provider } from "react-redux"
+import { store } from "@/redux/store"
 
 // Mock navigation
 const mockNavigate = vi.fn()
@@ -34,9 +36,11 @@ const queryClient = new QueryClient({
 function TestWrapper({ children }: { children: React.ReactNode }) {
     return (
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-                <AuthProvider>{children}</AuthProvider>
-            </BrowserRouter>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <AuthProvider>{children}</AuthProvider>
+                </BrowserRouter>
+            </Provider>
         </QueryClientProvider>
     )
 }
