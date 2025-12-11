@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/features/auth/use-auth"
-import useCartManager from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart-manager"
 import { ProductCard } from "@/features/products/components/product-card"
 import { ArrowRight, Headphones, Shield, Star, Truck } from "lucide-react"
 import { Link } from "react-router-dom"

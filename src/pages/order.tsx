@@ -1,6 +1,6 @@
 import { Form } from "@/components/ui/form"
 import { useAuth } from "@/features/auth/use-auth"
-import useCartManager from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart-manager"
 import { createOrder } from "@/features/order/api/requests"
 import {
     OrderFormSchema,

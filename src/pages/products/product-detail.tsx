@@ -1,5 +1,5 @@
 import { useAuth } from "@/features/auth/use-auth"
-import useCartManager from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart-manager"
 import { ProductCard } from "@/features/products/components/product-card"
 import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"

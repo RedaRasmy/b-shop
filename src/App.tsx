@@ -3,7 +3,7 @@ import { useAuth } from "./features/auth/use-auth"
 import { Button } from "./components/ui/button"
 import { ShoppingCart, User } from "lucide-react"
 import { cn } from "./lib/utils"
-import useCartManager from "@/features/cart/hooks/use-cart"
+import useCartManager from "@/features/cart/hooks/use-cart-manager"
 
 export default function App() {
     const { user, isAuthenticated } = useAuth()

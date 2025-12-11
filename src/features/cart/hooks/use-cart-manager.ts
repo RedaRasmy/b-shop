@@ -102,11 +102,9 @@ export default function useCartManager(isAuthenticated: boolean) {
             }
         },
         onSuccess: () => {
-            if (isAuthenticated) {
-                queryClient.invalidateQueries({
-                    queryKey: cartKeys.auth(),
-                })
-            }
+            queryClient.invalidateQueries({
+                queryKey: cartKeys.auth(),
+            })
         },
     })
 
