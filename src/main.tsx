@@ -9,6 +9,7 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "./features/auth/components/auth-provider.tsx"
 import { queryClient } from "@/lib/query-client.ts"
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
                     </NuqsAdapter>
                 </Provider>
             </AuthProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     </StrictMode>
 )
