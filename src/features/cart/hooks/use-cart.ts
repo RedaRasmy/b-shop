@@ -1,7 +1,6 @@
 import { cartKeys } from "@/features/cart/query-keys"
 import {
     createCartItem,
-    clearCartRequest,
     deleteCartItem,
     updateCartItem,
 } from "@/features/cart/api/requests"
@@ -111,23 +110,6 @@ export default function useCartManager(isAuthenticated: boolean) {
         },
     })
 
-    const clearMutation = useMutation({
-        mutationFn: async () => {
-            if (isAuthenticated) {
-                await clearCartRequest()
-            } else {
-                dispatch(cartActions.clearCart())
-            }
-        },
-        onSuccess: () => {
-            if (isAuthenticated) {
-                queryClient.invalidateQueries({
-                    queryKey: cartKeys.auth(),
-                })
-            }
-        },
-    })
-
     // Cart data
     const items = isAuthenticated ? authCart || [] : guestCart || []
     const itemCount = items.reduce((acc, item) => acc + item.quantity, 0)
@@ -153,15 +135,12 @@ export default function useCartManager(isAuthenticated: boolean) {
             }
         },
         removeItem: (productId: string) => {
+            console.log("remove clicked")
             deleteMutation.mutate({ id: productId })
-        },
-        clearCart: () => {
-            clearMutation.mutate()
         },
         isPending:
             addMutation.isPending ||
             updateMutation.isPending ||
-            deleteMutation.isPending ||
-            clearMutation.isPending,
+            deleteMutation.isPending,
     }
 }

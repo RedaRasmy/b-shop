@@ -30,10 +30,6 @@ export const deleteCartItem = async function (id: string) {
     axiosInstance.delete("/me/cart/" + id)
 }
 
-export const clearCartRequest = async function () {
-    return axiosInstance.delete("/me/cart")
-}
-
 export const mergeCartRequest = async function (items: CartItem[]) {
     return axiosInstance.post("/me/cart/merge", items)
 }

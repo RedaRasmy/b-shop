@@ -1,5 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
-import {  createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "@/redux/store"
 
 export type CartItem = {
@@ -84,10 +84,6 @@ const cartSlice = createSlice({
                     item.quantity = newQuantity
                 }
             }
-        },
-
-        clearCart: (state) => {
-            state.length = 0
         },
 
         loadCart: (_, action: PayloadAction<CartItem[]>) => {
