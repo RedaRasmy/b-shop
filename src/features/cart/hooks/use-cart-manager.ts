@@ -2,6 +2,7 @@ import { cartKeys } from "@/features/cart/query-keys"
 import {
     createCartItem,
     deleteCartItem,
+    fetchCart,
     updateCartItem,
 } from "@/features/cart/api/requests"
 import type { CartProduct } from "@/features/cart/types"
@@ -11,7 +12,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo } from "react"
-import { useCart } from "@/features/cart/api/queries"
 
 export default function useCartManager(isAuthenticated: boolean) {
     const dispatch = useAppDispatch()
@@ -22,12 +22,15 @@ export default function useCartManager(isAuthenticated: boolean) {
         [localCart]
     )
 
-    // Fetch authenticated cart
     const {
         data: authCart,
         isLoading: isAuthCartLoading,
         error: authCartError,
-    } = useCart({ isAuthenticated })
+    } = useQuery({
+        queryKey: cartKeys.auth(),
+        queryFn: fetchCart,
+        enabled: isAuthenticated,
+    })
 
     const selectGuestCart = useCallback(
         (data: ProductSummary[]) => {
@@ -102,9 +105,11 @@ export default function useCartManager(isAuthenticated: boolean) {
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: cartKeys.auth(),
-            })
+            if (isAuthenticated) {
+                queryClient.invalidateQueries({
+                    queryKey: cartKeys.auth(),
+                })
+            }
         },
     })
 
