@@ -13,7 +13,7 @@ export function CartHeader({ itemCount }: { itemCount: number }) {
                 </Link>
             </Button>
             <h1 className="text-3xl font-bold">Shopping Cart</h1>
-            <Badge variant="secondary">{itemCount} items</Badge>
+            <Badge variant="secondary" className="not-md:hidden">{itemCount} items</Badge>
         </div>
     )
 }

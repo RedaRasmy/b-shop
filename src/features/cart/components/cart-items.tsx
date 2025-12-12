@@ -29,8 +29,8 @@ export function CartItems({ items, onMinus, onPlus, onRemove }: Props) {
         <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
                 <Card key={item.id}>
-                    <CardContent className="px-6">
-                        <div className="flex gap-4">
+                    <CardContent className="md:px-6 px-3">
+                        <div className="flex md:gap-4 gap-1">
                             <img
                                 src={item.thumbnailUrl}
                                 alt={item.name}

@@ -36,7 +36,7 @@ export default function App() {
                         Products
                     </NavLink>
                 </div>
-                <div className="flex items-center gap-5">
+                <div className="flex items-center md:gap-5">
                     <Button
                         asChild
                         variant={"ghost"}
@@ -53,7 +53,7 @@ export default function App() {
                         </Link>
                     </Button>
                     {!isAuthenticated ? (
-                        <div className="flex gap-2 ">
+                        <div className="flex gap-1 md:gap-2 ">
                             <Button asChild>
                                 <Link to="/auth/register">Register</Link>
                             </Button>
