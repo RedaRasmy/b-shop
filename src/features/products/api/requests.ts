@@ -20,6 +20,7 @@ export async function fetchProducts(params: ProductsQuery = {}) {
 }
 
 export async function fetchProductsByIds(ids: string[]) {
+    if (ids.length === 0) return []
     const res = await axiosInstance.post("/products/bulk", ids)
     return res.data as ProductSummary[]
 }

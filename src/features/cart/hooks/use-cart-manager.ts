@@ -10,7 +10,12 @@ import { fetchProductsByIds } from "@/features/products/api/requests"
 import type { ProductSummary } from "@/features/products/types"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { cartActions, selectCart, type CartItem } from "@/redux/slices/cart"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query"
 import { useCallback, useMemo } from "react"
 
 export default function useCartManager(isAuthenticated: boolean) {
@@ -30,6 +35,7 @@ export default function useCartManager(isAuthenticated: boolean) {
         queryKey: cartKeys.auth(),
         queryFn: fetchCart,
         enabled: isAuthenticated,
+        placeholderData: keepPreviousData,
     })
 
     const selectGuestCart = useCallback(
@@ -50,8 +56,9 @@ export default function useCartManager(isAuthenticated: boolean) {
     } = useQuery({
         queryKey: cartKeys.guest(ids),
         queryFn: () => fetchProductsByIds(ids),
-        enabled: !isAuthenticated && ids.length > 0,
+        enabled: !isAuthenticated,
         select: selectGuestCart,
+        placeholderData: keepPreviousData,
     })
 
     // Mutations
@@ -65,11 +72,9 @@ export default function useCartManager(isAuthenticated: boolean) {
             }
         },
         onSuccess: () => {
-            if (isAuthenticated) {
-                queryClient.invalidateQueries({
-                    queryKey: cartKeys.auth(),
-                })
-            }
+            queryClient.invalidateQueries({
+                queryKey: cartKeys.base,
+            })
         },
     })
 
@@ -88,11 +93,9 @@ export default function useCartManager(isAuthenticated: boolean) {
             }
         },
         onSuccess: () => {
-            if (isAuthenticated) {
-                queryClient.invalidateQueries({
-                    queryKey: cartKeys.auth(),
-                })
-            }
+            queryClient.invalidateQueries({
+                queryKey: cartKeys.base,
+            })
         },
     })
 
@@ -105,11 +108,9 @@ export default function useCartManager(isAuthenticated: boolean) {
             }
         },
         onSuccess: () => {
-            if (isAuthenticated) {
-                queryClient.invalidateQueries({
-                    queryKey: cartKeys.auth(),
-                })
-            }
+            queryClient.invalidateQueries({
+                queryKey: cartKeys.base,
+            })
         },
     })
 
@@ -138,7 +139,6 @@ export default function useCartManager(isAuthenticated: boolean) {
             }
         },
         removeItem: (productId: string) => {
-            console.log("remove clicked")
             deleteMutation.mutate({ id: productId })
         },
         isPending:
