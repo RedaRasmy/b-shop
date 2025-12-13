@@ -14,11 +14,11 @@ export default function App() {
     return (
         <div className="h-screen w-full">
             <nav className="flex items-center h-15 justify-between border-b border-black/10 px-2 lg:px-4">
-                <div className="flex space-x-6 items-center">
+                <div className="flex items-center gap-4 sm:gap-8">
                     <NavLink
                         to="/"
                         className={() =>
-                            cn("font-extrabold text-accent text-xl mr-8")
+                            cn("font-extrabold text-accent text-xl")
                         }
                     >
                         B-Shop
@@ -36,17 +36,17 @@ export default function App() {
                         Products
                     </NavLink>
                 </div>
-                <div className="flex items-center md:gap-5">
+                <div className="flex items-center md:gap-5 gap-3.5">
                     <Button
                         asChild
                         variant={"ghost"}
-                        size={"default"}
+                        size={"icon"}
                         className="relative"
                     >
                         <Link to="/cart">
                             <ShoppingCart className="size-4.5" />
                             {itemCount > 0 && (
-                                <span className="absolute -top-1 font-mono -right-1 text-xs text-white bg-destructive rounded-full size-5 flex items-center justify-center ">
+                                <span className="absolute -top-1 font-mono -right-1 text-xs text-white bg-destructive rounded-full size-4.5 flex items-center justify-center ">
                                     {itemCount}
                                 </span>
                             )}
@@ -54,7 +54,7 @@ export default function App() {
                     </Button>
                     {!isAuthenticated ? (
                         <div className="flex gap-1 md:gap-2 ">
-                            <Button asChild>
+                            <Button asChild className="not-sm:hidden">
                                 <Link to="/auth/register">Register</Link>
                             </Button>
                             <Button asChild>
