@@ -2,8 +2,8 @@ import { test, expect } from "@playwright/test"
 
 function getCredentials(timestamp: number) {
     return {
-        email : `testuser${timestamp}@example.com`,
-        password : 'password123'
+        email: `testuser${timestamp}@example.com`,
+        password: "password123",
     }
 }
 
@@ -18,12 +18,18 @@ test.describe("Register Flow", () => {
 
         const credentials = getCredentials(Date.now())
         const emailInput = page.getByPlaceholder("Enter your email")
-        const passwordInput = page.getByPlaceholder("Enter your password")
-        const registerButton = page.getByRole("button", { name: /register/i })
+        const passwordInput = page.getByPlaceholder("Create a password")
+        const confirmPasswordInput = page.getByPlaceholder(
+            "Confirm your password"
+        )
+        const registerButton = page.getByRole("button", {
+            name: /create account/i,
+        })
 
         // input credentials
         await emailInput.fill(credentials.email)
         await passwordInput.fill(credentials.password)
+        await confirmPasswordInput.fill(credentials.password)
 
         // submit
         await registerButton.click()
@@ -31,7 +37,6 @@ test.describe("Register Flow", () => {
         // Wait for successful registration
         // Should redirect to profile page for regular users
         await expect(page).toHaveURL(/.*profile.*/)
-
     })
     test("should persist authentication after page reload", async ({
         page,
@@ -41,11 +46,17 @@ test.describe("Register Flow", () => {
 
         const credentials = getCredentials(Date.now())
         const emailInput = page.getByPlaceholder("Enter your email")
-        const passwordInput = page.getByPlaceholder("Enter your password")
-        const registerButton = page.getByRole("button", { name: /register/i })
+        const passwordInput = page.getByPlaceholder("Create a password")
+        const confirmPasswordInput = page.getByPlaceholder(
+            "Confirm your password"
+        )
+        const registerButton = page.getByRole("button", {
+            name: /create account/i,
+        })
 
         await emailInput.fill(credentials.email)
         await passwordInput.fill(credentials.password)
+        await confirmPasswordInput.fill(credentials.password)
         await registerButton.click()
 
         // Wait for redirect
@@ -67,11 +78,17 @@ test.describe("Register Flow", () => {
         const credentials = getCredentials(Date.now())
 
         const emailInput = page.getByPlaceholder("Enter your email")
-        const passwordInput = page.getByPlaceholder("Enter your password")
-        const registerButton = page.getByRole("button", { name: /register/i })
+        const passwordInput = page.getByPlaceholder("Create a password")
+        const confirmPasswordInput = page.getByPlaceholder(
+            "Confirm your password"
+        )
+        const registerButton = page.getByRole("button", {
+            name: /create account/i,
+        })
 
         await emailInput.fill(credentials.email)
         await passwordInput.fill(credentials.password)
+        await confirmPasswordInput.fill(credentials.password)
         await registerButton.click()
 
         // Should be redirected to profile
@@ -81,7 +98,7 @@ test.describe("Register Flow", () => {
         const homeButton = page.getByText("B-Shop")
         await homeButton.click()
 
-        await expect(page).toHaveURL('/')
+        await expect(page).toHaveURL("/")
 
         // return to profile
         await page.goto("/profile")
