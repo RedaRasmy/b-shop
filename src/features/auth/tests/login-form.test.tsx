@@ -59,9 +59,9 @@ describe("RegisterForm", () => {
         )
 
         // Check form elements are present
-        expect(screen.getByText("Sign in to your account")).toBeInTheDocument()
-        expect(screen.getByLabelText("Email")).toBeInTheDocument()
-        expect(screen.getByLabelText("Password")).toBeInTheDocument()
+        expect(screen.getByText("Welcome Back")).toBeInTheDocument()
+        expect(screen.getByText("Email")).toBeInTheDocument()
+        expect(screen.getByText("Password")).toBeInTheDocument()
         expect(
             screen.getByRole("button", { name: "Sign in" })
         ).toBeInTheDocument()
@@ -107,7 +107,7 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
+        const emailInput = screen.getByPlaceholderText("Enter your email")
         const signInButton = screen.getByRole("button", { name: "Sign in" })
 
         // Enter invalid email
@@ -120,7 +120,7 @@ describe("RegisterForm", () => {
         })
 
         // Should still be on form page
-        expect(screen.getByText("Sign in to your account")).toBeInTheDocument()
+        expect(screen.getByText("Welcome Back")).toBeInTheDocument()
     })
 
     it("successfully login a regular user and navigates to profile", async () => {
@@ -132,8 +132,8 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Enter your password")
         const signInButton = screen.getByRole("button", { name: "Sign in" })
 
         // Fill form with valid data
@@ -163,8 +163,8 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Enter your password")
         const signInButton = screen.getByRole("button", { name: "Sign in" })
 
         // Fill form with admin credentials
@@ -189,8 +189,8 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Enter your password")
         const signInButton = screen.getByRole("button", { name: "Sign in" })
 
         // Use credentials that will trigger error
@@ -232,8 +232,8 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Enter your password")
         const signInButton = screen.getByRole("button", { name: "Sign in" })
 
         // Fill and submit form
@@ -269,8 +269,8 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Enter your password")
         const signInButton = screen.getByRole("button", { name: "Sign in" })
 
         await user.type(emailInput, "test@example.com")
@@ -294,8 +294,8 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Enter your password")
         const signInButton = screen.getByRole("button", { name: "Sign in" })
 
         // First submission - should fail
