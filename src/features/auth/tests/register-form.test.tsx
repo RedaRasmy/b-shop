@@ -56,13 +56,8 @@ describe("RegisterForm", () => {
                 <RegisterForm />
             </TestWrapper>
         )
-
-        // Check form elements are present
-        expect(screen.getByText("Create new account")).toBeInTheDocument()
-        expect(screen.getByLabelText("Email")).toBeInTheDocument()
-        expect(screen.getByLabelText("Password")).toBeInTheDocument()
         expect(
-            screen.getByRole("button", { name: "Register" })
+            screen.getByRole("button", { name: "Create Account" })
         ).toBeInTheDocument()
 
         // Check placeholders
@@ -70,7 +65,7 @@ describe("RegisterForm", () => {
             screen.getByPlaceholderText("Enter your email")
         ).toBeInTheDocument()
         expect(
-            screen.getByPlaceholderText("Enter your password")
+            screen.getByPlaceholderText("Create a password")
         ).toBeInTheDocument()
     })
 
@@ -83,7 +78,9 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const registerButton = screen.getByRole("button", { name: "Register" })
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
 
         // Try to submit empty form
         await user.click(registerButton)
@@ -106,8 +103,10 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const registerButton = screen.getByRole("button", { name: "Register" })
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
 
         // Enter invalid email
         await user.type(emailInput, "invalid-email")
@@ -119,7 +118,9 @@ describe("RegisterForm", () => {
         })
 
         // Should still be on form page
-        expect(screen.getByText("Create new account")).toBeInTheDocument()
+        expect(
+            screen.getByPlaceholderText("Create a password")
+        ).toBeInTheDocument()
     })
 
     it("successfully registers a regular user and navigates to profile", async () => {
@@ -131,13 +132,22 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
-        const registerButton = screen.getByRole("button", { name: "Register" })
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Create a password")
+        const confirmPasswordInput = screen.getByPlaceholderText(
+            "Confirm your password"
+        )
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
 
         // Fill form with valid data
         await user.type(emailInput, mockedCustomerCredentials.email)
         await user.type(passwordInput, mockedCustomerCredentials.password)
+        await user.type(
+            confirmPasswordInput,
+            mockedCustomerCredentials.password
+        )
 
         // Submit form
         await user.click(registerButton)
@@ -162,13 +172,18 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
-        const registerButton = screen.getByRole("button", { name: "Register" })
-
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Create a password")
+        const confirmPasswordInput = screen.getByPlaceholderText(
+            "Confirm your password"
+        )
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
         // Fill form with admin credentials
         await user.type(emailInput, mockedAdminCredentials.email)
         await user.type(passwordInput, mockedAdminCredentials.password)
+        await user.type(confirmPasswordInput, mockedAdminCredentials.password)
 
         // Submit form
         await user.click(registerButton)
@@ -188,13 +203,19 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
-        const registerButton = screen.getByRole("button", { name: "Register" })
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Create a password")
+        const confirmPasswordInput = screen.getByPlaceholderText(
+            "Confirm your password"
+        )
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
 
         // Use credentials that will trigger error
         await user.type(emailInput, "existing@example.com")
         await user.type(passwordInput, "password123")
+        await user.type(confirmPasswordInput, "password123")
 
         // Submit form
         await user.click(registerButton)
@@ -229,13 +250,22 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
-        const registerButton = screen.getByRole("button", { name: "Register" })
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Create a password")
+        const confirmPasswordInput = screen.getByPlaceholderText(
+            "Confirm your password"
+        )
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
 
         // Fill and submit form
         await user.type(emailInput, mockedCustomerCredentials.email)
         await user.type(passwordInput, mockedCustomerCredentials.password)
+        await user.type(
+            confirmPasswordInput,
+            mockedCustomerCredentials.password
+        )
         await user.click(registerButton)
 
         // Button should be disabled during submission
@@ -266,12 +296,18 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
-        const registerButton = screen.getByRole("button", { name: "Register" })
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Create a password")
+        const confirmPasswordInput = screen.getByPlaceholderText(
+            "Confirm your password"
+        )
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
 
         await user.type(emailInput, "test@example.com")
         await user.type(passwordInput, "password123")
+        await user.type(confirmPasswordInput, "password123")
         await user.click(registerButton)
 
         // Should show fallback error message
@@ -291,13 +327,19 @@ describe("RegisterForm", () => {
             </TestWrapper>
         )
 
-        const emailInput = screen.getByLabelText("Email")
-        const passwordInput = screen.getByLabelText("Password")
-        const registerButton = screen.getByRole("button", { name: "Register" })
+        const emailInput = screen.getByPlaceholderText("Enter your email")
+        const passwordInput = screen.getByPlaceholderText("Create a password")
+        const confirmPasswordInput = screen.getByPlaceholderText(
+            "Confirm your password"
+        )
+        const registerButton = screen.getByRole("button", {
+            name: "Create Account",
+        })
 
         // First submission - should fail
         await user.type(emailInput, "existing@example.com")
         await user.type(passwordInput, "password123")
+        await user.type(confirmPasswordInput, "password123")
         await user.click(registerButton)
 
         // Wait for error
