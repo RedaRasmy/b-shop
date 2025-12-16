@@ -5,9 +5,15 @@ import ProductPath from "@/features/products/components/product-path"
 import ProductSection from "@/features/products/components/product-section"
 import LoadingPage from "@/pages/loading"
 import NotFoundPage from "@/pages/not-found"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { useParams } from "react-router-dom"
-import { useProduct, useProducts } from "@/features/products/api/queries"
+import {
+    useInfiniteProducts,
+    useProduct,
+    // useProducts,
+} from "@/features/products/api/queries"
+import { useInView } from "react-intersection-observer"
+import { Spinner } from "@/components/ui/spinner"
 
 export default function ProductDetailPage() {
     const { slug } = useParams<{ slug: string }>()
@@ -17,14 +23,31 @@ export default function ProductDetailPage() {
             "ProductDetailPage should be in a dynamic route with :slug"
         )
 
+    const { ref, inView } = useInView()
+
     const { data: product, isError, isLoading } = useProduct(slug)
 
-    const { data } = useProducts({
-        categoryId: product?.categoryId,
-    })
+    const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+        useInfiniteProducts({
+            categoryId: product?.categoryId,
+        })
+
+    useEffect(() => {
+        if (inView && hasNextPage && !isFetchingNextPage) {
+            fetchNextPage()
+        }
+    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
     const relatedProducts = useMemo(() => {
-        return data?.filter((p) => p.id !== product?.id) || []
+        if (data) {
+            return data.pages
+                .flat()
+                .map((p) => p.data)
+                .flat()
+                .filter((p) => p.id !== product?.id)
+        } else {
+            return []
+        }
     }, [data, product?.id])
 
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
@@ -59,6 +82,10 @@ export default function ProductDetailPage() {
                                     onAddToCart={() => addItem(product.id)}
                                 />
                             ))}
+                            {isFetchingNextPage && hasNextPage && (
+                                <Spinner className="w-full mx-auto my-auto size-8" />
+                            )}
+                            <div ref={ref} />
                         </div>
                     </div>
                 )}
