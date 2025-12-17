@@ -11,6 +11,7 @@ type Props = {
     tax?: number
     isPending: boolean
     error?: string
+    disabled?: boolean
 }
 
 export default function OrderSummary({
@@ -20,6 +21,7 @@ export default function OrderSummary({
     tax = 0,
     isPending,
     error,
+    disabled = false,
 }: Props) {
     const total = subtotal + shippingCost + tax
 
@@ -80,7 +82,7 @@ export default function OrderSummary({
                     size="lg"
                     className="w-full"
                     type="submit"
-                    disabled={isPending}
+                    disabled={isPending || disabled}
                 >
                     Place Order
                 </Button>

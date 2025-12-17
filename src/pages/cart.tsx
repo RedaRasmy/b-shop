@@ -22,6 +22,9 @@ export default function CartPage() {
 
     if (items.length === 0) return <EmptyCart />
 
+    const disabled = items.every(
+        (item) => item.inventoryStatus === "Out of Stock"
+    )
     return (
         <div className="container mx-auto px-4 py-8 2xl:px-40">
             <CartHeader itemCount={itemCount} />
@@ -32,7 +35,12 @@ export default function CartPage() {
                     onPlus={(id, quantity) => updateQuantity(id, quantity + 1)}
                     onRemove={removeItem}
                 />
-                <OrderSummary shipping={0} tax={0} subtotal={subtotal} />
+                <OrderSummary
+                    shipping={0}
+                    tax={0}
+                    subtotal={subtotal}
+                    disabled={disabled}
+                />
             </div>
         </div>
     )

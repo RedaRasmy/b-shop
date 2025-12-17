@@ -87,6 +87,10 @@ export default function OrderPage() {
         }
     }
 
+    const outOfStock = items.every(
+        (item) => item.inventoryStatus === "Out of Stock"
+    )
+
     return (
         <div className="container mx-auto px-4 py-8 2xl:px-40">
             <Header />
@@ -107,6 +111,7 @@ export default function OrderPage() {
                         orderItems={items}
                         subtotal={subtotal}
                         error={errorMessage}
+                        disabled={outOfStock}
                     />
                 </form>
             </Form>

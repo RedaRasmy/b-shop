@@ -8,9 +8,15 @@ type Props = {
     subtotal: number
     shipping: number
     tax: number
+    disabled?: boolean
 }
 
-export default function OrderSummary({ subtotal, shipping, tax }: Props) {
+export default function OrderSummary({
+    subtotal,
+    shipping,
+    tax,
+    disabled = false,
+}: Props) {
     const total = subtotal + shipping + tax
 
     return (
@@ -54,7 +60,7 @@ export default function OrderSummary({ subtotal, shipping, tax }: Props) {
                         <span>${total.toFixed(2)}</span>
                     </div>
 
-                    <Button size="lg" className="w-full" asChild>
+                    <Button size="lg" className="w-full" disabled={disabled}>
                         <Link to="/order">Proceed to Order</Link>
                     </Button>
 
