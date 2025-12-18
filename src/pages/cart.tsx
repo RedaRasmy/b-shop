@@ -14,7 +14,7 @@ export default function CartPage() {
         items,
         updateQuantity,
         removeItem,
-        subtotal,
+        cartSubtotal,
         itemCount,
     } = useCartManager(isAuthenticated)
 
@@ -38,7 +38,7 @@ export default function CartPage() {
                 <OrderSummary
                     shipping={0}
                     tax={0}
-                    subtotal={subtotal}
+                    subtotal={cartSubtotal}
                     disabled={disabled}
                 />
             </div>

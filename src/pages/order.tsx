@@ -12,7 +12,7 @@ import ContactInfos from "@/features/order/components/contact-infos"
 import ShippingAddress from "@/features/order/components/shipping-address"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { cartKeys } from "@/features/cart/query-keys"
@@ -20,9 +20,14 @@ import { useAddresses, useProfile } from "@/features/profile/api/queries"
 
 export default function OrderPage() {
     const { isAuthenticated } = useAuth()
-    const { subtotal, items } = useCartManager(isAuthenticated)
+    const { orderSubtotal, items } = useCartManager(isAuthenticated)
     const queryClient = useQueryClient()
     const navigate = useNavigate()
+
+    const filteredItems = useMemo(
+        () => items.filter((itm) => itm.inventoryStatus !== "Out of Stock"),
+        [items]
+    )
 
     // get defaults
     const { data: profile } = useProfile()
@@ -76,7 +81,7 @@ export default function OrderPage() {
         try {
             await mutateAsync({
                 ...data,
-                items: items.map(({ quantity, id }) => ({
+                items: filteredItems.map(({ quantity, id }) => ({
                     productId: id,
                     quantity,
                 })),
@@ -102,16 +107,17 @@ export default function OrderPage() {
                     <div className="lg:col-span-2 space-y-6">
                         <ContactInfos />
                         <ShippingAddress
+                            // TODO
                             addresses={[]}
                             onSelectAddress={() => {}}
                         />
                     </div>
                     <OrderSummary
-                        isPending={isPending || items.length < 1}
-                        orderItems={items}
-                        subtotal={subtotal}
+                        isPending={isPending}
+                        orderItems={filteredItems}
+                        subtotal={orderSubtotal}
                         error={errorMessage}
-                        disabled={outOfStock}
+                        disabled={outOfStock || items.length === 0}
                     />
                 </form>
             </Form>

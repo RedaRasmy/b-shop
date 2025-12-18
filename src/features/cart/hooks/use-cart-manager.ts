@@ -117,15 +117,19 @@ export default function useCartManager(isAuthenticated: boolean) {
     // Cart data
     const items = isAuthenticated ? authCart || [] : guestCart || []
     const itemCount = items.reduce((acc, item) => acc + item.quantity, 0)
-    const subtotal = items.reduce(
+    const cartSubtotal = items.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
     )
+    const orderSubtotal = items
+        .filter((itm) => itm.inventoryStatus !== "Out of Stock")
+        .reduce((acc, item) => acc + item.price * item.quantity, 0)
 
     return {
         items,
         itemCount,
-        subtotal,
+        cartSubtotal,
+        orderSubtotal,
         isLoading: isAuthCartLoading || isGuestCartLoading,
         error: authCartError || guestCartError,
         addItem: (productId: string, quantity: number = 1) => {
