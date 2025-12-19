@@ -62,7 +62,7 @@ export default function OrderPage() {
         }
     }, [profile, defaultAddress, form])
 
-    const { mutateAsync, isPending, isError } = useMutation({
+    const { mutateAsync, isPending, isError, error } = useMutation({
         mutationFn: createOrder,
         onSuccess: (token) => {
             queryClient.invalidateQueries({
@@ -74,7 +74,7 @@ export default function OrderPage() {
     })
 
     const errorMessage = isError
-        ? "Something went wrong , try again."
+        ? error.response?.data.message || "Something went wrong , try again."
         : undefined
 
     async function submit(data: OrderFormData) {
