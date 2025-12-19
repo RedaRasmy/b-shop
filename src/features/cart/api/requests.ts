@@ -27,7 +27,7 @@ export const updateCartItem = async function ({
 }
 
 export const deleteCartItem = async function (id: string) {
-    axiosInstance.delete("/me/cart/" + id)
+    return axiosInstance.delete("/me/cart/" + id)
 }
 
 export const mergeCartRequest = async function (items: CartItem[]) {
