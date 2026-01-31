@@ -12,7 +12,7 @@ const getBaseURL = () => {
     return process.env.VITE_BACKEND_API_URL || "/api"
 }
 
-export const axiosInstance = axios.create({
+export const api = axios.create({
     baseURL: getBaseURL(),
     withCredentials: true,
     headers: {
@@ -21,7 +21,7 @@ export const axiosInstance = axios.create({
     },
 })
 
-axiosInstance.interceptors.response.use(
+api.interceptors.response.use(
     (response) => response, // successful responses pass through
 
     async (error) => {
@@ -45,8 +45,8 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true
             try {
                 // Attempt to refresh the access token
-                await axiosInstance.post("/auth/refresh")
-                return axiosInstance(originalRequest) // retry original request
+                await api.post("/auth/refresh")
+                return api(originalRequest) // retry original request
             } catch (refreshError) {
                 // Redirect or handle logout
                 console.error("Refresh failed:", refreshError)
@@ -55,5 +55,5 @@ axiosInstance.interceptors.response.use(
         }
 
         return Promise.reject(error) // all other errors
-    }
+    },
 )

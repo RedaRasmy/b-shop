@@ -1,17 +1,17 @@
 import type { User } from "@/features/auth/types"
 import type { Credentials } from "@/features/auth/validation"
-import { axiosInstance } from "@/lib/axios"
+import { api } from "@/lib/axios"
 
 export async function registerRequest(data: Credentials) {
-    const res = await axiosInstance.post("/auth/register", data)
+    const res = await api.post("/auth/register", data)
     return res.data as User
 }
 
 export async function loginRequest(data: Credentials) {
-    const res = await axiosInstance.post("/auth/login", data)
+    const res = await api.post("/auth/login", data)
     return res.data as User
 }
 
 export async function logoutRequest() {
-    return axiosInstance.post("/auth/logout")
+    return api.post("/auth/logout")
 }
