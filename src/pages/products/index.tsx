@@ -11,6 +11,7 @@ import { Fragment, useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useCategories } from "@/features/categories/api/queries"
 import { useInfiniteProducts } from "@/features/products/api/queries"
+import { cn } from "@/lib/utils"
 
 export default function ProductsPage() {
     const { ref, inView } = useInView()
@@ -26,11 +27,16 @@ export default function ProductsPage() {
             sort: sortBy,
             search: search || undefined,
         }),
-        [categoryId, search, sortBy]
+        [categoryId, search, sortBy],
     )
 
-    const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
-        useInfiniteProducts(queryParams)
+    const {
+        data,
+        isFetchingNextPage,
+        fetchNextPage,
+        hasNextPage,
+        isPlaceholderData,
+    } = useInfiniteProducts(queryParams)
 
     useEffect(() => {
         if (inView && hasNextPage && !isFetchingNextPage) {
@@ -56,7 +62,14 @@ export default function ProductsPage() {
                     sortBy={sortBy}
                 />
                 {data && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <div
+                        className={cn(
+                            "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6",
+                            {
+                                "opacity-30": isPlaceholderData,
+                            },
+                        )}
+                    >
                         {data.pages.map(({ data }, index) => (
                             <Fragment key={index}>
                                 {data.map((product) => (

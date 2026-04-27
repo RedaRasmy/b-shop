@@ -31,6 +31,7 @@ export function useInfiniteProducts(query?: ProductsQuery) {
         initialPageParam: 1,
         getPreviousPageParam: (data) => data.prevPage ?? undefined,
         getNextPageParam: (data) => data.nextPage ?? undefined,
+        placeholderData: keepPreviousData,
     })
 }
 
@@ -41,6 +42,7 @@ export function useProducts(query?: ProductsQuery) {
         select: (res) => {
             return res.data
         },
+        placeholderData: keepPreviousData,
     })
 }
 
