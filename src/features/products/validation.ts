@@ -20,12 +20,12 @@ const ImageFormSchema = z.object({
         .instanceof(File)
         .refine(
             (file) => file.size <= 10 * 1024 * 1024,
-            "Image must be less than 10MB"
+            "Image must be less than 10MB",
         )
         .refine(
             (file) =>
                 ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-            "Only JPEG, PNG, and WebP images are allowed"
+            "Only JPEG, PNG, and WebP images are allowed",
         )
         .optional(),
 
@@ -42,7 +42,7 @@ export const ProductFormSchema = z.object({
         .max(255, "Product slug is too long")
         .regex(
             /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-            "Slug must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen."
+            "Slug must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen.",
         ),
     description: z.string().min(1, "Description is required"),
     price: z.number().min(0, "Price must be positive"),
@@ -56,6 +56,8 @@ export const ProductFormSchema = z.object({
         .array(ImageFormSchema)
         .min(1, "At least one image is required")
         .max(5, "Maximum 5 images allowed"),
+
+    isFeatured: z.boolean(),
 })
 
 export type ProductFormData = z.input<typeof ProductFormSchema>

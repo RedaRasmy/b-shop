@@ -37,6 +37,7 @@ import {
     ProductFormSchema,
     type ProductFormData,
 } from "@/features/products/validation"
+import { Checkbox } from "@/components/ui/checkbox"
 
 type ProductImage = ProductFormData["images"][number]
 
@@ -83,6 +84,7 @@ export default function ProductForm({
                   categoryId: "",
                   status: "inactive",
                   images: [],
+                  isFeatured: false,
               },
     })
 
@@ -149,6 +151,7 @@ export default function ProductForm({
         formData.append("stock", data.stock.toString())
         formData.append("categoryId", data.categoryId)
         formData.append("status", data.status)
+        formData.append("isFeatured", String(data.isFeatured))
         // Add images
         data.images.forEach((image, index) => {
             if (image.file) {
@@ -160,7 +163,7 @@ export default function ProductForm({
             formData.append(`images[${index}].alt`, image.alt || "")
             formData.append(
                 `images[${index}].isPrimary`,
-                String(image.isPrimary)
+                String(image.isPrimary),
             )
         })
         try {
@@ -277,8 +280,8 @@ export default function ProductForm({
                                                 onChange={(e) =>
                                                     field.onChange(
                                                         parseFloat(
-                                                            e.target.value
-                                                        ) || 0
+                                                            e.target.value,
+                                                        ) || 0,
                                                     )
                                                 }
                                             />
@@ -303,8 +306,8 @@ export default function ProductForm({
                                                 onChange={(e) =>
                                                     field.onChange(
                                                         parseInt(
-                                                            e.target.value
-                                                        ) || 0
+                                                            e.target.value,
+                                                        ) || 0,
                                                     )
                                                 }
                                             />
@@ -392,6 +395,28 @@ export default function ProductForm({
                                             removeImage={removeImage}
                                             updateImageAlt={updateImageAlt}
                                         />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="isFeatured"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <div className="flex gap-2 items-center">
+                                            <Checkbox
+                                                name={field.name}
+                                                checked={field.value}
+                                                onCheckedChange={(checked) => {
+                                                    field.onChange(checked)
+                                                }}
+                                            />
+                                            Featured
+                                        </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
