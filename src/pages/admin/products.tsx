@@ -36,6 +36,14 @@ export default function AdminProductsPage() {
                         })),
                         nullable: true,
                     },
+                    {
+                        label: "Featured",
+                        value: "featured",
+                        options: [
+                            { label: "Featured", value: "true" },
+                            { label: "Normal", value: "false" },
+                        ],
+                    },
                 ],
                 sort: [
                     { label: "Name", value: "name" },
@@ -45,7 +53,7 @@ export default function AdminProductsPage() {
                     { label: "Date", value: "createdAt", type: "date" },
                 ],
             }),
-        [categories]
+        [categories],
     )
 
     // Filter controls
