@@ -72,4 +72,5 @@ export type AdminProduct = {
         height: number | null
         size: number | null
     }[]
+    isFeatured: boolean
 }
