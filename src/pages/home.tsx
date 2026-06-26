@@ -31,7 +31,8 @@ const features = [
 
 export default function HomePage() {
     const { data: products = [] } = useProducts({
-        perPage: 4,
+        perPage: 20,
+        featured: true,
     })
 
     const { isAuthenticated } = useAuth()

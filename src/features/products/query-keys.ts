@@ -16,6 +16,7 @@ export type ProductsQuery = Prettify<
     BasicQuery &
         PaginationQuery & {
             categoryId?: string
+            featured?: boolean
         }
 >
 
