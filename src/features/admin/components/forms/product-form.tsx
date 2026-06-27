@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import {
     Field,
-    FieldDescription,
     FieldError,
-    FieldGroup,
     FieldContent,
     FieldLabel,
 } from "@/components/ui/field"
@@ -24,14 +22,12 @@ import {
     Select,
     SelectContent,
     SelectItem,
-    SelectSeparator,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
 import ImagesInput from "@/features/admin/components/forms/images-input"
 import type { ChangeEvent, ReactNode } from "react"
 import axios from "axios"
-import type { Prettify } from "@/types/global-types"
 import { createSlug } from "@/lib/slugify"
 import type { AdminCategory } from "@/features/categories/types"
 import {
@@ -43,16 +39,28 @@ import { Checkbox } from "@/components/ui/checkbox"
 type ProductImage = ProductFormData["images"][number]
 
 // categoryId can be undefined if its category have been deleted
-type InitialData = Prettify<
-    Omit<ProductFormData, "categoryId"> & { categoryId: string | null }
->
+// type InitialData = Prettify<
+//     Omit<ProductFormData, "categoryId"> & { categoryId: string | null }
+// >
+
+const EMPTY_PRODUCT_VALUES: ProductFormData = {
+    name: "",
+    slug: "",
+    description: "",
+    price: 0,
+    stock: 0,
+    categoryId: "",
+    status: "inactive",
+    images: [],
+    isFeatured: false,
+}
 
 type Props = {
     buttonText: string
     title: string
     description: string
-    onSubmit: (data: FormData) => Promise<unknown>
-    initialData?: InitialData
+    onSubmit: (data: ProductFormData) => Promise<unknown>
+    defaultValues?: ProductFormData
     isSubmitting: boolean
     onOpenChange?: (open: boolean) => void
     open?: boolean
@@ -67,26 +75,14 @@ export default function ProductForm({
     onSubmit,
     title,
     children,
-    initialData,
+    defaultValues = EMPTY_PRODUCT_VALUES,
     onOpenChange,
     open,
     categories,
 }: Props) {
     const form = useForm<ProductFormData>({
         resolver: zodResolver(ProductFormSchema),
-        defaultValues: initialData
-            ? { ...initialData, categoryId: initialData.categoryId || "" }
-            : {
-                  name: "",
-                  slug: "",
-                  description: "",
-                  price: 0,
-                  stock: 0,
-                  categoryId: "",
-                  status: "inactive",
-                  images: [],
-                  isFeatured: false,
-              },
+        defaultValues,
     })
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -142,46 +138,14 @@ export default function ProductForm({
     }
 
     const handleSubmit = async (data: ProductFormData) => {
-        // create FormData object
-        const formData = new FormData()
-
-        formData.append("name", data.name)
-        formData.append("slug", data.slug)
-        formData.append("description", data.description)
-        formData.append("price", data.price.toString())
-        formData.append("stock", data.stock.toString())
-        formData.append("categoryId", data.categoryId)
-        formData.append("status", data.status)
-        formData.append("isFeatured", String(data.isFeatured))
-        // Add images
-        data.images.forEach((image, index) => {
-            if (image.file) {
-                formData.append(`images[${index}].file`, image.file)
-            } else {
-                // EXISTING IMAGE - just send id
-                formData.append(`images[${index}].id`, image.id!)
-            }
-            formData.append(`images[${index}].alt`, image.alt || "")
-            formData.append(
-                `images[${index}].isPrimary`,
-                String(image.isPrimary),
-            )
-        })
         try {
-            await onSubmit(formData)
+            await onSubmit(data)
             form.reset()
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const message =
-                    error.response?.data.message || "Failed to save product"
-                form.setError("root", {
-                    message,
-                })
-            } else {
-                form.setError("root", {
-                    message: "An unexpected error occurred",
-                })
-            }
+            const message = axios.isAxiosError(error)
+                ? error.response?.data.message
+                : "An unexpected error occurred"
+            form.setError("root", { message })
         }
     }
 

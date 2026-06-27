@@ -21,8 +21,8 @@ import { Link } from "react-router-dom"
 
 type Props = {
     products: AdminProduct[]
-    onUpdate: (id: string) => void
-    onDelete: (id: string) => void
+    onUpdate: (product: AdminProduct) => void
+    onDelete: (product: AdminProduct) => void
     isUpdating: boolean
 }
 
@@ -94,9 +94,9 @@ export default function ProductsTable({
                                     product.inventoryStatus === "In Stock"
                                         ? "default"
                                         : product.inventoryStatus ===
-                                          "Low Stock"
-                                        ? "secondary"
-                                        : "destructive"
+                                            "Low Stock"
+                                          ? "secondary"
+                                          : "destructive"
                                 }
                             >
                                 {product.inventoryStatus}
@@ -117,7 +117,7 @@ export default function ProductsTable({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => onUpdate(product.id)}
+                                    onClick={() => onUpdate(product)}
                                     title="Edit"
                                 >
                                     <Edit className="h-4 w-4" />
@@ -141,14 +141,14 @@ export default function ProductsTable({
                                             </Link>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
-                                            onClick={() => onUpdate(product.id)}
+                                            onClick={() => onUpdate(product)}
                                         >
                                             <Edit className="h-4 w-4 mr-2 hover:text-white" />
                                             Edit
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             variant="destructive"
-                                            onClick={() => onDelete(product.id)}
+                                            onClick={() => onDelete(product)}
                                         >
                                             <Trash2 className="h-4 w-4 mr-2" />
                                             Delete

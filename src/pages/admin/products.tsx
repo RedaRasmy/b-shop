@@ -1,16 +1,16 @@
-import { Button } from "@/components/ui/button"
-import { DeleteConfirmDialog } from "@/features/admin/components/delete-confirm-dialog"
 import AdminPageHeader from "@/features/admin/components/page-header"
-import ProductForm from "@/features/admin/components/forms/product-form"
 import ProductsPagination from "@/features/admin/components/pagination"
 import ProductsTable from "@/features/admin/components/tables/products-table"
-import useProductsManager from "@/features/admin/hooks/use-products-manager"
-import { Plus } from "lucide-react"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useAdminCategories } from "@/features/categories/api/queries"
 import usePaginatedFilters from "@/features/admin/hooks/use-paginated-filters"
 import Filters from "@/features/admin/components/filter-controls"
 import { getOptions } from "@/features/admin/components/filter-controls/get-options"
+import { CreateProductDialog } from "@/features/admin/components/create-product-dialog"
+import { EditProductDialog } from "@/features/admin/components/edit-product-dialog"
+import type { AdminProduct } from "@/features/products/types"
+import { DeleteProductDialog } from "@/features/admin/components/delete-product-dialog"
+import { useAdminProducts } from "@/features/products/api/queries"
 
 export default function AdminProductsPage() {
     const { data: categories = [] } = useAdminCategories()
@@ -57,53 +57,65 @@ export default function AdminProductsPage() {
     )
 
     // Filter controls
-    const { query, controls, page, setPage } = usePaginatedFilters({
+    const {
+        query: { category, ...params },
+        controls,
+        page,
+        setPage,
+    } = usePaginatedFilters({
         ...options,
         defaultSort: "createdAt:desc",
         pageSize: 15,
     })
 
-    const {
-        addForm,
-        updateForm,
-        confirm,
-        products,
-        updatingId,
-        deletingId,
-        triggers,
-        total,
-        totalPages,
-        isPlaceholderData,
-    } = useProductsManager({
-        queryParams: query,
-        categories,
+    const { data, isPlaceholderData } = useAdminProducts({
+        ...params,
+        categoryId:
+            category === "__NULL__"
+                ? "__NULL__" // for deleted categories
+                : categories.find((c) => c.slug === category)?.id,
     })
+
+    const products = data?.data || []
+
+    const [editProduct, setEditProduct] = useState<AdminProduct | null>(null)
+    const [deleteProduct, setDeleteProduct] = useState<AdminProduct | null>(
+        null,
+    )
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
 
     return (
         <div className="space-y-6 h-full flex flex-col">
-            <ProductForm key={updatingId ?? undefined} {...updateForm} />
-            <DeleteConfirmDialog key={deletingId ?? undefined} {...confirm} />
+            <EditProductDialog
+                product={editProduct}
+                open={!!editProduct}
+                onOpenChange={(open) => !open && setEditProduct(null)}
+            />
+            <DeleteProductDialog
+                product={deleteProduct}
+                open={!!deleteProduct}
+                onOpenChange={(open) => !open && setDeleteProduct(null)}
+            />
             <AdminPageHeader
                 title="Products"
-                description={`Manage your product inventory (${total} products) `}
+                description={`Manage your product inventory (${data?.total ?? 0} products) `}
             >
-                <ProductForm {...addForm}>
-                    <Button>
-                        <Plus />
-                        Add Product
-                    </Button>
-                </ProductForm>
+                <CreateProductDialog
+                    open={isCreateOpen}
+                    onOpenChange={setIsCreateOpen}
+                />
             </AdminPageHeader>
             <Filters {...controls} searchPlaceholder="Search by product name" />
             <ProductsTable
                 products={products}
-                {...triggers}
+                onUpdate={setEditProduct}
+                onDelete={setDeleteProduct}
                 isUpdating={isPlaceholderData}
             />
             <ProductsPagination
                 page={page}
                 setPage={setPage}
-                totalPages={totalPages ?? 1}
+                totalPages={data?.totalPages ?? 1}
             />
         </div>
     )
