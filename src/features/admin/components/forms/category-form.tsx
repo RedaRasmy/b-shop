@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
     Dialog,
@@ -10,13 +10,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+    Field,
+    FieldContent,
+    FieldError,
+    FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
@@ -96,7 +94,7 @@ export function CategoryForm({
         const nameExists = existingCategories.some(
             ({ name }) =>
                 name.toLowerCase() === newName.toLowerCase() &&
-                name.toLowerCase() !== initialData?.name?.toLowerCase()
+                name.toLowerCase() !== initialData?.name?.toLowerCase(),
         )
 
         if (nameExists) {
@@ -113,7 +111,7 @@ export function CategoryForm({
 
         // Check if slug exists (excluding current category in edit mode)
         const slugExists = existingCategories.some(
-            ({ slug }) => slug === newSlug && slug !== initialData?.slug
+            ({ slug }) => slug === newSlug && slug !== initialData?.slug,
         )
         if (slugExists) {
             form.setValue("slug", newSlug, { shouldValidate: false })
@@ -129,7 +127,7 @@ export function CategoryForm({
         const newSlug = e.target.value
         // Check if slug exists (excluding current category in edit mode)
         const slugExists = existingCategories.some(
-            ({ slug }) => slug === newSlug && slug !== initialData?.slug
+            ({ slug }) => slug === newSlug && slug !== initialData?.slug,
         )
         if (slugExists) {
             form.setValue("slug", newSlug, { shouldValidate: false })
@@ -152,107 +150,128 @@ export function CategoryForm({
                     <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
 
-                <Form {...form}>
-                    <form
-                        onSubmit={form.handleSubmit(handleSubmit)}
-                        className="space-y-4"
-                    >
-                        <div className="text-destructive">{error}</div>
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Category Name</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter category name"
-                                            {...field}
-                                            onChange={handleNameChange}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                <form
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                    className="space-y-4"
+                >
+                    <div className="text-destructive">{error}</div>
+                    <Controller
+                        name="name"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="category-name">
+                                    Category Name
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="category-name"
+                                    aria-invalid={fieldState.invalid}
+                                    placeholder="Enter category name"
+                                    onChange={handleNameChange}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                    <Controller
+                        name="slug"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="category-slug">
+                                    Slug
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="category-slug"
+                                    aria-invalid={fieldState.invalid}
+                                    placeholder="category-slug"
+                                    onChange={handleSlugChange}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
 
-                        <FormField
-                            control={form.control}
-                            name="slug"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Slug</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="category-slug"
-                                            {...field}
-                                            onChange={handleSlugChange}
+                    <Controller
+                        name="description"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="category-description">
+                                    Description
+                                </FieldLabel>
+                                <Textarea
+                                    {...field}
+                                    aria-invalid={fieldState.invalid}
+                                    placeholder="Enter category description"
+                                    className="min-h-[80px]"
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                    <Controller
+                        name="status"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field
+                                orientation="responsive"
+                                data-invalid={fieldState.invalid}
+                            >
+                                <FieldContent>
+                                    <FieldLabel htmlFor="product-status">
+                                        Status
+                                    </FieldLabel>
+                                    {fieldState.invalid && (
+                                        <FieldError
+                                            errors={[fieldState.error]}
                                         />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Enter category description"
-                                            className="min-h-[80px]"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="status"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Status</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                    )}
+                                </FieldContent>
+                                <Select
+                                    name={field.name}
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger
+                                        id="product-status"
+                                        aria-invalid={fieldState.invalid}
+                                        className="w-full"
                                     >
-                                        <FormControl>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="active">
-                                                Active
-                                            </SelectItem>
-                                            <SelectItem value="inactive">
-                                                Inactive
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <SelectValue placeholder="Select a status" />
+                                    </SelectTrigger>
+                                    <SelectContent position="item-aligned">
+                                        <SelectItem value="active">
+                                            Active
+                                        </SelectItem>
+                                        <SelectItem value="inactive">
+                                            Inactive
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </Field>
+                        )}
+                    />
 
-                        <div className="flex justify-end space-x-2 pt-4">
-                            <DialogClose>
-                                <Button asChild type="button" variant="outline">
-                                    <div>Cancel</div>
-                                </Button>
-                            </DialogClose>
-                            <Button type="submit" disabled={isSubmitting}>
-                                {buttonText}
+                    <div className="flex justify-end space-x-2 pt-4">
+                        <DialogClose>
+                            <Button asChild type="button" variant="outline">
+                                <div>Cancel</div>
                             </Button>
-                        </div>
-                    </form>
-                </Form>
+                        </DialogClose>
+                        <Button type="submit" disabled={isSubmitting}>
+                            {buttonText}
+                        </Button>
+                    </div>
+                </form>
             </DialogContent>
         </Dialog>
     )

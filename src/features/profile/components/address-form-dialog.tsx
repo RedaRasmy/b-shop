@@ -15,16 +15,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Switch } from "@/components/ui/switch"
 import type { Address } from "@/features/profile/types"
 import {
@@ -41,7 +34,7 @@ interface Props {
     title: string
     description: string
     buttonText: string
-    error?: string 
+    error?: string
 }
 
 export function AddressFormDialog({
@@ -82,110 +75,131 @@ export function AddressFormDialog({
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
-                <Form {...form}>
-                    <p className="text-destructive">{error}</p>
-                    <form
-                        onSubmit={form.handleSubmit(handleSubmit)}
-                        className="space-y-4"
-                    >
-                        <FormField
-                            control={form.control}
-                            name="label"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Address Type</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            value={field.value}
-                                            defaultValue={field.value}
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="Home">
-                                                    Home
-                                                </SelectItem>
-                                                <SelectItem value="Work">
-                                                    Work
-                                                </SelectItem>
-                                                <SelectItem value="Other">
-                                                    Other
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="city"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>City</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="postalCode"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Postal Code</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="addressLine1"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Street Address</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="isDefault"
-                            render={({ field }) => (
-                                <FormItem className="flex w-full gap-4 mt-6">
-                                    <FormLabel>
-                                        Set as default address
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Switch
-                                            className="scale-[1.2]"
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            defaultChecked={field.value}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <DialogFooter>
-                            <Button type="submit" disabled={isSubmitting}>
-                                {buttonText}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </Form>
+                <p className="text-destructive">{error}</p>
+                <form
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                    className="space-y-4"
+                >
+                    <Controller
+                        name="label"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="address-type">
+                                    Address Type
+                                </FieldLabel>
+                                <Select
+                                    name={field.name}
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger
+                                        id="address-type"
+                                        aria-invalid={fieldState.invalid}
+                                        className="min-w-full"
+                                    >
+                                        <SelectValue placeholder="Select a type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Home">
+                                            Home
+                                        </SelectItem>
+                                        <SelectItem value="Work">
+                                            Work
+                                        </SelectItem>
+                                        <SelectItem value="Other">
+                                            Other
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </Field>
+                        )}
+                    />
+                    <Controller
+                        name="city"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="city">City</FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="city"
+                                    aria-invalid={fieldState.invalid}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                    <Controller
+                        name="postalCode"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="postal-code">
+                                    Postal Code
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="postal-code"
+                                    aria-invalid={fieldState.invalid}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+
+                    <Controller
+                        name="addressLine1"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="street-address">
+                                    Street Address
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="street-address"
+                                    aria-invalid={fieldState.invalid}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+
+                    <Controller
+                        name="isDefault"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="is-default">
+                                    Set as default address
+                                </FieldLabel>
+                                <Switch
+                                    id="is-default"
+                                    name={field.name}
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                    aria-invalid={fieldState.invalid}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+
+                    <DialogFooter>
+                        <Button type="submit" disabled={isSubmitting}>
+                            {buttonText}
+                        </Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )

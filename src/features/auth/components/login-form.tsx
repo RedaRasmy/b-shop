@@ -1,15 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useMutation } from "@tanstack/react-query"
 import { loginRequest } from "@/features/auth/requests"
@@ -102,95 +94,104 @@ export function LoginForm() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                        <Form {...form}>
-                            <form
-                                onSubmit={form.handleSubmit(onSubmit)}
-                                className="space-y-4"
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="space-y-4"
+                        >
+                            <p className="text-red-500">{message}</p>
+                            {/* Email Field */}
+                            <Controller
+                                name="email"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor="email">
+                                            Email
+                                        </FieldLabel>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                                            <Input
+                                                {...field}
+                                                id="email"
+                                                type="email"
+                                                placeholder="Enter your email"
+                                                className="pl-10"
+                                                aria-invalid={
+                                                    fieldState.invalid
+                                                }
+                                            />
+                                        </div>
+                                        {fieldState.invalid && (
+                                            <FieldError
+                                                errors={[fieldState.error]}
+                                            />
+                                        )}
+                                    </Field>
+                                )}
+                            />
+
+                            {/* Password Field */}
+                            <Controller
+                                name="password"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor="password">
+                                            Password
+                                        </FieldLabel>
+                                        <div className="relative">
+                                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                                            <Input
+                                                {...field}
+                                                id="password"
+                                                type={
+                                                    showPassword
+                                                        ? "text"
+                                                        : "password"
+                                                }
+                                                placeholder="Enter your password"
+                                                className="pl-10 pr-10"
+                                                aria-invalid={
+                                                    fieldState.invalid
+                                                }
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="absolute right-0 top-0 h-full px-3"
+                                                onClick={() =>
+                                                    setShowPassword(
+                                                        !showPassword,
+                                                    )
+                                                }
+                                            >
+                                                {showPassword ? (
+                                                    <EyeOff className="h-4 w-4" />
+                                                ) : (
+                                                    <Eye className="h-4 w-4" />
+                                                )}
+                                            </Button>
+                                        </div>
+                                        {fieldState.invalid && (
+                                            <FieldError
+                                                errors={[fieldState.error]}
+                                            />
+                                        )}
+                                    </Field>
+                                )}
+                            />
+
+                            {/* Sign In Button */}
+                            <Button
+                                type="submit"
+                                className="w-full cursor-pointer"
+                                size="lg"
+                                disabled={form.formState.isSubmitting}
                             >
-                                <p className="text-red-500">{message}</p>
-                                {/* Email Field */}
-                                <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Email</FormLabel>
-                                            <FormControl>
-                                                <div className="relative">
-                                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                                                    <Input
-                                                        id="email"
-                                                        type="email"
-                                                        placeholder="Enter your email"
-                                                        className="pl-10"
-                                                        {...field}
-                                                    />
-                                                </div>
-                                            </FormControl>
-                                            <FormDescription></FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                {/* Password Field */}
-                                <FormField
-                                    control={form.control}
-                                    name="password"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Password</FormLabel>
-                                            <FormControl>
-                                                <div className="relative">
-                                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                                                    <Input
-                                                        id="password"
-                                                        type={
-                                                            showPassword
-                                                                ? "text"
-                                                                : "password"
-                                                        }
-                                                        placeholder="Enter your password"
-                                                        className="pl-10 pr-10"
-                                                        {...field}
-                                                    />
-
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="absolute right-0 top-0 h-full px-3"
-                                                        onClick={() =>
-                                                            setShowPassword(
-                                                                !showPassword
-                                                            )
-                                                        }
-                                                    >
-                                                        {showPassword ? (
-                                                            <EyeOff className="h-4 w-4" />
-                                                        ) : (
-                                                            <Eye className="h-4 w-4" />
-                                                        )}
-                                                    </Button>
-                                                </div>
-                                            </FormControl>
-                                            <FormDescription></FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                {/* Sign In Button */}
-                                <Button
-                                    type="submit"
-                                    className="w-full cursor-pointer"
-                                    size="lg"
-                                    disabled={form.formState.isSubmitting}
-                                >
-                                    Sign in
-                                </Button>
-                            </form>
-                        </Form>
+                                Sign in
+                            </Button>
+                        </form>
 
                         {/* Sign Up Link */}
                         <div className="text-center text-sm">
