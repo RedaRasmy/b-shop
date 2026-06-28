@@ -9,10 +9,15 @@ import { AuthContext } from "@/features/auth/auth-context"
 import { logoutRequest } from "@/features/auth/requests"
 import { fetchMe } from "@/features/profile/api/requests"
 import type { User } from "@/features/auth/types"
+import { useQueryClient } from "@tanstack/react-query"
+import { useAppDispatch } from "@/redux/hooks"
+import { cartActions } from "@/redux/slices/cart"
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
+    const queryClient = useQueryClient()
+    const dispatch = useAppDispatch()
 
     const set = useCallback((user: User) => {
         setUser(user)
@@ -22,6 +27,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = useCallback(async () => {
         try {
             await logoutRequest()
+            queryClient.clear()
+            dispatch(cartActions.clear())
         } catch (err) {
             console.error("Logout failed", err)
         } finally {
@@ -54,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             refreshUser,
             setUser: set,
         }),
-        [user, loading, logout, refreshUser, set]
+        [user, loading, logout, refreshUser, set],
     )
 
     return (

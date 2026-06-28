@@ -38,17 +38,12 @@ export function LoginForm() {
     const mutation = useMutation({
         mutationFn: loginRequest,
         onSuccess: async (user) => {
-            setUser(user)
             // Merge Carts
             if (localCart.length !== 0) {
                 await mergeCartRequest(localCart)
             }
-
-            if (user.role === "admin") {
-                navigate("/admin")
-            } else {
-                navigate("/profile")
-            }
+            setUser(user)
+            navigate(user.role === "admin" ? "/admin" : "/profile")
         },
         onError: (err) => {
             const message =

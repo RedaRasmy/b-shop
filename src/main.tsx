@@ -14,14 +14,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-                <Provider store={store}>
+            <Provider store={store}>
+                <AuthProvider>
                     <NuqsAdapter>
                         <RouterProvider router={router} />
                     </NuqsAdapter>
-                </Provider>
-            </AuthProvider>
+                </AuthProvider>
+            </Provider>
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
-    </StrictMode>
+    </StrictMode>,
 )

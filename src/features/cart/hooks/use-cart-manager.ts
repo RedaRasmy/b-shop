@@ -24,7 +24,7 @@ export default function useCartManager(isAuthenticated: boolean) {
     const localCart = useAppSelector(selectCart)
     const ids = useMemo(
         () => localCart.map((item) => item.productId),
-        [localCart]
+        [localCart],
     )
 
     const {
@@ -46,7 +46,7 @@ export default function useCartManager(isAuthenticated: boolean) {
                     .quantity,
             })) as CartProduct[]
         },
-        [localCart]
+        [localCart],
     )
 
     const {
@@ -119,7 +119,7 @@ export default function useCartManager(isAuthenticated: boolean) {
     const itemCount = items.reduce((acc, item) => acc + item.quantity, 0)
     const cartSubtotal = items.reduce(
         (acc, item) => acc + item.price * item.quantity,
-        0
+        0,
     )
     const orderSubtotal = items
         .filter((itm) => itm.inventoryStatus !== "Out of Stock")

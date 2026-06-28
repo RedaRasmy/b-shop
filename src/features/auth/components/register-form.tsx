@@ -47,15 +47,11 @@ export function RegisterForm() {
     const mutation = useMutation({
         mutationFn: registerRequest,
         onSuccess: async (user) => {
-            setUser(user)
             if (localCart.length !== 0) {
                 await mergeCartRequest(localCart)
             }
-            if (user.role === "admin") {
-                navigate("/admin")
-            } else {
-                navigate("/profile")
-            }
+            setUser(user)
+            navigate(user.role === "admin" ? "/admin" : "/profile")
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (err: any) => {

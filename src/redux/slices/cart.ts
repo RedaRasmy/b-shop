@@ -20,7 +20,7 @@ const cartSlice = createSlice({
             action: PayloadAction<{
                 productId: string
                 quantity?: number
-            }>
+            }>,
         ) => {
             const { productId, quantity = 1 } = action.payload
 
@@ -28,7 +28,7 @@ const cartSlice = createSlice({
             if (quantity <= 0) return
 
             const existingItem = state.find(
-                (item) => item.productId === productId
+                (item) => item.productId === productId,
             )
 
             if (existingItem) {
@@ -57,7 +57,7 @@ const cartSlice = createSlice({
         },
         incrementQuantity: (
             state,
-            action: PayloadAction<{ productId: string; amount?: number }>
+            action: PayloadAction<{ productId: string; amount?: number }>,
         ) => {
             const { productId, amount = 1 } = action.payload
             const item = state.find((item) => item.productId === productId)
@@ -69,7 +69,7 @@ const cartSlice = createSlice({
 
         decrementQuantity: (
             state,
-            action: PayloadAction<{ productId: string; amount?: number }>
+            action: PayloadAction<{ productId: string; amount?: number }>,
         ) => {
             const { productId, amount = 1 } = action.payload
             const item = state.find((item) => item.productId === productId)
@@ -88,6 +88,10 @@ const cartSlice = createSlice({
 
         loadCart: (_, action: PayloadAction<CartItem[]>) => {
             return action.payload
+        },
+
+        clear: () => {
+            return []
         },
     },
 })
