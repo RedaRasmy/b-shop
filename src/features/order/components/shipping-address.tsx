@@ -1,11 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -18,7 +12,7 @@ import {
 import type { OrderFormData } from "@/features/order/validation"
 import type { Address } from "@/features/profile/types"
 import { MapPin } from "lucide-react"
-import { useFormContext } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 
 export default function ShippingAddress({
     onSelectAddress,
@@ -63,61 +57,82 @@ export default function ShippingAddress({
                     </div>
                 )}
 
-                <FormField
-                    control={control}
+                <Controller
                     name="addressLine1"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Street Address</FormLabel>
-                            <FormControl>
-                                <Input placeholder="" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor="street-address">
+                                Street Address
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                id="street-address"
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
                     )}
                 />
 
-                <FormField
-                    control={control}
+                <Controller
                     name="addressLine2"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor="optional-address">
                                 Apartment, suite, etc. (optional)
-                            </FormLabel>
-                            <FormControl>
-                                <Input placeholder="" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                id="optional-address"
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
                     )}
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                        control={control}
+                    <Controller
                         name="city"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>City</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="city">City</FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="city"
+                                    aria-invalid={fieldState.invalid}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
                         )}
                     />
-                    <FormField
-                        control={control}
+
+                    <Controller
                         name="postalCode"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Postal Code</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="postal-code">
+                                    Postal Code
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="postal-code"
+                                    aria-invalid={fieldState.invalid}
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
                         )}
                     />
                 </div>

@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { profileKeys } from "@/features/profile/query-keys"
 import { updateProfile } from "@/features/profile/api/requests"
@@ -15,7 +8,7 @@ import { ProfileInfosSchema } from "@/features/profile/validation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { useProfile } from "@/features/profile/api/queries"
 
 type FormState = {
@@ -36,6 +29,7 @@ export default function ProfileTab() {
     })
 
     useEffect(() => {
+        console.log("profile-tab useEffect")
         if (profile) {
             form.reset({
                 fullName: profile.fullName || "",
@@ -83,70 +77,65 @@ export default function ProfileTab() {
                 <CardTitle className="text-2xl">Contact Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                <Form {...form}>
-                    <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-5 "
-                    >
-                        <p className="text-destructive">{error}</p>
-                        <FormField
-                            control={form.control}
-                            name="fullName"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Full Name</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter your full name"
-                                            type="text"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="email"
-                            disabled
-                            defaultValue={profile.email}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input type="email" {...field} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="phone"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Phone</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter your phone number"
-                                            type="tel"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="flex mt-6">
-                            <Button
-                                type="submit"
-                                className="cursor-pointer"
-                                disabled={isPending}
-                            >
-                                Save changes
-                            </Button>
-                        </div>
-                    </form>
-                </Form>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-5 "
+                >
+                    <p className="text-destructive">{error}</p>
+                    <Controller
+                        name="fullName"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="full-name">
+                                    Full Name
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="full-name"
+                                    aria-invalid={fieldState.invalid}
+                                    placeholder="Enter your full name"
+                                    type="text"
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                    <div>
+                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <Input disabled id="email" value={profile.email} />
+                    </div>
+                    <Controller
+                        name="phone"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor="phone">Phone</FieldLabel>
+                                <Input
+                                    {...field}
+                                    id="phone"
+                                    aria-invalid={fieldState.invalid}
+                                    type="tel"
+                                    placeholder="Enter your phone number"
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                    <div className="flex mt-6">
+                        <Button
+                            type="submit"
+                            className="cursor-pointer"
+                            disabled={isPending}
+                        >
+                            Save changes
+                        </Button>
+                    </div>
+                </form>
             </CardContent>
         </Card>
     )

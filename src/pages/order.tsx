@@ -1,4 +1,3 @@
-import { Form } from "@/components/ui/form"
 import { useAuth } from "@/features/auth/use-auth"
 import useCartManager from "@/features/cart/hooks/use-cart-manager"
 import { createOrder } from "@/features/order/api/requests"
@@ -26,7 +25,7 @@ export default function OrderPage() {
 
     const filteredItems = useMemo(
         () => items.filter((itm) => itm.inventoryStatus !== "Out of Stock"),
-        [items]
+        [items],
     )
 
     // get defaults
@@ -93,34 +92,32 @@ export default function OrderPage() {
     }
 
     const outOfStock = items.every(
-        (item) => item.inventoryStatus === "Out of Stock"
+        (item) => item.inventoryStatus === "Out of Stock",
     )
 
     return (
         <div className="container mx-auto px-4 py-8 2xl:px-40">
             <Header />
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(submit)}
-                    className="grid lg:grid-cols-3 gap-8"
-                >
-                    <div className="lg:col-span-2 space-y-6">
-                        <ContactInfos />
-                        <ShippingAddress
-                            // TODO
-                            addresses={[]}
-                            onSelectAddress={() => {}}
-                        />
-                    </div>
-                    <OrderSummary
-                        isPending={isPending}
-                        orderItems={filteredItems}
-                        subtotal={orderSubtotal}
-                        error={errorMessage}
-                        disabled={outOfStock || items.length === 0}
+            <form
+                onSubmit={form.handleSubmit(submit)}
+                className="grid lg:grid-cols-3 gap-8"
+            >
+                <div className="lg:col-span-2 space-y-6">
+                    <ContactInfos />
+                    <ShippingAddress
+                        // TODO
+                        addresses={[]}
+                        onSelectAddress={() => {}}
                     />
-                </form>
-            </Form>
+                </div>
+                <OrderSummary
+                    isPending={isPending}
+                    orderItems={filteredItems}
+                    subtotal={orderSubtotal}
+                    error={errorMessage}
+                    disabled={outOfStock || items.length === 0}
+                />
+            </form>
         </div>
     )
 }

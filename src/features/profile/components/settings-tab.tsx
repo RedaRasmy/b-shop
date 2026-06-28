@@ -4,18 +4,11 @@ import { TabsContent } from "@/components/ui/tabs"
 import { LogOut, Settings } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/features/auth/use-auth"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import z from "zod"
 import { PasswordSchema } from "@/features/auth/validation"
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { updatePassword } from "@/features/profile/api/requests"
 import { useMutation } from "@tanstack/react-query"
 import type { AxiosError } from "axios"
@@ -98,65 +91,86 @@ export default function SettingsTab() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Form {...form}>
-                            <form
-                                onSubmit={form.handleSubmit(onSubmit)}
-                                className="space-y-4"
-                            >
-                                {error && (
-                                    <p className="text-destructive">{error}</p>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="space-y-4"
+                        >
+                            {error && (
+                                <p className="text-destructive">{error}</p>
+                            )}
+                            {message && (
+                                <p className="text-green-600">{message}</p>
+                            )}
+
+                            <Controller
+                                name="oldPassword"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor="current-password">
+                                            Current Password
+                                        </FieldLabel>
+                                        <Input
+                                            {...field}
+                                            id="current-password"
+                                            aria-invalid={fieldState.invalid}
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError
+                                                errors={[fieldState.error]}
+                                            />
+                                        )}
+                                    </Field>
                                 )}
-                                {message && (
-                                    <p className="text-green-600">{message}</p>
+                            />
+
+                            <Controller
+                                name="newPassword"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor="new-password">
+                                            New Password
+                                        </FieldLabel>
+                                        <Input
+                                            {...field}
+                                            id="new-password"
+                                            aria-invalid={fieldState.invalid}
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError
+                                                errors={[fieldState.error]}
+                                            />
+                                        )}
+                                    </Field>
                                 )}
-                                <FormField
-                                    control={form.control}
-                                    name="oldPassword"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>
-                                                Current Password
-                                            </FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="newPassword"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>New Password</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="confirmPassword"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>
-                                                Confirm New Password
-                                            </FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button disabled={isPending} type="submit">
-                                    Update Password
-                                </Button>
-                            </form>
-                        </Form>
+                            />
+
+                            <Controller
+                                name="confirmPassword"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel htmlFor="confirm-password">
+                                            Confirm New Password
+                                        </FieldLabel>
+                                        <Input
+                                            {...field}
+                                            id="confirm-password"
+                                            aria-invalid={fieldState.invalid}
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError
+                                                errors={[fieldState.error]}
+                                            />
+                                        )}
+                                    </Field>
+                                )}
+                            />
+                            <Button disabled={isPending} type="submit">
+                                Update Password
+                            </Button>
+                        </form>
                     </CardContent>
                 </Card>
             </div>
