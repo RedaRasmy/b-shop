@@ -39,7 +39,7 @@ type Props = {
     title: string
     description: string
     onSubmit: (data: CategoryFormData) => Promise<unknown>
-    initialData?: CategoryFormData
+    defaultValues?: CategoryFormData
     isSubmitting: boolean
     onOpenChange?: (open: boolean) => void
     open?: boolean
@@ -51,7 +51,7 @@ export function CategoryForm({
     description,
     onSubmit,
     title,
-    initialData,
+    defaultValues,
     isSubmitting,
     children,
     onOpenChange,
@@ -60,7 +60,7 @@ export function CategoryForm({
 }: Props) {
     const form = useForm<CategoryFormData>({
         resolver: zodResolver(CategoryFormSchema),
-        defaultValues: initialData || {
+        defaultValues: defaultValues ?? {
             name: "",
             description: "",
             slug: "",
@@ -94,7 +94,7 @@ export function CategoryForm({
         const nameExists = existingCategories.some(
             ({ name }) =>
                 name.toLowerCase() === newName.toLowerCase() &&
-                name.toLowerCase() !== initialData?.name?.toLowerCase(),
+                name.toLowerCase() !== defaultValues?.name?.toLowerCase(),
         )
 
         if (nameExists) {
@@ -111,7 +111,7 @@ export function CategoryForm({
 
         // Check if slug exists (excluding current category in edit mode)
         const slugExists = existingCategories.some(
-            ({ slug }) => slug === newSlug && slug !== initialData?.slug,
+            ({ slug }) => slug === newSlug && slug !== defaultValues?.slug,
         )
         if (slugExists) {
             form.setValue("slug", newSlug, { shouldValidate: false })
@@ -127,7 +127,7 @@ export function CategoryForm({
         const newSlug = e.target.value
         // Check if slug exists (excluding current category in edit mode)
         const slugExists = existingCategories.some(
-            ({ slug }) => slug === newSlug && slug !== initialData?.slug,
+            ({ slug }) => slug === newSlug && slug !== defaultValues?.slug,
         )
         if (slugExists) {
             form.setValue("slug", newSlug, { shouldValidate: false })
