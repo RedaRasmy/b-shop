@@ -1,15 +1,13 @@
 import { Link, NavLink, Outlet } from "react-router-dom"
 import { useAuth } from "./features/auth/use-auth"
 import { Button } from "./components/ui/button"
-import { ShoppingCart, User } from "lucide-react"
+import { User } from "lucide-react"
 import { cn } from "./lib/utils"
-import useCartManager from "@/features/cart/hooks/use-cart-manager"
+import CartButton from "@/features/cart/components/cart-button"
 
 export default function App() {
     const { user, isAuthenticated } = useAuth()
     const isAdmin = user && user.role === "admin"
-
-    const { itemCount } = useCartManager(isAuthenticated)
 
     return (
         <div className="h-screen w-full">
@@ -29,7 +27,7 @@ export default function App() {
                         className={({ isActive }) =>
                             cn(
                                 "hover:text-accent font-semibold",
-                                isActive && "text-accent"
+                                isActive && "text-accent",
                             )
                         }
                     >
@@ -37,21 +35,7 @@ export default function App() {
                     </NavLink>
                 </div>
                 <div className="flex items-center md:gap-5 gap-3.5">
-                    <Button
-                        asChild
-                        variant={"ghost"}
-                        size={"icon"}
-                        className="relative"
-                    >
-                        <Link to="/cart">
-                            <ShoppingCart className="size-4.5" />
-                            {itemCount > 0 && (
-                                <span className="absolute -top-1 font-mono -right-1 text-xs text-white bg-destructive rounded-full size-4.5 flex items-center justify-center ">
-                                    {itemCount}
-                                </span>
-                            )}
-                        </Link>
-                    </Button>
+                    <CartButton />
                     {!isAuthenticated ? (
                         <div className="flex gap-1 md:gap-2 ">
                             <Button asChild className="not-sm:hidden">
