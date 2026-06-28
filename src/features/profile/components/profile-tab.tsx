@@ -103,10 +103,10 @@ export default function ProfileTab() {
                             </Field>
                         )}
                     />
-                    <div>
+                    <Field>
                         <FieldLabel htmlFor="email">Email</FieldLabel>
                         <Input disabled id="email" value={profile.email} />
-                    </div>
+                    </Field>
                     <Controller
                         name="phone"
                         control={form.control}
