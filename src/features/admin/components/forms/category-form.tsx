@@ -207,6 +207,7 @@ export function CategoryForm({
                                     Description
                                 </FieldLabel>
                                 <Textarea
+                                    id="category-description"
                                     {...field}
                                     aria-invalid={fieldState.invalid}
                                     placeholder="Enter category description"
