@@ -6,12 +6,27 @@ import type { ReactNode } from "react"
 import { server } from "@/tests/mocked-server"
 import { http, HttpResponse } from "msw"
 import { mockedCustomer } from "./mocked-users"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { Provider } from "react-redux"
+import { rootReducer } from "@/redux/store"
+import { configureStore } from "@reduxjs/toolkit"
 
-const wrapper = ({ children }: { children: ReactNode }) => (
-    <AuthProvider>{children}</AuthProvider>
-)
+const getAuthResult = () => {
+    const testQueryClient = new QueryClient({
+        defaultOptions: { queries: { retry: false } },
+    })
+    const testStore = configureStore({ reducer: rootReducer })
 
-const getAuthResult = () => renderHook(() => useAuth(), { wrapper }).result
+    return renderHook(() => useAuth(), {
+        wrapper: ({ children }: { children: ReactNode }) => (
+            <QueryClientProvider client={testQueryClient}>
+                <Provider store={testStore}>
+                    <AuthProvider>{children}</AuthProvider>
+                </Provider>
+            </QueryClientProvider>
+        ),
+    }).result
+}
 
 describe("AuthContext", () => {
     it("should start with no user then auto login", async () => {
@@ -27,7 +42,6 @@ describe("AuthContext", () => {
 
         expect(result.current.user).toStrictEqual(mockedCustomer)
         expect(result.current.isAuthenticated).toBe(true)
-        
     })
 
     it("should set user", async () => {
@@ -69,9 +83,7 @@ describe("AuthContext", () => {
 
     it("should handle refreshUser failure", async () => {
         server.use(
-            http.get("/api/me", () =>
-                HttpResponse.json({}, { status: 401 })
-            )
+            http.get("/api/me", () => HttpResponse.json({}, { status: 401 })),
         )
 
         const result = getAuthResult()
