@@ -176,7 +176,10 @@ export function AddressFormDialog({
                         name="isDefault"
                         control={form.control}
                         render={({ field, fieldState }) => (
-                            <Field data-invalid={fieldState.invalid}>
+                            <Field
+                                data-invalid={fieldState.invalid}
+                                orientation={"horizontal"}
+                            >
                                 <FieldLabel htmlFor="is-default">
                                     Set as default address
                                 </FieldLabel>
@@ -195,7 +198,11 @@ export function AddressFormDialog({
                     />
 
                     <DialogFooter>
-                        <Button type="submit" disabled={isSubmitting}>
+                        <Button
+                            className={"mt-2"}
+                            type="submit"
+                            disabled={isSubmitting}
+                        >
                             {buttonText}
                         </Button>
                     </DialogFooter>
