@@ -30,9 +30,9 @@ export default function OrderPage() {
 
     // get defaults
     const { data: profile } = useProfile()
-    const { data: addresses } = useAddresses()
+    const { data: addresses = [] } = useAddresses()
 
-    const defaultAddress = addresses?.find((ad) => ad.isDefault)
+    const defaultAddress = addresses.find((ad) => ad.isDefault)
 
     const form = useForm({
         resolver: zodResolver(OrderFormSchema),
@@ -106,9 +106,21 @@ export default function OrderPage() {
                     <div className="lg:col-span-2 space-y-6">
                         <ContactInfos />
                         <ShippingAddress
-                            // TODO
-                            addresses={[]}
-                            onSelectAddress={() => {}}
+                            addresses={addresses}
+                            onSelectAddress={(address) => {
+                                form.setValue(
+                                    "addressLine1",
+                                    address.addressLine1,
+                                )
+                                form.setValue("city", address.city)
+                                form.setValue("postalCode", address.postalCode)
+
+                                form.trigger([
+                                    "addressLine1",
+                                    "city",
+                                    "postalCode",
+                                ])
+                            }}
                         />
                     </div>
                     <OrderSummary

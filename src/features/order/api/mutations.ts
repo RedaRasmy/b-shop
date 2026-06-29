@@ -10,7 +10,6 @@ export function useUpdateOrder() {
             queryClient.invalidateQueries({
                 queryKey: orderKeys.base,
             })
-            // TODO : maybe I should invalidate other things
         },
     })
 }

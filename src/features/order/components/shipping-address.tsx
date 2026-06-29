@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
     Select,
     SelectContent,
@@ -19,7 +18,7 @@ export default function ShippingAddress({
     addresses,
 }: {
     addresses: Address[]
-    onSelectAddress: (id: string) => void
+    onSelectAddress: (id: Address) => void
 }) {
     const { control } = useFormContext<OrderFormData>()
 
@@ -35,11 +34,15 @@ export default function ShippingAddress({
             </CardHeader>
             <CardContent className="space-y-4">
                 {addresses.length > 0 && (
-                    <div>
-                        <Label htmlFor="savedAddress">
-                            Select Saved Address
-                        </Label>
-                        <Select onValueChange={onSelectAddress}>
+                    <div className="">
+                        <Select
+                            onValueChange={(id) => {
+                                const add = addresses.find(
+                                    (add) => add.id === id,
+                                )!
+                                onSelectAddress(add)
+                            }}
+                        >
                             <SelectTrigger id="savedAddress">
                                 <SelectValue placeholder="Choose from saved addresses" />
                             </SelectTrigger>
