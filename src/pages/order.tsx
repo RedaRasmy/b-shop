@@ -12,7 +12,7 @@ import ShippingAddress from "@/features/order/components/shipping-address"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useMemo } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { cartKeys } from "@/features/cart/query-keys"
 import { useAddresses, useProfile } from "@/features/profile/api/queries"
@@ -98,26 +98,28 @@ export default function OrderPage() {
     return (
         <div className="container mx-auto px-4 py-8 2xl:px-40">
             <Header />
-            <form
-                onSubmit={form.handleSubmit(submit)}
-                className="grid lg:grid-cols-3 gap-8"
-            >
-                <div className="lg:col-span-2 space-y-6">
-                    <ContactInfos />
-                    <ShippingAddress
-                        // TODO
-                        addresses={[]}
-                        onSelectAddress={() => {}}
+            <FormProvider {...form}>
+                <form
+                    onSubmit={form.handleSubmit(submit)}
+                    className="grid lg:grid-cols-3 gap-8"
+                >
+                    <div className="lg:col-span-2 space-y-6">
+                        <ContactInfos />
+                        <ShippingAddress
+                            // TODO
+                            addresses={[]}
+                            onSelectAddress={() => {}}
+                        />
+                    </div>
+                    <OrderSummary
+                        isPending={isPending}
+                        orderItems={filteredItems}
+                        subtotal={orderSubtotal}
+                        error={errorMessage}
+                        disabled={outOfStock || items.length === 0}
                     />
-                </div>
-                <OrderSummary
-                    isPending={isPending}
-                    orderItems={filteredItems}
-                    subtotal={orderSubtotal}
-                    error={errorMessage}
-                    disabled={outOfStock || items.length === 0}
-                />
-            </form>
+                </form>
+            </FormProvider>
         </div>
     )
 }
